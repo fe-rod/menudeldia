@@ -1,0 +1,203 @@
+﻿<div class="row">
+    <div class="span10">
+        <h2>Menús</h2>
+    </div>
+</div>
+
+<div ng-show="menu.nombre == null && comercio.nombre == null">
+    <!-- FILTROS -->
+    <div class="row">
+        <div class="col-md-3">
+            <label>Tags: </label>
+            <input type="text" ng-model="selected" placeholder="Buscar tags" typeahead="tag as tag.nombre for tag in getTag($viewValue) | filter:$viewValue" typeahead-loading="loadingLocations" typeahead-on-select="selectedCallback()" class="form-control">
+            <bootstrap-tagsinput ng-model="tags"
+                                 typeahead-source="queryTags"
+                                 tagclass="getTagClass"
+                                 itemvalue="id"
+                                 itemtext="nombre">
+            </bootstrap-tagsinput>
+        </div>
+        <div class="col-md-3">
+            <label>Fecha: </label>
+            <p class="input-group">
+                <input type="text" name="fecha" class="form-control" show-weeks="false" show-button-bar="false" datepicker-popup="{{format}}" ng-model="dt" ng-change="getMenus()" is-open="opened" min="minDate" max="'2015-06-22'" datepicker-options="dateOptions" />
+                <span class="input-group-btn">
+                    <button class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+            </p>
+        </div>
+        <div class="col-md-2">
+            <label>Zona: </label>
+            <select ng-model="zona" class="form-control">
+                <option></option>
+                <option ng-repeat="zona in zonas">{{zona.nombre}}</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label>Tarjeta: </label>
+            <select ng-model="tarjeta" class="form-control">
+                <option></option>
+                <option ng-repeat="tarjeta in tarjetas">{{tarjeta.nombre}}</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <div class="checkbox">
+                <label>
+                    <input ng-model="delivery" type="checkbox">Delivery
+                </label>
+            </div>
+        </div>
+    </div>
+    <br />
+
+    <!-- LISTADO DE MENÚS -->
+    Ordenar por:
+    <a href="#" ng-click="sortBy='puntuacion'; reverse=!reverse">Puntuacion</a>
+    |
+    <a href="#" ng-click="sortBy='nombre'; reverse=!reverse">Nombre</a>
+    |
+    <a href="#" ng-click="sortBy='comercio.nombre'; reverse=!reverse">Comercio</a>
+    <hr>
+    <div ng-show="menus.length > 0" class="row">
+        <div ng-repeat="menu in menus | orderBy:sortBy:reverse | filter:applyFilters | startFrom:currentPage*pageSize | limitTo:pageSize" class="col-sm-4 col-lg-4 col-md-4">
+            <div class="thumbnail">
+                <div class="caption">
+                    <h4>
+                        <a href="#" ng-click="getObject(menu)">{{menu.nombre}}</a>
+                    </h4>
+                    <p>{{menu.descripcion}}</p>
+                    <p><a href="#" ng-click="getComercio(menu.comercio)">{{menu.comercio.nombre}}</a></p>
+                    <p><span ng-class="getTagClass(tag)" ng-repeat="tag in menu.tags">{{ tag.nombre }} </span></p>
+                </div>
+                <div class="ratings">
+                    <p class="pull-right">{{menu.comentarios.length}} comentarios</p>
+                    <p>
+                        <rating value="menu.puntuacion" max="5" readonly="true"></rating>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <ul class="pager">
+        <li ng-class="{ disabled: currentPage == 0 }" class="previous"><a ng-click="currentPage = currentPage - 1" href="#">Anterior</a></li>
+        {{ currentPage + 1 }} de {{ numberOfPages() }}
+        <li ng-class="{ disabled: currentPage >= menus.length/pageSize - 1 }" class="next"><a ng-click="currentPage = currentPage + 1" href="#">Siguiente</a></li>
+    </ul>
+</div>
+
+<!-- DETALLE DE UN MENÚ / COMERCIO -->
+<div ng-show="menu.nombre != null || comercio.nombre != null" class="row">
+    <button class="btn btn-primary" ng-click="Index()">
+        Volver
+    </button>
+    <br /><br />
+</div>
+<div ng-show="menu.nombre != null || comercio.nombre != null" class="row">
+    <div class="thumbnail">
+        <div class="caption-full">
+            <h4 ng-show="menu.nombre != null">
+                {{menu.nombre}}
+            </h4>
+            <p ng-show="menu.nombre != null">
+                {{menu.descripcion}}
+            </p>
+            <p ng-show="menu.nombre != null">
+                <span ng-class="getTagClass(tag)" ng-repeat="tag in menu.tags">{{ tag.nombre }} </span>
+            </p>
+            <h4 ng-show="comercio.nombre != null">
+                {{comercio.nombre}}
+            </h4>
+            <div ng-show="comercio.nombre != null">
+                <div class="form-group">
+                    <label>Zona</label>
+                    <p>{{comercio.zona.nombre}}</p>
+                </div>
+                <div class="form-group">
+                    <label>Dirección</label>
+                    <p>{{comercio.direccion}}</p>
+                </div>
+                <div class="form-group">
+                    <label>Teléfono</label>
+                    <p>{{comercio.telefono}}</p>
+                </div>
+                <div class="form-group">
+                    <label>Horario</label>
+                    <p>{{comercio.horario}}</p>
+                </div>
+                <div ng-show="comercio.tarjetas.length > 0" class="form-group">
+                    <label>Tarjetas</label>
+                    <p><span class="badge badge-success" ng-repeat="tarjeta in comercio.tarjetas">{{tarjeta.nombre}} </span></p>
+                </div>
+                <div class="form-group">
+                    <label>Delivery</label>
+                    <p ng-if="comercio.delivery"><i class="glyphicon glyphicon-ok"></i></p>
+                    <p ng-if="!comercio.delivery"><i class="glyphicon glyphicon-remove"></i></p>
+                </div>
+                <div class="form-group">
+                    <a href="{{comercio.url}}">{{comercio.url}}</a>
+                </div>
+            </div>
+        </div>
+        <div class="ratings">
+            <p ng-show="menu.nombre != null" class="pull-right">{{menu.comentarios.length}} comentarios</p>
+            <p ng-show="comercio.nombre != null" class="pull-right">{{comercio.comentarios.length}} comentarios</p>
+            <p ng-show="comercio.nombre != null">
+                <rating value="comercio.puntuacion" max="5" readonly="true"></rating>
+            </p>
+            <p ng-show="menu.nombre != null">
+                <rating value="menu.puntuacion" max="5" readonly="true"></rating>
+            </p>
+        </div>
+    </div>
+    <div class="well">
+        <div class="row">
+            Ordenar por:
+            <a href="#" ng-click="mSortBy='fecha'; mReverse=!mReverse">Fecha</a>
+            |
+            <a href="#" ng-click="mSortBy='puntuacion'; mReverse=!mReverse">Puntuacion</a>
+            |
+            <a href="#" ng-click="mSortBy='descripcion'; mReverse=!mReverse">Descripcion</a>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-12">
+                <rating value="comentario.puntuacion" max="5" readonly="false"></rating>
+                <input class="form-control" ng-model="comentario.descripcion" />
+                <div style="color: red;" ng-show="errors.length > 0" ng-repeat="error in errors">{{ error }}</div>
+                <div class="text-right">
+                    <button class="btn btn-success"
+                            ng-click="AddComment()"
+                            ng-disabled="comentario.descripcion==null || comentario.descripcion=='' || comentario.puntuacion==null || comentario.puntuacion==0">
+                        Dejar Comentario
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div ng-show="menu.nombre != null" ng-repeat="comentario in menu.comentarios | orderBy:mSortBy:mReverse | startFrom:cCurrentPage*pageSize | limitTo:pageSize">
+            <hr>
+            <div class="row">
+                <div class="col-md-12">
+                    <rating value="comentario.puntuacion" max="5" readonly="true"></rating>
+                    <span class="pull-right">{{comentario.fecha}}</span>
+                    <p>{{comentario.descripcion}}</p>
+                </div>
+            </div>
+        </div>
+        <div ng-show="comercio.nombre != null" ng-repeat="comentario in comercio.comentarios | orderBy:mSortBy:mReverse | startFrom:cCurrentPage*pageSize | limitTo:pageSize">
+            <hr>
+            <div class="row">
+                <div class="col-md-12">
+                    <rating value="comentario.puntuacion" max="5" readonly="true"></rating>
+                    <span class="pull-right">{{comentario.fecha}}</span>
+                    <p>{{comentario.descripcion}}</p>
+                </div>
+            </div>
+        </div>
+        <ul class="pager" ng-show="(menu.nombre != null && menu.comentarios.length > 0) || (comercio.nombre != null && comercio.comentarios.length > 0)">
+            <li ng-class="{ disabled: cCurrentPage == 0 }" class="previous"><a ng-click="cCurrentPage = cCurrentPage - 1" href="#">Anterior</a></li>
+            {{ cCurrentPage + 1 }} de {{ cNumberOfPages() }}
+            <li ng-class="{ disabled: cNextDisabled() }" class="next"><a ng-click="cCurrentPage = cCurrentPage + 1" href="#">Siguiente</a></li>
+        </ul>
+    </div>
+</div>

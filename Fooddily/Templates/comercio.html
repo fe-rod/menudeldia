@@ -1,0 +1,127 @@
+﻿<!-- LISTADO DE COMERCIOS -->
+<div class="row">
+    <div class="span10">
+        <h2>Comercios</h2>
+    </div>
+</div>
+<div ng-show="comercios.length > 0" class="row">
+    <div class="span10">
+        <table class="table table-condensed table-hover">
+            <tr>
+                <th><a href="#" ng-click="sortBy='puntuacion'; reverse=!reverse">Puntuacion</a></th>
+                <th><a href="#" ng-click="sortBy='nombre'; reverse=!reverse">Nombre</a></th>
+                <th></th>
+            </tr>
+            <tr ng-repeat="comercio in comercios | orderBy:sortBy:reverse | startFrom:currentPage*pageSize | limitTo:pageSize">
+                <td>
+                    <rating value="comercio.puntuacion" max="max" readonly="isReadonly"></rating>
+                </td>
+                <td>{{comercio.nombre}}</td>
+                <td><a href="#" ng-click="getObject(comercio)">Menús</a></td>
+            </tr>
+        </table>
+        <ul class="pager">
+            <li ng-class="{ disabled: currentPage == 0 }" class="previous"><a ng-click="currentPage = currentPage - 1" href="#">Previous</a></li>
+            {{ currentPage + 1}} de {{ numberOfPages() }}
+            <li ng-class="{ disabled: currentPage >= comercios.length/pageSize - 1 }" class="next"><a ng-click="currentPage = currentPage + 1" href="#">Next</a></li>
+        </ul>
+    </div>
+</div>
+<!-- LISTADO DE MENÚS DE UN COMERCIO -->
+<div ng-show="comercio.nombre != null && !addMode">
+    <div class="row">
+        <div class="span10">
+            <h3>{{comercio.nombre}}</h3>
+            <h4>Menús</h4>
+            <table ng-show="comercio.menus.length > 0" class="table table-condensed table-hover">
+                <tr>
+                    <th>Fecha</th>
+                    <th><a href="#" ng-click="mSortBy='nombre'; mReverse=!mReverse">Nombre</a></th>
+                    <th><a href="#" ng-click="mSortBy='descripcion'; mReverse=!mReverse">Descripcion</a></th>
+                    <th>Tags</th>
+                    <th></th>
+                </tr>
+                <tr ng-repeat="menu in comercio.menus | orderBy:mSortBy:mReverse | startFrom:mCurrentPage*pageSize | limitTo:pageSize">
+                    <td>{{menu.fechaString}}</td>
+                    <td>{{menu.nombre}}</td>
+                    <td>{{menu.descripcion}}</td>
+                    <td><span ng-class="getTagClass(tag)" ng-repeat="tag in menu.tags">{{ tag.nombre }} </span></td>
+                    <th><a href="#" ng-click="eliminarMenu(menu)">Eliminar</a></th>
+                </tr>
+            </table>
+            <ul ng-show="comercio.menus.length > 0" class="pager">
+                <li ng-class="{ disabled: mCurrentPage == 0 }" class="previous"><a ng-click="mCurrentPage=mCurrentPage-1" href="#">Previous</a></li>
+                {{mCurrentPage+1}} de {{mNumberOfPages()}}
+                <li ng-class="{ disabled: mCurrentPage >= comercio.menus.length/pageSize - 1 }" class="next"><a ng-click="mCurrentPage=mCurrentPage+1" href="#">Next</a></li>
+            </ul>
+            <button class="btn btn-default" ng-click="addMode = true">Subir Menú</button>
+        </div>
+    </div>
+</div>
+<!-- FORMULARIO PARA SUBIR UN MENÚ -->
+<div ng-show="comercio.nombre != null && addMode">
+    <div class="row">
+        <div class="span10">
+            <h3>{{comercio.nombre}}</h3>
+            <h4>Subir Menú</h4>
+        </div>
+    </div>
+    <form name="accountForm" novalidate>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Fecha</label>
+                    <div class="checkbox">
+                        <label>
+                            <input ng-model="menu.recurrente" ng-click="" type="checkbox">Recurrente</label>
+                    </div>
+                    <div ng-show="menu.recurrente" class="btn-group">
+                        <span ng-repeat="dia in dias">
+                            <button type="button"
+                                class="btn btn-primary"
+                                ng-class="{ active: menu.dias.indexOf(dia) > -1 }"
+                                name="menu.dias[]"
+                                value="{{dia}}"
+                                ng-checked="menu.dias.indexOf(dia) > -1"
+                                ng-click="toggleSelection(dia)">
+                                {{dia}}
+                            </button>
+                        </span>
+                    </div>
+                    <div ng-show="!menu.recurrente">
+                        <p class="input-group">
+                            <input type="text" name="fecha" class="form-control" show-weeks="false" show-button-bar="false" datepicker-popup="{{format}}" ng-model="menu.fecha" is-open="opened" min="minDate" max="'2015-06-22'" datepicker-options="dateOptions" />
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Nombre</label>
+                    <input type="text" name="nombre" ng-model="menu.nombre" class="form-control" required />
+                    <div class="text-danger" ng-show="accountForm.nombre.$error.required && accountForm.nombre.$dirty">Por favor ingrese el nombre.</div>
+                </div>
+                <div class="form-group">
+                    <label>Descripcion</label>
+                    <input type="text" name="descripcion" ng-model="menu.descripcion" class="form-control" required />
+                    <div class="text-danger" ng-show="accountForm.descripcion.$error.required && accountForm.descripcion.$dirty">Por favor ingrese la descripción.</div>
+                </div>
+                <div class="form-group">
+                    <label>Tags</label>
+                    <input type="text" ng-model="selected" placeholder="Search for tags" typeahead="tag as tag.nombre for tag in getTag($viewValue) | filter:$viewValue" typeahead-loading="loadingLocations" typeahead-on-select="selectedCallback()" class="form-control">
+                    <bootstrap-tagsinput
+                        ng-model="menu.tags"
+                        typeahead-source="queryTags"
+                        tagclass="getTagClass"
+                        itemvalue="id"
+                        itemtext="nombre">
+                    </bootstrap-tagsinput>
+                </div>
+                <button class="btn btn-default" ng-disabled="accountForm.$invalid" ng-click="saveMenu(menu)">Subir Menú</button>
+                <button class="btn btn-default" ng-click="addMode = false">Volver</button>
+                <div style="color: red;" ng-show="errors.length > 0" ng-repeat="error in errors">{{ error }}</div>
+            </div>
+        </div>
+    </form>
+</div>
