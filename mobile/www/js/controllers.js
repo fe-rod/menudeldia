@@ -1,24 +1,82 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['ionic'])
 
-.controller('DashCtrl', function($scope) {
+.controller('DashCtrl', function($scope, Menus) {
+    $scope.menus = Menus.all();
 
-    var menuList = [
-        {name:'Pollo asado con pure', image:'pollo', description: 'Pata de pollo con pure de papa y calabaza', likes:'5', comments:'2', local:'Toca y pica'},
-        {name:'Carne con papas y boniatos', image:'carne', description: 'Carne al horno con papa y boniatos. Imperdibles', likes:'1', comments:'1', local:'Toca y pica'},
-        {name:'Strogonoff de pollo', image:'strogo', description: 'Strogonoff de pollo con arroz. Plato muy generoso, para compartir', likes:'5',              comments:'4', local:'Fans'},
-        {name:'Wrap canadiense', image:'wrap', description: 'Wrap canadiense con papas fritas o ensalada', likes:'10', comments:'3', local:'Fans'},
-    ];
+    $scope.like = function(menuId){
+        $scope.menus[menuId].likes++;
+    }
 
-        $scope.menus = menuList;
-        })
+})
 
-        .controller('FriendsCtrl', function($scope, Friends) {
-        $scope.friends = Friends.all();
-        })
+.controller('FriendsCtrl', function($scope, Friends) {
+    $scope.friends = Friends.all();
+})
 
-        .controller('FriendDetailCtrl', function($scope, $stateParams, Friends) {
-        $scope.friend = Friends.get($stateParams.friendId);
-        })
+.controller('FriendDetailCtrl', function($scope, $stateParams, Friends) {
+    $scope.friend = Friends.get($stateParams.friendId);
+})
 
-        .controller('AccountCtrl', function($scope) {
+.controller('AccountCtrl', function($scope) {
+})
+
+.controller('MapCtrl', function($scope, $ionicLoading, $compile) {
+    
+    //$scope.store = $stateParams.storeId);
+    
+    function initialize() {
+        var myLatlng = new google.maps.LatLng(-34.917191,-56.152229);
+
+        var mapOptions = {
+            center: myLatlng,
+            zoom: 16,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("map"),
+                                      mapOptions);
+
+        //Marker + infowindow + angularjs compiled ng-click
+        var contentString = "<div><a ng-click='clickTest()'>Click me!</a></div>";
+        var compiled = $compile(contentString)($scope);
+
+        var infowindow = new google.maps.InfoWindow({
+            content: compiled[0]
         });
+
+        var marker = new google.maps.Marker({
+            position: myLatlng,
+            map: map,
+            title: 'Uluru (Ayers Rock)'
+        });
+
+        google.maps.event.addListener(marker, 'click', function() {
+            infowindow.open(map,marker);
+        });
+//
+//        $scope.map = map;
+    }
+    ionic.Platform.ready(initialize);
+
+//    $scope.centerOnMe = function() {
+//        if(!$scope.map) {
+//            return;
+//        }
+//
+//        $scope.loading = $ionicLoading.show({
+//            content: 'Getting current location...',
+//            showBackdrop: false
+//        });
+//
+//        navigator.geolocation.getCurrentPosition(function(pos) {
+//            $scope.map.setCenter(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
+//            $scope.loading.hide();
+//        }, function(error) {
+//            alert('Unable to get location: ' + error.message);
+//        });
+//    };
+
+//    $scope.clickTest = function() {
+//        alert('Example of infowindow with ng-click')
+//    };
+
+});;

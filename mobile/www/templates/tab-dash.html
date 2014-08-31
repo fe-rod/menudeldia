@@ -13,23 +13,22 @@
                     {{menu.description}}
                 </p>
                 <p>
-                    <a href="#" class="subdued">{{menu.likes}} Like</a>
-                    <a href="#" class="subdued">{{menu.comments}} Comments</a>
+                    <a href="#" class="subdued">{{menu.likes}} Me gusta</a>
                 </p>
             </div>
 
             <div class="item tabs tabs-secondary tabs-icon-left">
-                <a class="tab-item" href="#">
+                <a class="tab-item" href="#" ng-click="like(menu.id)">
                     <i class="icon ion-thumbsup"></i>
-                    Like
+                    <span>Me gusta</span>
                 </a>
-                <a class="tab-item" href="#">
-                    <i class="icon ion-chatbox"></i>
-                    Comment
+                <a class="tab-item" href="tel:{{menu.store.phone}}">
+                    <i class="icon ion-ios7-telephone"></i>
+                    Llamar
                 </a>
-                <a class="tab-item" href="#">
-                    <i class="icon ion-share"></i>
-                    Share
+                <a class="tab-item" href="#/tab/map/{{menu.store.id}}">
+                    <i class="icon ion-ios7-location"></i>
+                    Ubicaci&oacute;n
                 </a>
             </div>
         </div>
