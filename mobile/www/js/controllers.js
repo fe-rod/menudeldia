@@ -1,6 +1,6 @@
 angular.module('starter.controllers', ['ionic'])
 
-.controller('DashCtrl', function($scope, Menus) {
+.controller('MenusCtrl', function($scope, Menus) {
     $scope.menus = Menus.all();
 
     $scope.like = function(menuId){
@@ -9,12 +9,12 @@ angular.module('starter.controllers', ['ionic'])
 
 })
 
-.controller('FriendsCtrl', function($scope, Friends) {
-    $scope.friends = Friends.all();
+.controller('StoresCtrl', function($scope, Stores) {
+    $scope.stores = Stores.all();
 })
 
-.controller('FriendDetailCtrl', function($scope, $stateParams, Friends) {
-    $scope.friend = Friends.get($stateParams.friendId);
+.controller('StoreDetailCtrl', function($scope, $stateParams, Stores) {
+    $scope.store = Stores.get($stateParams.storeId);
 })
 
 .controller('AccountCtrl', function($scope) {

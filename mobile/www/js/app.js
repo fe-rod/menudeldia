@@ -38,12 +38,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
     // Each tab has its own nav history stack:
 
-    .state('tab.dash', {
-        url: '/dash',
+    .state('tab.menus', {
+        url: '/menus',
         views: {
-            'tab-dash': {
-                templateUrl: 'templates/tab-dash.html',
-                controller: 'DashCtrl'
+            'tab-menus': {
+                templateUrl: 'templates/tab-menus.html',
+                controller: 'MenusCtrl'
             }
         }
     })
@@ -51,28 +51,28 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     .state('tab.map', {
         url: '/map/:storeId',
         views: {
-            'tab-dash': {
+            'tab-menus': {
                 templateUrl: 'templates/map.html',
                 controller: 'MapCtrl'
             }
         }
     })
 
-    .state('tab.friends', {
-        url: '/friends',
+    .state('tab.stores', {
+        url: '/stores',
         views: {
-            'tab-friends': {
-                templateUrl: 'templates/tab-friends.html',
-                controller: 'FriendsCtrl'
+            'tab-stores': {
+                templateUrl: 'templates/tab-stores.html',
+                controller: 'StoresCtrl'
             }
         }
     })
-    .state('tab.friend-detail', {
-        url: '/friend/:friendId',
+    .state('tab.store-detail', {
+        url: '/store/:storeId',
         views: {
-            'tab-friends': {
-                templateUrl: 'templates/friend-detail.html',
-                controller: 'FriendDetailCtrl'
+            'tab-stores': {
+                templateUrl: 'templates/store-detail.html',
+                controller: 'StoreDetailCtrl'
             }
         }
     })
@@ -88,7 +88,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     });
 
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/tab/dash');
+    $urlRouterProvider.otherwise('/tab/menus');
 
 });
 

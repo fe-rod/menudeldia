@@ -1,10 +1,10 @@
-<ion-view title="Dashboard">
+<ion-view title="MENÚS DEL DÍA">
     <ion-content class="has-header padding">
         <div class="list card" ng-repeat="menu in menus">
             <div class="item item-avatar">
                 <img src="img/ionic.png">
                 <h2>{{menu.name}}</h2>
-                <p>{{menu.local}}</p>
+                <p>{{menu.local}} - {{menu.store.distance}} km</p>
             </div>
 
             <div class="item item-body">

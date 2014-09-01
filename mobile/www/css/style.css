@@ -1,1 +1,43 @@
 /* Empty. Add your own CSS if you like */
+.bar.bar-stable {
+    background-color: #2727d4;
+    border-color: #2727d4;
+}
+
+.bar.bar-stable .title {
+    color: #fcfcfc;
+    font-size: 14px;
+}
+
+.bar-stable .button {
+    color:#fcfcfc;
+}
+
+.tabs {
+    background-color: #2727d4;
+    color: #fcfcfc;
+    height: 55px;
+    padding-top: 4px;
+    border-color: #2727d4;
+}
+
+.tabs-icon-top > .tabs .tab-item, .tabs-icon-top.tabs .tab-item, .tabs-icon-bottom > .tabs .tab-item, .tabs-icon-bottom.tabs .tab-item {
+    font-size: 10px;
+}
+
+.tabs.tabs-secondary {
+    background-color: #f8f8f8;
+    border-color: #ddd;
+    color: #444;
+    height: 55px;
+    padding-top: 4px;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+}
+
+.scroll {
+  height: 100%;
+}
