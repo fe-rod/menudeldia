@@ -3,8 +3,8 @@
         <div class="list card" ng-repeat="menu in menus">
             <div class="item item-avatar">
                 <img src="img/ionic.png">
-                <h2>{{menu.name}}</h2>
-                <p>{{menu.local}} - {{menu.store.distance}} km</p>
+                <h2>{{menu.name}} - {{menu.price | currency}}</h2>
+                <p>{{menu.store.name}} - {{menu.store.distance}} km</p>
             </div>
 
             <div class="item item-body">

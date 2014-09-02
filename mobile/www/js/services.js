@@ -30,10 +30,10 @@ angular.module('starter.services', [])
 .factory('Menus', function() {
 
   var menuList = [
-        {id:'0', name:'Pollo asado con pure', image:'pollo', description: 'Pata de pollo con pure de papa y calabaza', likes:'5', comments:'2', local:'Toca y          pica', store: { id: 1, phone: '12345', distance: 0.3}},
-        {id:'1', name:'Carne con papas y boniatos', image:'carne', description: 'Carne al horno con papa y boniatos. Imperdibles', likes:'1', comments:'1',            local:'Toca y pica', store: { id: 2, phone: '12345', distance: 0.5}},
-        {id:'2', name:'Strogonoff de pollo', image:'strogo', description: 'Strogonoff de pollo con arroz. Plato muy generoso, para compartir', likes:'5',              comments:'4', local:'Fans', store: { id: 3, phone: '54321', distance: 0.6}},
-        {id:'3', name:'Wrap canadiense', image:'wrap', description: 'Wrap canadiense con papas fritas o ensalada', likes:'10', comments:'3', local:'Fans', store: { id: 4, phone: '54321', distance: 1.4}},
+        {id:'0', name:'Pollo asado con pure', price:'160', image:'pollo', description: 'Pata de pollo con pure de papa y calabaza', likes:'5', comments:'2', store: { id: 1, name:'Toca y pica', phone: '12345', distance: 0.3}},
+        {id:'1', name:'Carne con papas y boniatos', price:'150', image:'carne', description: 'Carne al horno con papa y boniatos. Imperdibles', likes:'1', comments:'1', store: { id: 1, name:'Toca y pica', phone: '12345', distance: 0.5}},
+        {id:'2', name:'Strogonoff de pollo', price:'210', image:'strogo', description: 'Strogonoff de pollo con arroz. Plato muy generoso, para compartir', likes:'5', comments:'4', store: { id: 2, name:'Fans', phone: '54321', distance: 0.6}},
+        {id:'3', name:'Wrap canadiense', price:'180', image:'wrap', description: 'Wrap canadiense con papas fritas o ensalada', likes:'10', comments:'3', store: { id: 2, name:'Fans', phone: '54321', distance: 1.4}},
     ];
 
   return {
