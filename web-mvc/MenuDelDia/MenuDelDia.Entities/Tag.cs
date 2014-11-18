@@ -18,6 +18,8 @@ namespace MenuDelDia.Entities
 
         [Key]
         public override Guid Id { get; set; }
+
+        [Required(AllowEmptyStrings = false)]
         public string Name { get; set; }
 
 

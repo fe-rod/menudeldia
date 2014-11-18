@@ -77,6 +77,10 @@
     <Compile Include="Migrations\201411181709060_script_03.Designer.cs">
       <DependentUpon>201411181709060_script_03.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201411181740002_script_04.cs" />
+    <Compile Include="Migrations\201411181740002_script_04.Designer.cs">
+      <DependentUpon>201411181740002_script_04.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -99,6 +103,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201411181709060_script_03.resx">
       <DependentUpon>201411181709060_script_03.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201411181740002_script_04.resx">
+      <DependentUpon>201411181740002_script_04.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
