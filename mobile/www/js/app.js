@@ -47,9 +47,36 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
             }
         }
     })
+    .state('tab.menu-detail', {
+        url: '/menu/:menuId',
+        views: {
+            'tab-menus': {
+                templateUrl: 'templates/menuDetail.html',
+                controller: 'MenuDetailCtrl'
+            }
+        }
+    })
+        .state('tab.stores', {
+            url: '/stores',
+            views: {
+                'tab-stores': {
+                    templateUrl: 'templates/tab-stores.html',
+                    controller: 'StoresCtrl'
+                }
+            }
+        })
+        .state('tab.store-detail', {
+            url: '/store/:storeId',
+            views: {
+                'tab-stores': {
+                    templateUrl: 'templates/store-detail.html',
+                    controller: 'StoreDetailCtrl'
+                }
+            }
+        })
 
-    .state('tab.map', {
-        url: '/map/:storeId',
+    .state('tab.menuMap', {
+        url: '/menuMap/:storeId',
         views: {
             'tab-menus': {
                 templateUrl: 'templates/map.html',
@@ -57,22 +84,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
             }
         }
     })
-
-    .state('tab.stores', {
-        url: '/stores',
+    .state('tab.storeMap', {
+        url: '/storeMap/:storeId',
         views: {
             'tab-stores': {
-                templateUrl: 'templates/tab-stores.html',
-                controller: 'StoresCtrl'
-            }
-        }
-    })
-    .state('tab.store-detail', {
-        url: '/store/:storeId',
-        views: {
-            'tab-stores': {
-                templateUrl: 'templates/store-detail.html',
-                controller: 'StoreDetailCtrl'
+                templateUrl: 'templates/map.html',
+                controller: 'MapCtrl'
             }
         }
     })

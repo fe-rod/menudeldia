@@ -1,7 +1,20 @@
 /* Empty. Add your own CSS if you like */
+
+.globalNavBar .button-icon:before{
+    font-size: 24px!important;
+}
+
+.item h2{
+    font-size: 15px;
+}
+
+.item p{
+    font-size: 13px;
+}
+
 .bar.bar-stable {
-    background-color: #2727d4;
-    border-color: #2727d4;
+    background-color: #1aacc3;
+    border-color: #1aacc3;
 }
 
 .bar.bar-stable .title {
@@ -14,15 +27,19 @@
 }
 
 .tabs {
-    background-color: #2727d4;
+    background-color: #1aacc3;
     color: #fcfcfc;
-    height: 55px;
+    height: 52px;
     padding-top: 4px;
-    border-color: #2727d4;
+    border-color: #1aacc3;
 }
 
 .tabs-icon-top > .tabs .tab-item, .tabs-icon-top.tabs .tab-item, .tabs-icon-bottom > .tabs .tab-item, .tabs-icon-bottom.tabs .tab-item {
-    font-size: 10px;
+    font-size: 9px;
+}
+
+.tab-item .icon{
+    font-size: 30px;
 }
 
 .tabs.tabs-secondary {
@@ -40,4 +57,184 @@
 
 .scroll {
   height: 100%;
+}
+
+.ion-close-small:before, .ion-close-small:after{
+    font-size: 20px!important;
+    color: white;
+}
+
+.menuList{
+
+}
+
+.menuList .button{
+    border-radius: 2px;
+    min-height: 0;
+    font-size: 11px;
+    font-weight: normal;
+    line-height: 15px;
+}
+
+.menuList .menuTitle{
+    display:inline
+}
+
+.menuList .menuPrice{
+    float: right;
+    color: #1a889f;
+    font-weight: bold;
+}
+
+.menuList .button.button-stable.active, .menuList .button.button-stable.activated {
+    border-color: #b2b2b2;
+    background-color: #f8f8f8;
+    color: #444;
+    box-shadow: none;
+}
+
+/*.menuDetailButtons{*/
+    /*text-align: center;*/
+    /*clear: both;*/
+/*}*/
+
+/*.menuDetailButtons .button {*/
+    /*min-width: 65px;*/
+    /*min-height: 65px;*/
+/*}*/
+
+/*.menuDetailButtons .button.middle {*/
+    /*margin-left: 5%;*/
+    /*margin-right: 5%;*/
+/*}*/
+
+
+
+.menuDetailHeader{
+}
+
+.menuDetailHeader img{
+    height: 50px;
+    width: 50px;
+    float: left;
+}
+
+.menuDetailHeader h4{
+    padding-left: 60px;
+}
+
+.menuDetailHeader h5{
+    padding-left:60px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #1aacc3;
+}
+
+.menuDetailContent{
+
+}
+
+.menuDetailContent .item-divider{
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.menuDetailContent .item-text-wrap{
+    font-size: 13px;
+}
+
+.menuDetailTags{
+    padding-top: 15px;
+}
+.menuDetailTags .button{
+    border-radius: 2px;
+    min-height: 0;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 30px;
+}
+
+.menuDetailTags .button.button-dark.active, .menuDetailTags .button.button-dark.activated {
+    border-color: #111;
+    background-color: #444;
+    color: #fff;
+    box-shadow: none;
+}
+
+.menuDetailFooter{
+    height: 60px;
+    border-top: none;
+}
+
+.menuDetailFooter .menuDetailButtons {
+    background-color: #D9D9D9;
+}
+
+.menuDetailFooter .menuDetailButtons .icon{
+    color: #1aacc3;
+}
+.menuDetailFooter .menuDetailButtons .icon:before{
+    padding-top: 2px;
+    font-size: 25px;
+}
+
+.popoverContent.scroll-content {
+    margin: 0;
+}
+
+.popoverContent li{
+
+    font-size: 12px;
+}
+
+.popoverContent .item-checkbox{
+    padding-left:45px;
+}
+
+.popoverContent .item-checkbox .checkbox{
+    margin-top:-18px;
+}
+
+.popoverContent .checkbox input:after, .popoverContent .checkbox-icon:after{
+    -webkit-transition: opacity 0.05s ease-in-out;
+    -moz-transition: opacity 0.05s ease-in-out;
+    transition: opacity 0.05s ease-in-out;
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    position: absolute;
+    top: 22%;
+    left: 22%;
+    display: table;
+    width: 12px;
+    height: 8.33333px;
+    border: 3px solid #fff;
+    border-top: 0;
+    border-right: 0;
+    content: ' ';
+    opacity: 1;
+}
+.popoverContent .checkbox input:checked:before, .popoverContent .checkbox input:checked + .checkbox-icon:before{
+    background-color: #74c974;
+    border-color: #74c974;
+}
+
+.popoverContent .checkbox input:before, .popoverContent .checkbox .checkbox-icon:before{
+    border-color: #74c974;
+}
+
+.popoverContent input[type='checkbox']{
+    height: 20px;
+    width: 20px;
+}
+
+.popoverFooter{
+    background-color: #efefef;
+}
+
+.popoverFooter .button{
+    margin-left:auto;
+    margin-right: auto;
+    padding-left:30px;
+    padding-right:30px;
 }

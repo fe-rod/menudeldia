@@ -1,10 +1,35 @@
-<!--
-  This template loads for the 'tab.friend-detail' state (app.js)
-  'friend' is a $scope variable created in the FriendsCtrl controller (controllers.js)
-  The FriendsCtrl pulls data from the Friends service (service.js)
-  The Friends service returns an array of friend data
--->
-<ion-view title="{{store.name | uppercase}}">
-  <ion-content has-header="true" padding="true">
-  </ion-content>
+<ion-view>
+    <ion-header-bar class="bar bar-header bar-stable">
+        <h1 class="title">{{store.name | uppercase}}</h1>
+    </ion-header-bar>
+    <ion-content class="padding" scroll="true">
+        <div class="menuDetailHeader">
+            <img src="img/{{store.icon}}.png">
+            <h4>{{store.name}}</h4>
+            <h5>&nbsp;</h5>
+        </div>
+        <div class="menuDetailContent">
+            <div class="list list-inset">
+                <div class="item item-divider">
+                    Descripci&oacute;n
+                </div>
+                <p class="item item-text-wrap" href="#">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ac posuere libero, ac ultrices lorem. Suspendisse nec urna scelerisque lorem semper mattis. Etiam mollis erat sed efficitur.
+                </p>
+                <div class="item item-divider">
+                    Direcci&oacute;n
+                </div>
+                <p class="item item-text-wrap" href="#">
+                    Tom&aacute;s Diago 1425 esquina Scocer&iacute;a
+                </p>
+            </div>
+        </div>
+    </ion-content>
+    <ion-footer-bar class="bar-light menuDetailFooter">
+        <div class="menuDetailButtons button-bar">
+            <a class="button button-stable" href="tel:{{store.phone}}"><span class="icon ion-ios7-telephone"></span></a>
+            <a class="button button-stable" href="#/tab/storeMap/{{store.id}}"><span class="icon ion-ios7-location"></span></a>
+            <a class="button button-stable"><span class="icon ion-ios7-email"></span></a>
+        </div>
+    </ion-footer-bar>
 </ion-view>
