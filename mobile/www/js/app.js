@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
+angular.module('todayMenu', ['ionic', 'ngCordova'])
 
 .run(function($ionicPlatform) {
     $ionicPlatform.ready(function() {
@@ -18,6 +18,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
             // org.apache.cordova.statusbar required
             StatusBar.styleDefault();
         }
+
     });
 })
 
@@ -42,7 +43,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         url: '/menus',
         views: {
             'tab-menus': {
-                templateUrl: 'templates/tab-menus.html',
+                templateUrl: 'templates/menus/tab-menus.html',
                 controller: 'MenusCtrl'
             }
         }
@@ -51,7 +52,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         url: '/menu/:menuId',
         views: {
             'tab-menus': {
-                templateUrl: 'templates/menuDetail.html',
+                templateUrl: 'templates/menus/menuDetail.html',
                 controller: 'MenuDetailCtrl'
             }
         }
@@ -60,7 +61,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
             url: '/stores',
             views: {
                 'tab-stores': {
-                    templateUrl: 'templates/tab-stores.html',
+                    templateUrl: 'templates/stores/tab-stores.html',
                     controller: 'StoresCtrl'
                 }
             }
@@ -69,7 +70,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
             url: '/store/:storeId',
             views: {
                 'tab-stores': {
-                    templateUrl: 'templates/store-detail.html',
+                    templateUrl: 'templates/stores/store-detail.html',
                     controller: 'StoreDetailCtrl'
                 }
             }
@@ -79,7 +80,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         url: '/menuMap/:storeId',
         views: {
             'tab-menus': {
-                templateUrl: 'templates/map.html',
+                templateUrl: 'templates/map/map.html',
                 controller: 'MapCtrl'
             }
         }
@@ -88,7 +89,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         url: '/storeMap/:storeId',
         views: {
             'tab-stores': {
-                templateUrl: 'templates/map.html',
+                templateUrl: 'templates/map/map.html',
                 controller: 'MapCtrl'
             }
         }
@@ -98,7 +99,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         url: '/account',
         views: {
             'tab-account': {
-                templateUrl: 'templates/tab-account.html',
+                templateUrl: 'templates/account/tab-account.html',
                 controller: 'AccountCtrl'
             }
         }
