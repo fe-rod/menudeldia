@@ -49,7 +49,26 @@ angular.module('starter.controllers', ['ionic'])
         $rootScope.hideFilter = true;
     })
 
-    .controller('AccountCtrl', function($scope) {
+    .controller('AccountCtrl', function($scope, $rootScope, $ionicModal) {
+
+        $ionicModal.fromTemplateUrl('templates/comments.html', function($ionicModal) {
+            $rootScope.commentsModal = $ionicModal;
+        }, {
+            // Use our scope for the scope of the modal to keep it simple
+            scope: $rootScope,
+            // The animation we want to use for the modal entrance
+            animation: 'slide-in-up'
+        });
+
+        $ionicModal.fromTemplateUrl('templates/suggest.html', function($ionicModal) {
+            $rootScope.suggestModal = $ionicModal;
+        }, {
+            // Use our scope for the scope of the modal to keep it simple
+            scope: $rootScope,
+            // The animation we want to use for the modal entrance
+            animation: 'slide-in-up'
+        });
+
     })
 
     .controller('MapCtrl', function($scope, $ionicLoading, $compile) {

@@ -238,3 +238,39 @@
     padding-left:30px;
     padding-right:30px;
 }
+
+.myProfile .item-icon-left .icon:before, .myProfile .item-icon-right .icon:before{
+    color: #707070;
+    font-size: 25px;
+}
+
+.myProfile .item-icon-left .icon.star:before, .myProfile .item-icon-right .icon.star:before{
+    color: #baba40;
+    font-size: 25px;
+}
+
+.myProfile .item-icon-left .icon.logoff:before, .myProfile .item-icon-right .icon.logoff:before{
+    color: #85342d;
+    font-size: 25px;
+}
+
+.commentsForm textarea{
+    height: 200px;
+    resize: none;
+}
+
+.submitComments{
+    float: left;
+}
+
+.submitComments .button-stable {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.commentsForm .button.button-clear{
+    color: #fff;
+}
+.commentsForm .button.button-clear .icon:before{
+    font-size: 20px;
+}
