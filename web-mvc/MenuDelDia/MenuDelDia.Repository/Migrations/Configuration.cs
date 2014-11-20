@@ -1,3 +1,5 @@
+using MenuDelDia.Entities;
+using MenuDelDia.Entities.Enums;
 using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace MenuDelDia.Repository.Migrations
@@ -20,6 +22,12 @@ namespace MenuDelDia.Repository.Migrations
 
             context.Roles.AddOrUpdate(p => p.Name, new IdentityRole { Name = "Administrator" });
             context.Roles.AddOrUpdate(p => p.Name, new IdentityRole { Name = "User" });
+
+            context.Cards.AddOrUpdate(c => new { c.Name, c.CardType }, new Card { Id = Guid.Parse("90C694AC-246F-45D6-9435-5A3330CD67D2"), Name = "Visa", CardType = CardType.Credit });
+            context.Cards.AddOrUpdate(c => new { c.Name, c.CardType }, new Card { Id = Guid.Parse("FDEE4F3A-2677-47D3-9DF4-78CB633C0836"), Name = "Visa", CardType = CardType.Debit });
+            context.Cards.AddOrUpdate(c => new { c.Name, c.CardType }, new Card { Id = Guid.Parse("ED2D36F3-8851-408F-9882-C6216787EF54"), Name = "Master", CardType = CardType.Credit });
+            context.Cards.AddOrUpdate(c => new { c.Name, c.CardType }, new Card { Id = Guid.Parse("F8F21E7B-B4F5-4D1E-95FA-F9A48E2014A5"), Name = "Master", CardType = CardType.Debit });
+
 
             //  This method will be called after migrating to the latest version.
 

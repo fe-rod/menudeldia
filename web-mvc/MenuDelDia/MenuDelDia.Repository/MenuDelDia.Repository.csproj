@@ -81,6 +81,26 @@
     <Compile Include="Migrations\201411181740002_script_04.Designer.cs">
       <DependentUpon>201411181740002_script_04.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201411181902390_script_05.cs" />
+    <Compile Include="Migrations\201411181902390_script_05.Designer.cs">
+      <DependentUpon>201411181902390_script_05.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201411181914038_script_06.cs" />
+    <Compile Include="Migrations\201411181914038_script_06.Designer.cs">
+      <DependentUpon>201411181914038_script_06.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201411181941175_script_07.cs" />
+    <Compile Include="Migrations\201411181941175_script_07.Designer.cs">
+      <DependentUpon>201411181941175_script_07.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201411191950164_script_08.cs" />
+    <Compile Include="Migrations\201411191950164_script_08.Designer.cs">
+      <DependentUpon>201411191950164_script_08.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201411201351505_script_09.cs" />
+    <Compile Include="Migrations\201411201351505_script_09.Designer.cs">
+      <DependentUpon>201411201351505_script_09.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -106,6 +126,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201411181740002_script_04.resx">
       <DependentUpon>201411181740002_script_04.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201411181902390_script_05.resx">
+      <DependentUpon>201411181902390_script_05.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201411181914038_script_06.resx">
+      <DependentUpon>201411181914038_script_06.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201411181941175_script_07.resx">
+      <DependentUpon>201411181941175_script_07.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201411191950164_script_08.resx">
+      <DependentUpon>201411191950164_script_08.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201411201351505_script_09.resx">
+      <DependentUpon>201411201351505_script_09.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

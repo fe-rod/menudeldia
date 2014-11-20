@@ -1,0 +1,135 @@
+﻿@model MenuDelDia.Presentacion.Models.LocationModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Location</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Streets)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Streets)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Phone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Phone)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Delivery)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Delivery)
+        </dd>
+
+        <dt>
+            Ubicación
+        </dt>
+
+        <dd>
+            @Html.HiddenFor(model => model.Latitude)
+            @Html.HiddenFor(model => model.Longitude)
+            <div id="map_canvas" class="form-control" style="width: 50%; height: 300px"></div>
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OpenDays)
+        </dt>
+
+        <dd>
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        for (var i = 0; i < Model.OpenDays.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.CheckBox("OpenDays[" + (i + 10) + "].Open", Model.OpenDays[i].Open, new { disabled = "disabled" })
+                                </td>
+                                <td>
+                                    @Model.OpenDays[i].DayOfWeek
+                                </td>
+                                <td>
+                                    @Html.TextBox("OpenDays[" + (i + 10) + "].OpenHour", Model.OpenDays[i].OpenHour, new { disabled = "disabled" })
+                                    @Html.TextBox("OpenDays[" + (i + 10) + "].OpenMinutes", Model.OpenDays[i].OpenMinutes, new { disabled = "disabled" })
+                                </td>
+                                <td>
+                                    @Html.TextBox("OpenDays[" + (i + 10) + "].CloseHour", Model.OpenDays[i].CloseHour, new { disabled = "disabled" })
+                                    @Html.TextBox("OpenDays[" + (i + 10) + "].CloseMinutes", Model.OpenDays[i].CloseMinutes, new { disabled = "disabled" })
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+
+@section Scripts {
+
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBch-yBM77R9QSsw9_xG5qeiMv261Eeqs"></script>
+    <script type="text/javascript">
+        var markers = [];
+        function setAllMap(map) {
+            for (var i = 0; i < markers.length; i++) {
+                markers[i].setMap(map);
+            }
+        }
+        function createMarker(map, lat, lng) {
+            var marker = new google.maps.Marker({
+                map: map,
+                position: new google.maps.LatLng(lat, lng)
+            });
+            markers.push(marker);
+        }
+        function initialize() {
+            var latitude = $("#Latitude").val().replace(",", ".");
+            var longitude = $("#Longitude").val().replace(",", ".");
+
+            var mapDiv = document.getElementById('map_canvas');
+            var map = new google.maps.Map(mapDiv, {
+                center: new google.maps.LatLng(latitude, longitude),
+                zoom: 13,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            });
+
+            createMarker(map, latitude, longitude);
+        }
+
+        google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+}

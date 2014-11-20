@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -14,24 +15,35 @@ namespace MenuDelDia.Entities
             Locations = new Collection<Location>();
             Tags = new Collection<Tag>();
             Cards = new Collection<Card>();
-            Menus = new Collection<Menu>();
         }
 
         [Key]
         public override Guid Id { get; set; }
 
         [Required(AllowEmptyStrings = false)]
+        [DisplayName("Nombre")]
         public string Name { get; set; }
 
-        [Required(AllowEmptyStrings = false)]
+        [DisplayName("Logo")]
         public string LogoPath { get; set; }
 
+        [DisplayName("Descripción")]
         public string Description { get; set; }
+        
+        [DisplayName("Url")]
         public string Url { get; set; }
+        
+        [EmailAddress]
+        [DisplayName("Email")]
+        public string Email { get; set; }
 
+        [DisplayName("Sucursales")]
         public virtual ICollection<Location> Locations { get; set; }
+
+        [DisplayName("Tags")]
         public virtual ICollection<Tag> Tags { get; set; }
+
+        [DisplayName("Tarjetas")]
         public virtual ICollection<Card> Cards { get; set; }
-        public virtual ICollection<Menu> Menus { get; set; }
     }
 }

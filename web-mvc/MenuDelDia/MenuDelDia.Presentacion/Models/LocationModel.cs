@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using MenuDelDia.Entities;
 
-namespace MenuDelDia.Entities
+namespace MenuDelDia.Presentacion.Models
 {
-    [Table("Locations")]
-    public class Location : EntityBase
+
+    public class LocationModel
     {
-        public Location()
+        public LocationModel()
         {
-            OpenDays = new Collection<OpenDay>();
+            OpenDays = new Collection<OpenDaysModel>();
             Tags = new Collection<Tag>();
             Menus = new Collection<Menu>();
         }
 
-        [Key]
-        public override Guid Id { get; set; }
+        
+        public Guid Id { get; set; }
 
         [Required(AllowEmptyStrings = false)]
         [DisplayName("Dirección")]
@@ -44,12 +44,34 @@ namespace MenuDelDia.Entities
         public Guid? RestaurantId { get; set; }
 
         [DisplayName("Días abiertos")]
-        public virtual ICollection<OpenDay> OpenDays { get; set; }
+        public virtual IList<OpenDaysModel> OpenDays { get; set; }
 
         [DisplayName("Tags")]
         public virtual ICollection<Tag> Tags { get; set; }
-        
+
         [DisplayName("Menús")]
         public virtual ICollection<Menu> Menus { get; set; }
+    }
+    
+    public class OpenDaysModel
+    {
+        public Guid Id { get; set; }
+
+        [DisplayName("Abierto")]
+        public bool Open { get; set; }
+
+        public DayOfWeek DayOfWeek { get; set; }
+
+        [DisplayName("Hora de apertura")]
+        [Range(0,12)]
+        public int OpenHour { get; set; }
+        [Range(0, 59)]
+        public int OpenMinutes { get; set; }
+
+        [DisplayName("Hora de cierre")]
+        [Range(0, 12)]
+        public int CloseHour { get; set; }
+        [Range(0, 59)]
+        public int CloseMinutes { get; set; }
     }
 }
