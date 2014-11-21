@@ -6,13 +6,13 @@
     <ion-content class="padding commentsForm" scroll="false">
         <div class="list list-inset">
             <label class="item item-input">
-                <textarea type="text" placeholder="¿Querés conocer el menú del día de algún local en especial? Envianos el nombre del local y su teléfono, y nos pondremos en contacto con ellos. Gracias!"></textarea>
+                <textarea ng-model="suggestions.value" type="text" placeholder="¿Querés conocer el menú del día de algún local en especial? Envianos el nombre del local y su teléfono, y nos pondremos en contacto con ellos. Gracias!"></textarea>
             </label>
         </div>
         <div class="row">
             <div class="col col-20"></div>
             <div class="col col-40">
-                <button class="button button-block button-stable">Enviar sugerencia</button>
+                <button class="button button-block button-stable" ng-click="sendSuggestions()">Enviar sugerencia</button>
             </div>
             <div class="col col-20"></div>
         </div>
