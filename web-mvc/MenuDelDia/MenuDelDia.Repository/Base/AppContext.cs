@@ -15,7 +15,7 @@ namespace MenuDelDia.Repository
     {
         public AppContext():base("AppContext")
         {
-
+            
         }
 
         public IDbSet<Card> Cards { get; set; }
@@ -30,7 +30,7 @@ namespace MenuDelDia.Repository
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
+            
             //modelBuilder.Conventions.Remove<PluralizingEntitySetNameConvention>();
             modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
             modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();

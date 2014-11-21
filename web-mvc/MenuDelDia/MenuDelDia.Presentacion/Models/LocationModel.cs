@@ -17,8 +17,12 @@ namespace MenuDelDia.Presentacion.Models
             Menus = new Collection<Menu>();
         }
 
-        
+
         public Guid Id { get; set; }
+
+        [Required(AllowEmptyStrings = false)]
+        [DisplayName("Identificador")]
+        public string Identifier { get; set; }
 
         [Required(AllowEmptyStrings = false)]
         [DisplayName("Dirección")]
@@ -51,19 +55,37 @@ namespace MenuDelDia.Presentacion.Models
 
         [DisplayName("Menús")]
         public virtual ICollection<Menu> Menus { get; set; }
-    }
-    
-    public class OpenDaysModel
-    {
-        public Guid Id { get; set; }
 
-        [DisplayName("Abierto")]
-        public bool Open { get; set; }
+
+
+
 
         public DayOfWeek DayOfWeek { get; set; }
 
         [DisplayName("Hora de apertura")]
-        [Range(0,12)]
+        [Range(0, 23)]
+        public int OpenHour { get; set; }
+        [Range(0, 59)]
+        public int OpenMinutes { get; set; }
+
+        [DisplayName("Hora de cierre")]
+        [Range(0, 23)]
+        public int CloseHour { get; set; }
+        [Range(0, 59)]
+        public int CloseMinutes { get; set; }
+
+        public Guid? RemoveDayOfWeek { get; set; }
+    }
+
+    public class OpenDaysModel
+    {
+        public Guid Id { get; set; }
+
+        public DayOfWeek DayOfWeek { get; set; }
+        public string DayOfWeekStr { get; set; }
+
+        [DisplayName("Hora de apertura")]
+        [Range(0, 12)]
         public int OpenHour { get; set; }
         [Range(0, 59)]
         public int OpenMinutes { get; set; }

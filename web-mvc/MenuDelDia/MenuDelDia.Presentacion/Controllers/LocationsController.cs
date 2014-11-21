@@ -58,107 +58,32 @@ namespace MenuDelDia.Presentacion.Controllers
             UserManager = applicationUserManager;
         }
 
-
-
-        private IList<OpenDaysModel> GenerateOpenDaysModels(IList<OpenDay> openDays = null)
+        public string DayOfWeekToString(DayOfWeek dayOfWeek)
         {
-            if (openDays == null)
+            switch (dayOfWeek)
             {
-                return new List<OpenDaysModel>
-                {
-                    new OpenDaysModel {DayOfWeek = DayOfWeek.Monday},
-                    new OpenDaysModel {DayOfWeek = DayOfWeek.Tuesday},
-                    new OpenDaysModel {DayOfWeek = DayOfWeek.Wednesday},
-                    new OpenDaysModel {DayOfWeek = DayOfWeek.Thursday},
-                    new OpenDaysModel {DayOfWeek = DayOfWeek.Friday},
-                    new OpenDaysModel {DayOfWeek = DayOfWeek.Saturday},
-                    new OpenDaysModel {DayOfWeek = DayOfWeek.Sunday}
-                };
+                case DayOfWeek.Monday: return "Lunes";
+                case DayOfWeek.Tuesday: return "Martes";
+                case DayOfWeek.Wednesday: return "Miércoles";
+                case DayOfWeek.Thursday: return "Juéves";
+                case DayOfWeek.Friday: return "Viernes";
+                case DayOfWeek.Saturday: return "Sábado";
+                case DayOfWeek.Sunday: return "Domingo";
+                default: return string.Empty;
             }
-
-            var monday = openDays.FirstOrDefault(od => od.DayOfWeek == DayOfWeek.Monday);
-            var tuesday = openDays.FirstOrDefault(od => od.DayOfWeek == DayOfWeek.Tuesday);
-            var wednesday = openDays.FirstOrDefault(od => od.DayOfWeek == DayOfWeek.Wednesday);
-            var thursday = openDays.FirstOrDefault(od => od.DayOfWeek == DayOfWeek.Thursday);
-            var friday = openDays.FirstOrDefault(od => od.DayOfWeek == DayOfWeek.Friday);
-            var saturday = openDays.FirstOrDefault(od => od.DayOfWeek == DayOfWeek.Saturday);
-            var sunday = openDays.FirstOrDefault(od => od.DayOfWeek == DayOfWeek.Sunday);
-
-
-
-            return new List<OpenDaysModel>
-            {
-                new OpenDaysModel
+        }
+        public IEnumerable<SelectListItem> DayOfWeeksSelectListItems()
+        {
+            return new List<SelectListItem>
                 {
-                    DayOfWeek = DayOfWeek.Monday,
-                    Open = (monday != null),
-                    Id = (monday != null) ? monday.Id : Guid.Empty,
-                    OpenHour = (monday != null) ? monday.OpenHour : 0,
-                    OpenMinutes = (monday != null) ? monday.OpenMinutes : 0,
-                    CloseHour = (monday != null) ? monday.CloseHour : 0,
-                    CloseMinutes = (monday != null) ? monday.CloseMinutes : 0,
-                },
-                new OpenDaysModel
-                {
-                    DayOfWeek = DayOfWeek.Tuesday,
-                    Open = (tuesday != null),
-                    Id = (tuesday != null) ? tuesday.Id : Guid.Empty,
-                    OpenHour = (tuesday != null) ? tuesday.OpenHour : 0,
-                    OpenMinutes = (tuesday != null) ? tuesday.OpenMinutes : 0,
-                    CloseHour = (tuesday != null) ? tuesday.CloseHour : 0,
-                    CloseMinutes = (tuesday != null) ? tuesday.CloseMinutes : 0,
-                },
-                new OpenDaysModel
-                {
-                    DayOfWeek = DayOfWeek.Wednesday,
-                    Open = (wednesday != null),
-                    Id = (wednesday != null) ? wednesday.Id : Guid.Empty,
-                    OpenHour = (wednesday != null) ? wednesday.OpenHour : 0,
-                    OpenMinutes = (wednesday != null) ? wednesday.OpenMinutes : 0,
-                    CloseHour = (wednesday != null) ? wednesday.CloseHour : 0,
-                    CloseMinutes = (wednesday != null) ? wednesday.CloseMinutes : 0,
-                },
-                new OpenDaysModel
-                {
-                    DayOfWeek = DayOfWeek.Thursday,
-                    Open = (thursday != null),
-                    Id = (thursday != null) ? thursday.Id : Guid.Empty,
-                    OpenHour = (thursday != null) ? thursday.OpenHour : 0,
-                    OpenMinutes = (thursday != null) ? thursday.OpenMinutes : 0,
-                    CloseHour = (thursday != null) ? thursday.CloseHour : 0,
-                    CloseMinutes = (thursday != null) ? thursday.CloseMinutes : 0,
-                },
-                new OpenDaysModel
-                {
-                    DayOfWeek = DayOfWeek.Friday,
-                    Open = (friday != null),
-                    Id = (friday != null) ? friday.Id : Guid.Empty,
-                    OpenHour = (friday != null) ? friday.OpenHour : 0,
-                    OpenMinutes = (friday != null) ? friday.OpenMinutes : 0,
-                    CloseHour = (friday != null) ? friday.CloseHour : 0,
-                    CloseMinutes = (friday != null) ? friday.CloseMinutes : 0,
-                },
-                new OpenDaysModel
-                {
-                    DayOfWeek = DayOfWeek.Saturday,
-                    Open = (saturday != null),
-                    Id = (saturday != null) ? saturday.Id : Guid.Empty,
-                    OpenHour = (saturday != null) ? saturday.OpenHour : 0,
-                    OpenMinutes = (saturday != null) ? saturday.OpenMinutes : 0,
-                    CloseHour = (saturday != null) ? saturday.CloseHour : 0,
-                    CloseMinutes = (saturday != null) ? saturday.CloseMinutes : 0,
-                },
-                new OpenDaysModel
-                {
-                    DayOfWeek = DayOfWeek.Sunday,
-                    Open = (sunday != null),
-                    Id = (sunday != null) ? sunday.Id : Guid.Empty,
-                    OpenHour = (sunday != null) ? sunday.OpenHour : 0,
-                    OpenMinutes = (sunday != null) ? sunday.OpenMinutes : 0,
-                    CloseHour = (sunday != null) ? sunday.CloseHour : 0,
-                    CloseMinutes = (sunday != null) ? sunday.CloseMinutes : 0,
-                },
-            };
+                    new SelectListItem{Value = DayOfWeek.Monday.ToString(),Text = DayOfWeekToString(DayOfWeek.Monday)},
+                    new SelectListItem{Value = DayOfWeek.Tuesday.ToString(),Text =DayOfWeekToString(DayOfWeek.Tuesday)},
+                    new SelectListItem{Value = DayOfWeek.Wednesday.ToString(),Text = DayOfWeekToString(DayOfWeek.Wednesday)},
+                    new SelectListItem{Value = DayOfWeek.Thursday.ToString(),Text = DayOfWeekToString(DayOfWeek.Thursday)},
+                    new SelectListItem{Value = DayOfWeek.Friday.ToString(),Text = DayOfWeekToString(DayOfWeek.Friday)},
+                    new SelectListItem{Value = DayOfWeek.Saturday.ToString(),Text = DayOfWeekToString(DayOfWeek.Saturday)},
+                    new SelectListItem{Value = DayOfWeek.Sunday.ToString(),Text = DayOfWeekToString(DayOfWeek.Sunday)},
+                };
         }
 
 
@@ -185,13 +110,22 @@ namespace MenuDelDia.Presentacion.Controllers
             var locationModel = new LocationModel
             {
                 Id = location.Id,
+                Identifier = location.Identifier,
                 Delivery = location.Delivery,
                 Description = location.Description,
                 Latitude = location.Latitude,
                 Longitude = location.Longitude,
                 Phone = location.Phone,
                 Streets = location.Streets,
-                OpenDays = GenerateOpenDaysModels(location.OpenDays.ToList())
+                OpenDays = location.OpenDays.Select(od => new OpenDaysModel
+                {
+                    Id = Guid.NewGuid(),
+                    DayOfWeek = od.DayOfWeek,
+                    OpenHour = od.OpenHour,
+                    OpenMinutes = od.OpenMinutes,
+                    CloseHour = od.CloseHour,
+                    CloseMinutes = od.CloseMinutes,
+                }).ToList()
             };
 
             return View(locationModel);
@@ -200,11 +134,8 @@ namespace MenuDelDia.Presentacion.Controllers
         // GET: Locations/Create
         public ActionResult Create()
         {
-            var model = new LocationModel
-            {
-                OpenDays = GenerateOpenDaysModels()
-            };
-            return View(model);
+            ViewBag.DayOfWeeks = DayOfWeeksSelectListItems();
+            return View(new LocationModel());
         }
 
         // POST: Locations/Create
@@ -212,15 +143,14 @@ namespace MenuDelDia.Presentacion.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Streets,Phone,Description,Delivery,Latitude,Longitude,OpenDays")] LocationModel location)
+        public ActionResult Create([Bind(Include = "Id,Identifier,Streets,Phone,Description,Delivery,Latitude,Longitude,OpenDays")] LocationModel location)
         {
             if (ModelState.IsValid)
             {
-                var openDays = location.OpenDays.Where(od => od.Open).ToList();
-
                 var entityLocation = new Location
                 {
                     Id = Guid.NewGuid(),
+                    Identifier = location.Identifier,
                     Streets = location.Streets,
                     Delivery = location.Delivery,
                     Description = location.Description,
@@ -228,7 +158,7 @@ namespace MenuDelDia.Presentacion.Controllers
                     Longitude = location.Longitude,
                     Phone = location.Phone,
                     RestaurantId = ApplicationUser.RestaurantId,
-                    OpenDays = openDays.Select(od => new OpenDay
+                    OpenDays = location.OpenDays.Select(od => new OpenDay
                     {
                         Id = Guid.NewGuid(),
                         DayOfWeek = od.DayOfWeek,
@@ -244,6 +174,7 @@ namespace MenuDelDia.Presentacion.Controllers
                 return RedirectToAction("Index");
             }
 
+            ViewBag.DayOfWeeks = DayOfWeeksSelectListItems();
             return View(location);
         }
 
@@ -262,16 +193,26 @@ namespace MenuDelDia.Presentacion.Controllers
             var locationModel = new LocationModel
             {
                 Id = location.Id,
+                Identifier = location.Identifier,
                 Delivery = location.Delivery,
                 Description = location.Description,
                 Latitude = location.Latitude,
                 Longitude = location.Longitude,
                 Phone = location.Phone,
                 Streets = location.Streets,
-                OpenDays = GenerateOpenDaysModels(location.OpenDays.ToList())
+                OpenDays = location.OpenDays.Select(od => new OpenDaysModel
+                {
+                    Id = Guid.NewGuid(),
+                    OpenHour = od.OpenHour,
+                    OpenMinutes = od.OpenMinutes,
+                    CloseHour = od.CloseHour,
+                    CloseMinutes = od.CloseMinutes,
+                    DayOfWeek = od.DayOfWeek,
+                    DayOfWeekStr = DayOfWeekToString(od.DayOfWeek)
+                }).ToList()
             };
 
-
+            ViewBag.DayOfWeeks = DayOfWeeksSelectListItems();
             return View(locationModel);
         }
 
@@ -280,13 +221,14 @@ namespace MenuDelDia.Presentacion.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Streets,Phone,Description,Delivery,Latitude,Longitude,OpenDays")] LocationModel location)
+        public ActionResult Edit([Bind(Include = "Id,Identifier,Streets,Phone,Description,Delivery,Latitude,Longitude,OpenDays")] LocationModel location)
         {
             if (ModelState.IsValid)
             {
                 var entityLocation = db.Locations.FirstOrDefault(l => l.Id == location.Id);
                 if (entityLocation != null)
                 {
+                    entityLocation.Identifier = location.Identifier;
                     entityLocation.Delivery = location.Delivery;
                     entityLocation.Description = location.Description;
                     entityLocation.Latitude = location.Latitude;
@@ -294,10 +236,8 @@ namespace MenuDelDia.Presentacion.Controllers
                     entityLocation.Phone = location.Phone;
                     entityLocation.Streets = location.Streets;
 
-                    var openDays = location.OpenDays.Where(od => od.Open).ToList();
                     entityLocation.OpenDays.Clear();
-
-                    foreach (var openDay in openDays)
+                    foreach (var openDay in location.OpenDays)
                     {
                         entityLocation.OpenDays.Add(new OpenDay
                         {
@@ -313,8 +253,8 @@ namespace MenuDelDia.Presentacion.Controllers
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
-
             }
+            ViewBag.DayOfWeeks = DayOfWeeksSelectListItems();
             return View(location);
         }
 
@@ -351,6 +291,44 @@ namespace MenuDelDia.Presentacion.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+
+        public ActionResult AddDayOfWeek(LocationModel locationModel)
+        {
+            if (locationModel.OpenDays.Any(l => l.DayOfWeek == locationModel.DayOfWeek &&
+                                                l.OpenHour == locationModel.OpenHour &&
+                                                l.OpenMinutes == locationModel.OpenMinutes &&
+                                                l.CloseHour == locationModel.CloseHour &&
+                                                l.CloseMinutes == locationModel.CloseMinutes
+                ))
+            {
+                return PartialView("_OpenDays", locationModel);
+            }
+            locationModel.OpenDays.Add(new OpenDaysModel
+            {
+                Id = Guid.NewGuid(),
+                OpenHour = locationModel.OpenHour,
+                OpenMinutes = locationModel.OpenMinutes,
+                CloseHour = locationModel.CloseHour,
+                CloseMinutes = locationModel.CloseMinutes,
+                DayOfWeek = locationModel.DayOfWeek,
+                DayOfWeekStr = DayOfWeekToString(locationModel.DayOfWeek),
+            });
+
+            locationModel.OpenDays = locationModel.OpenDays.OrderBy(l => l.DayOfWeek).ToList();
+            return PartialView("_OpenDays", locationModel);
+        }
+
+        public ActionResult RemoveDayOfWeek(LocationModel locationModel)
+        {
+            if (locationModel.RemoveDayOfWeek.HasValue)
+            {
+                var item = locationModel.OpenDays.FirstOrDefault(l => l.Id == locationModel.RemoveDayOfWeek.Value);
+                if (item != null)
+                    locationModel.OpenDays.Remove(item);
+            }
+            return PartialView("_OpenDays", locationModel);
         }
     }
 }

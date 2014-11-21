@@ -20,6 +20,11 @@ namespace MenuDelDia.Entities
         [Key]
         public override Guid Id { get; set; }
 
+
+        [Required(AllowEmptyStrings = false)]
+        [DisplayName("Identificador")]
+        public string Identifier { get; set; }
+
         [Required(AllowEmptyStrings = false)]
         [DisplayName("Dirección")]
         public string Streets { get; set; }

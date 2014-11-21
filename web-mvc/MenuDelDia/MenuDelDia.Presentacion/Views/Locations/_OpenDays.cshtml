@@ -1,0 +1,43 @@
+﻿@model MenuDelDia.Presentacion.Models.LocationModel
+
+<table>
+    <thead>
+        <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            for (var i = 0; i < Model.OpenDays.Count; i++)
+            {
+                <tr>
+                    <td>
+                        @Html.Hidden("OpenDays.Index", (i + 10))
+                        @Html.Hidden("OpenDays[" + (i + 10) + "].Id", Model.OpenDays[i].Id)
+                        @Html.Hidden("OpenDays[" + (i + 10) + "].DayOfWeek", Model.OpenDays[i].DayOfWeek)
+                        @Html.Hidden("OpenDays[" + (i + 10) + "].DayOfWeekStr", Model.OpenDays[i].DayOfWeekStr)
+                        @Html.Hidden("OpenDays[" + (i + 10) + "].OpenHour", Model.OpenDays[i].OpenHour)
+                        @Html.Hidden("OpenDays[" + (i + 10) + "].OpenMinutes", Model.OpenDays[i].OpenMinutes)
+                        @Html.Hidden("OpenDays[" + (i + 10) + "].CloseHour", Model.OpenDays[i].CloseHour)
+                        @Html.Hidden("OpenDays[" + (i + 10) + "].CloseMinutes", Model.OpenDays[i].CloseMinutes)
+
+                        @Model.OpenDays[i].DayOfWeekStr
+                    </td>
+                    <td>
+                        @Model.OpenDays[i].OpenHour.ToString("00"):@Model.OpenDays[i].OpenMinutes.ToString("00")Hrs
+                    </td>
+                    <td>
+                        @Model.OpenDays[i].CloseHour.ToString("00"):@Model.OpenDays[i].CloseMinutes.ToString("00")Hrs
+                    </td>
+                    <td>
+                        <a id="@Model.OpenDays[i].Id" href="#" class="btn btn-default lnkRemoveDayOfWeek">Borrar</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

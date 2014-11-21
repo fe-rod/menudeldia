@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using MenuDelDia.Entities;
+using MenuDelDia.Presentacion.Models;
 using MenuDelDia.Repository;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
@@ -42,6 +43,24 @@ namespace MenuDelDia.Presentacion.Controllers
         }
 
 
+        private IList<MenuLocationModel> LoadLocations(Guid restaurantId, IEnumerable<Location> selectedLocations = null)
+        {
+            var selectedLocationsIds = new List<Guid>();
+
+            if (selectedLocations != null)
+                selectedLocationsIds = selectedLocations.Select(sl => sl.Id).ToList();
+
+            return db.Locations
+                .Where(l => l.RestaurantId == restaurantId)
+                .ToList()
+                .Select(l => new MenuLocationModel
+                {
+                    Id = l.Id,
+                    Name = l.Identifier,
+                    Selected = (selectedLocationsIds.Contains(l.Id)),
+                }).ToList();
+        }
+
         // GET: Menus
         public async Task<ActionResult> Index()
         {
@@ -55,8 +74,12 @@ namespace MenuDelDia.Presentacion.Controllers
         }
 
         // GET: Menus/Details/5
-        public ActionResult Details(Guid? id)
+        public async Task<ActionResult> Details(Guid? id)
         {
+            var applicationUser = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            if (applicationUser.RestaurantId.HasValue == false)
+                throw new Exception();
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -66,14 +89,50 @@ namespace MenuDelDia.Presentacion.Controllers
             {
                 return HttpNotFound();
             }
-            return View(menu);
+
+            var menuModel = new MenuModel
+            {
+                Id = menu.Id,
+                Name = menu.Name,
+                Active = menu.Active,
+                Ingredients = menu.Ingredients,
+                Description = menu.Description,
+                MenuDays = new MenuDaysModel
+                {
+                    Friday = menu.MenuDays.Friday,
+                    Monday = menu.MenuDays.Monday,
+                    Saturday = menu.MenuDays.Saturday,
+                    Sunday = menu.MenuDays.Sunday,
+                    Thursday = menu.MenuDays.Thursday,
+                    Tuesday = menu.MenuDays.Tuesday,
+                    Wednesday = menu.MenuDays.Wednesday,
+                },
+                SpecialDay = new SpecialDayModel
+                {
+                    Date = menu.SpecialDay.Date,
+                    Recurrent = menu.SpecialDay.Recurrent,
+                },
+                //SpecialDayDate = menu.SpecialDay.Date,
+                //SpecialDayRecurrent = menu.SpecialDay.Recurrent,
+
+                Locations = LoadLocations(applicationUser.RestaurantId.Value, menu.Locations)
+            };
+            return View(menuModel);
         }
 
         // GET: Menus/Create
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
-            ViewBag.RestaurantId = new SelectList(db.Restaurants, "Id", "Name");
-            return View();
+            var applicationUser = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            if (applicationUser.RestaurantId.HasValue == false)
+                throw new Exception();
+
+            var menu = new MenuModel
+            {
+                Locations = LoadLocations(applicationUser.RestaurantId.Value),
+            };
+
+            return View(menu);
         }
 
         // POST: Menus/Create
@@ -81,7 +140,7 @@ namespace MenuDelDia.Presentacion.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Name,Description,Ingredients,MenuDays,SpecialDay,RestaurantId,Active")] Menu menu)
+        public async Task<ActionResult> Create([Bind(Include = "Id,Name,Description,Ingredients,MenuDays,SpecialDay,Active,Locations")] MenuModel menu)
         {
             if (ModelState.IsValid)
             {
@@ -89,20 +148,53 @@ namespace MenuDelDia.Presentacion.Controllers
                 if (applicationUser.RestaurantId.HasValue == false)
                     throw new Exception();
 
-                menu.Id = Guid.NewGuid();
+                var selectedLocations = menu.Locations.Where(l => l.Selected).Select(l => l.Id).ToList();
+                var entityLocations = db.Locations.Where(l => selectedLocations.Contains(l.Id)).ToList();
 
-                db.Menus.Add(menu);
+                var entityMenu = new Menu
+                {
+                    Id = Guid.NewGuid(),
+                    Name = menu.Name,
+                    Active = menu.Active,
+                    Ingredients = menu.Ingredients,
+                    Description = menu.Description,
+                    MenuDays = new MenuDays
+                    {
+                        Friday = menu.MenuDays.Friday,
+                        Monday = menu.MenuDays.Monday,
+                        Saturday = menu.MenuDays.Saturday,
+                        Sunday = menu.MenuDays.Sunday,
+                        Thursday = menu.MenuDays.Thursday,
+                        Tuesday = menu.MenuDays.Tuesday,
+                        Wednesday = menu.MenuDays.Wednesday,
+                    },
+                    SpecialDay = new SpecialDay
+                    {
+                        Date = menu.SpecialDay.Date,
+                        Recurrent = menu.SpecialDay.Recurrent,
+                    }
+                };
+
+                foreach (var entityLocation in entityLocations)
+                {
+                    entityMenu.Locations.Add(entityLocation);
+                }
+
+                db.Menus.Add(entityMenu);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.RestaurantId = new SelectList(db.Restaurants, "Id", "Name");
             return View(menu);
         }
 
         // GET: Menus/Edit/5
-        public ActionResult Edit(Guid? id)
+        public async Task<ActionResult> Edit(Guid? id)
         {
+            var applicationUser = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            if (applicationUser.RestaurantId.HasValue == false)
+                throw new Exception();
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -112,8 +204,38 @@ namespace MenuDelDia.Presentacion.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.RestaurantId = new SelectList(db.Restaurants, "Id", "Name");
-            return View(menu);
+
+            var menuModel = new MenuModel
+            {
+                Id = menu.Id,
+                Name = menu.Name,
+                Active = menu.Active,
+                Ingredients = menu.Ingredients,
+                Description = menu.Description,
+                MenuDays = new MenuDaysModel
+                {
+                    Friday = menu.MenuDays.Friday,
+                    Monday = menu.MenuDays.Monday,
+                    Saturday = menu.MenuDays.Saturday,
+                    Sunday = menu.MenuDays.Sunday,
+                    Thursday = menu.MenuDays.Thursday,
+                    Tuesday = menu.MenuDays.Tuesday,
+                    Wednesday = menu.MenuDays.Wednesday,
+                },
+                SpecialDay = new SpecialDayModel
+                {
+                    Date = menu.SpecialDay.Date,
+                    Recurrent = menu.SpecialDay.Recurrent,
+                },
+
+                //SpecialDayDate = menu.SpecialDay.Date,
+                //SpecialDayRecurrent = menu.SpecialDay.Recurrent,
+
+                Locations = LoadLocations(applicationUser.RestaurantId.Value, menu.Locations)
+            };
+
+
+            return View(menuModel);
         }
 
         // POST: Menus/Edit/5
@@ -121,7 +243,7 @@ namespace MenuDelDia.Presentacion.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Description,Ingredients,MenuDays,SpecialDay,Active")] Menu menu)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Description,Ingredients,MenuDays,SpecialDay,Active,Locations")] MenuModel menu)
         {
             if (ModelState.IsValid)
             {
@@ -129,13 +251,41 @@ namespace MenuDelDia.Presentacion.Controllers
                 if (applicationUser.RestaurantId.HasValue == false)
                     throw new Exception();
 
-                //menu.RestaurantId = applicationUser.RestaurantId.Value;
+                var selectedLocations = menu.Locations.Where(l => l.Selected).Select(l => l.Id).ToList();
+                var entityLocations = db.Locations.Where(l => selectedLocations.Contains(l.Id)).ToList();
 
-                db.Entry(menu).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                var entityMenu = db.Menus.FirstOrDefault(m => m.Id == menu.Id);
+
+                if (entityMenu != null)
+                {
+                    entityMenu.Name = menu.Name;
+                    entityMenu.Active = menu.Active;
+                    entityMenu.Ingredients = menu.Ingredients;
+                    entityMenu.Description = menu.Description;
+
+                    entityMenu.MenuDays.Friday = menu.MenuDays.Friday;
+                    entityMenu.MenuDays.Monday = menu.MenuDays.Monday;
+                    entityMenu.MenuDays.Saturday = menu.MenuDays.Saturday;
+                    entityMenu.MenuDays.Sunday = menu.MenuDays.Sunday;
+                    entityMenu.MenuDays.Thursday = menu.MenuDays.Thursday;
+                    entityMenu.MenuDays.Tuesday = menu.MenuDays.Tuesday;
+                    entityMenu.MenuDays.Wednesday = menu.MenuDays.Wednesday;
+
+                    entityMenu.SpecialDay.Date = menu.SpecialDay.Date;
+                    entityMenu.SpecialDay.Recurrent = menu.SpecialDay.Recurrent;
+
+                    entityMenu.Locations.Clear();
+
+                    foreach (var entityLocation in entityLocations)
+                    {
+                        entityMenu.Locations.Add(entityLocation);
+                    }
+                    db.Entry(entityMenu).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
             }
-            ViewBag.RestaurantId = new SelectList(db.Restaurants, "Id", "Name");
+
             return View(menu);
         }
 

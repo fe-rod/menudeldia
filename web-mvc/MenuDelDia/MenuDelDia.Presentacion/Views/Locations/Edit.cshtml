@@ -1,4 +1,5 @@
-﻿@model MenuDelDia.Presentacion.Models.LocationModel
+﻿@using MenuDelDia.Presentacion.Helpers
+@model MenuDelDia.Presentacion.Models.LocationModel
 
 @{
     ViewBag.Title = "Edit";
@@ -16,6 +17,16 @@
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Id)
+        
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Identifier, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Identifier, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Identifier, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        
 
         <div class="form-group">
             @Html.LabelFor(model => model.Streets, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -61,48 +72,31 @@
                 <div id="map_canvas" class="form-control" style="width: 50%; height: 300px"></div>
             </div>
         </div>
-            
+
         <div class="form-group">
-            @Html.LabelFor(model => model.OpenDays, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10 ">
-                <table>
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model != null)
-                        {
-                            for (var i = 0; i < Model.OpenDays.Count; i++)
-                            {
-                                <tr>
-                                    <td>
-                                        @Html.Hidden("OpenDays.Index", (i + 10))
-                                        @Html.CheckBox("OpenDays[" + (i + 10) + "].Open", Model.OpenDays[i].Open)
-                                    </td>
-                                    <td>
-                                        @Html.Hidden("OpenDays[" + (i + 10) + "].DayOfWeek", Model.OpenDays[i].DayOfWeek)
-                                        @Model.OpenDays[i].DayOfWeek
-                                    </td>
-                                    <td>
-                                        @Html.TextBox("OpenDays[" + (i + 10) + "].OpenHour", Model.OpenDays[i].OpenHour)
-                                        @Html.TextBox("OpenDays[" + (i + 10) + "].OpenMinutes", Model.OpenDays[i].OpenMinutes)
-                                    </td>
-                                    <td>
-                                        @Html.TextBox("OpenDays[" + (i + 10) + "].CloseHour", Model.OpenDays[i].CloseHour)
-                                        @Html.TextBox("OpenDays[" + (i + 10) + "].CloseMinutes", Model.OpenDays[i].CloseMinutes)
-                                    </td>
-                                </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
+            <label class="control-label col-md-2"> @Html.LabelFor(model => model.OpenDays, htmlAttributes: new { @class = "control-label col-md-2" }) </label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.DayOfWeek, (IEnumerable<SelectListItem>)ViewBag.DayOfWeeks, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.DropDownListFor(model => model.OpenHour, EnumerableHelper.Range(0, 23).Select(i => new SelectListItem { Text = i.ToString("00"), Value = i.ToString() }), new { htmlAttributes = new { @class = "form-control" } })
+                @Html.DropDownListFor(model => model.OpenMinutes, EnumerableHelper.Range(0, 59, x => x + 5).Select(i => new SelectListItem { Text = i.ToString("00"), Value = i.ToString() }), new { htmlAttributes = new { @class = "form-control" } })
+                @Html.DropDownListFor(model => model.CloseHour, EnumerableHelper.Range(0, 23).Select(i => new SelectListItem { Text = i.ToString("00"), Value = i.ToString() }), new { htmlAttributes = new { @class = "form-control" } })
+                @Html.DropDownListFor(model => model.CloseMinutes, EnumerableHelper.Range(0, 59, x => x + 5).Select(i => new SelectListItem { Text = i.ToString("00"), Value = i.ToString() }), new { htmlAttributes = new { @class = "form-control" } })
+
+                @Html.HiddenFor(model => model.RemoveDayOfWeek)
+
+                @Html.ValidationMessageFor(model => model.Longitude, "", new { @class = "text-danger" })
+
+                <a id="lnkAddDayOfWeek" href="#" class="btn btn-default">Agregar día</a>
             </div>
         </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.OpenDays, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10 " id="divOpenDays">
+                @Html.Partial("_OpenDays", Model)
+            </div>
+        </div>
+        
+        
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
@@ -171,5 +165,39 @@
         }
 
         google.maps.event.addDomListener(window, 'load', initialize);
+
+
+
+        $(document).ready(function () {
+            $("#lnkAddDayOfWeek").click(function (e) {
+                e.preventDefault();
+                var form = $('form');
+                $.ajax({
+                    url: '@Url.Action("AddDayOfWeek","Locations")',
+                    type: 'POST',
+                    data: form.serialize(),
+                    success: function (data) {
+                        $("#divOpenDays").html(data);
+                        $("#@Html.IdFor(m => m.OpenHour)").val(0);
+                        $("#@Html.IdFor(m => m.OpenMinutes)").val(0);
+                        $("#@Html.IdFor(m => m.CloseHour)").val(0);
+                        $("#@Html.IdFor(m => m.CloseMinutes)").val(0);
+                    },
+                    error: function () { }
+                });
+            });
+
+            $("#divOpenDays").on("click", ".lnkRemoveDayOfWeek", function (e) {
+                e.preventDefault();
+                $("#@Html.IdFor(m => m.RemoveDayOfWeek)").val($(this).attr("id"));
+                $.ajax({
+                    url: '@Url.Action("RemoveDayOfWeek","Locations")',
+                    type: 'POST',
+                    data: $('form').serialize(),
+                    success: function (data) { $("#divOpenDays").html(data); },
+                    error: function () { }
+                });
+            });
+        });
     </script>
 }

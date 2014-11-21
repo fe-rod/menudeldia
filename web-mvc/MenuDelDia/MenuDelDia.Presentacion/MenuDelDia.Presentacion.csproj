@@ -222,9 +222,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\EnumerableHelper.cs" />
     <Compile Include="Helpers\HttpExtensions.cs" />
     <Compile Include="Helpers\UrlHelper.cs" />
     <Compile Include="Helpers\WebPathHelper.cs" />
+    <Compile Include="Models\MenuModel.cs" />
     <Compile Include="Models\LocationModel.cs" />
     <Compile Include="Models\RestaurantModel.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
@@ -360,10 +362,14 @@
     <Content Include="Views\Restaurants\Details.cshtml" />
     <Content Include="Views\Restaurants\Edit.cshtml" />
     <Content Include="Views\Restaurants\Index.cshtml" />
+    <Content Include="Views\Locations\_OpenDays.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\MenuDays.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\SpecialDay.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="RestaurantsLogos\" />
+    <Folder Include="Views\Shared\EditorTemplates\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

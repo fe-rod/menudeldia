@@ -1,4 +1,4 @@
-﻿@model MenuDelDia.Entities.Menu
+﻿@model MenuDelDia.Presentacion.Models.MenuModel
 
 @{
     ViewBag.Title = "Details";
@@ -10,14 +10,6 @@
     <h4>Menu</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Restaurant.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Restaurant.Name)
-        </dd>
-
         <dt>
             @Html.DisplayNameFor(model => model.Name)
         </dt>
@@ -57,7 +49,7 @@
         <dd>
             @Html.DisplayFor(model => model.SpecialDay)
         </dd>
-        
+
         <dt>
             @Html.DisplayNameFor(model => model.Active)
         </dt>
@@ -66,6 +58,35 @@
             @Html.DisplayFor(model => model.Active)
         </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model => model.Locations)
+        </dt>
+
+        <dd>
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (var i = 0; i < Model.Locations.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                @Html.Hidden("Locations.Index", (i + 10))
+                                @Html.CheckBox("Locations[" + (i + 10) + "].Selected", Model.Locations[i].Selected,new {disabled="disabled"})
+                            </td>
+                            <td>
+                                @Model.Locations[i].Name
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </dd>
     </dl>
 </div>
 <p>

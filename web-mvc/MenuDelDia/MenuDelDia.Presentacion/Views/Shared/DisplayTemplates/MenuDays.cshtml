@@ -1,0 +1,26 @@
+﻿@model MenuDelDia.Entities.MenuDays
+
+<table>
+    <thead>
+        <tr>
+            <th>L</th>
+            <th>M</th>
+            <th>M</th>
+            <th>J</th>
+            <th>V</th>
+            <th>S</th>
+            <th>D</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Html.DisplayFor(m => m.Monday)</td>
+            <td>@Html.DisplayFor(m => m.Tuesday)</td>
+            <td>@Html.DisplayFor(m => m.Wednesday)</td>
+            <td>@Html.DisplayFor(m => m.Thursday)</td>
+            <td>@Html.DisplayFor(m => m.Friday)</td>
+            <td>@Html.DisplayFor(m => m.Saturday)</td>
+            <td>@Html.DisplayFor(m => m.Sunday)</td>
+        </tr>
+    </tbody>
+</table>

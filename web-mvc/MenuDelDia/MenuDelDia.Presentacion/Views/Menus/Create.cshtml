@@ -1,4 +1,4 @@
-﻿@model MenuDelDia.Entities.Menu
+﻿@model MenuDelDia.Presentacion.Models.MenuModel
 
 @{
     ViewBag.Title = "Create";
@@ -42,23 +42,79 @@
         <div class="form-group">
             @Html.LabelFor(model => model.MenuDays, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.MenuDays, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.MenuDays, "", new { @class = "text-danger" })
+                <table style=" width:100%; max-width: 280px">
+                    <thead>
+                        <tr>
+                            <th><label for="@Html.IdFor(m => m.MenuDays.Monday)">L</label></th>
+                            <th><label for="@Html.IdFor(m => m.MenuDays.Tuesday)">M</label></th>
+                            <th><label for="@Html.IdFor(m => m.MenuDays.Wednesday)">M</label></th>
+                            <th><label for="@Html.IdFor(m => m.MenuDays.Thursday)">J</label></th>
+                            <th><label for="@Html.IdFor(m => m.MenuDays.Friday)">V</label></th>
+                            <th><label for="@Html.IdFor(m => m.MenuDays.Saturday)">S</label></th>
+                            <th><label for="@Html.IdFor(m => m.MenuDays.Sunday)">D</label></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Html.CheckBoxFor(m => m.MenuDays.Monday)</td>
+                            <td>@Html.CheckBoxFor(m => m.MenuDays.Tuesday)</td>
+                            <td>@Html.CheckBoxFor(m => m.MenuDays.Wednesday)</td>
+                            <td>@Html.CheckBoxFor(m => m.MenuDays.Thursday)</td>
+                            <td>@Html.CheckBoxFor(m => m.MenuDays.Friday)</td>
+                            <td>@Html.CheckBoxFor(m => m.MenuDays.Saturday)</td>
+                            <td>@Html.CheckBoxFor(m => m.MenuDays.Sunday)</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.SpecialDay, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.SpecialDay, new { htmlAttributes = new { @class = "form-control datepicker" } })
-                @Html.ValidationMessageFor(model => model.SpecialDay, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.SpecialDay.Date, new { htmlAttributes = new { @class = "form-control datepicker" } })
+                <div class="col-md-5">
+                    @Html.EditorFor(model => model.SpecialDay.Recurrent, new { htmlAttributes = new { @class = "" } })
+                    @Html.LabelFor(model => model.SpecialDay.Recurrent, htmlAttributes: new { @class = "control-label" })
+                </div>
+                @Html.ValidationMessageFor(model => model.SpecialDay.Date, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Locations, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10 ">
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (var i = 0; i < Model.Locations.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.Hidden("Locations.Index", (i + 10))
+                                    @Html.CheckBox("Locations[" + (i + 10) + "].Selected", Model.Locations[i].Selected)
+                                </td>
+                                <td>
+                                    @Html.Hidden("Locations[" + (i + 10) + "].Id", Model.Locations[i].Id)
+                                    @Html.Hidden("Locations[" + (i + 10) + "].Name", Model.Locations[i].Name)
+                                    <label for="@string.Format("Locations_{0}__Selected", (i + 10))"> @Model.Locations[i].Name</label>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.Active, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Active, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.Active, new { htmlAttributes = new { @class = "" } })
                 @Html.ValidationMessageFor(model => model.Active, "", new { @class = "text-danger" })
             </div>
         </div>
