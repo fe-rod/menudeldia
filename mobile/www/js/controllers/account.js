@@ -1,5 +1,5 @@
 angular.module('todayMenu')
-    .controller('AccountCtrl', function($scope, $ionicModal, $cordovaToast, $rootScope) {
+    .controller('AccountCtrl', function($scope, $ionicModal, $cordovaToast, $rootScope, Account) {
         $rootScope.hideTabs = false;
         $rootScope.hideFilter = true;
         $ionicModal.fromTemplateUrl('templates/account/comments.html', function($ionicModal) {
@@ -24,23 +24,38 @@ angular.module('todayMenu')
 
         $scope.sendComments = function(){
             $scope.commentsModal.hide();
-            $scope.comments.value = '';
-            $cordovaToast.showLongBottom('Gracias por enviarnos tus comentarios').then(function(success) {
-                // success
-            }, function (error) {
-                // error
-            });
 
+            Account.saveComment($scope.comments.value).then(
+                function(data){
+                    $scope.comments.value = '';
+                    $cordovaToast.showLongBottom('Gracias por enviarnos tus comentarios').then(function(success) {
+                        // success
+                    }, function (error) {
+                        // error
+                    });
+                },
+                function(){
+                    alert('Error');
+                }
+            );
         }
 
         $scope.sendSuggestions = function(){
             $scope.suggestModal.hide();
-            $scope.suggestions.value = '';
-            $cordovaToast.showLongBottom('Gracias por enviarnos tus comentarios').then(function(success) {
-                // success
-            }, function (error) {
-                // error
-            });
+
+            Account.saveSuggestion($scope.suggestions.value).then(
+                function(data){
+                    $scope.suggestions.value = '';
+                    $cordovaToast.showLongBottom('Gracias por enviarnos tus comentarios').then(function(success) {
+                        // success
+                    }, function (error) {
+                        // error
+                    });
+                },
+                function(){
+                    alert('Error');
+                }
+            );
         }
 
     });

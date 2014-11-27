@@ -7,7 +7,7 @@ angular.module('todayMenu')
 
         var options = {
             frequency : 1000,
-            timeout : 3000,
+            timeout : 30000,
             enableHighAccuracy: true
         };
 
@@ -32,7 +32,7 @@ angular.module('todayMenu')
         $rootScope.hideTabs = true;
         $rootScope.hideFilter = true;
 
-        $scope.store = Stores.get($stateParams.storeId);
+        $scope.store = Stores.getById($stateParams.storeId);
         $scope.distanceAvailable = $stateParams.distance != 0;
         $scope.distanceTo = Math.ceil($stateParams.distance);
     });
