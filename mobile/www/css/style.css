@@ -130,6 +130,12 @@
     color: #1aacc3;
 }
 
+.menuDetailHeader p {
+    padding-left:60px;
+    font-size: 15px;
+    color: #707070;
+}
+
 .menuDetailContent{
 
 }
@@ -152,6 +158,7 @@
     font-size: 12px;
     font-weight: normal;
     line-height: 30px;
+    margin-bottom: 10px;
 }
 
 .menuDetailTags .button.button-dark.active, .menuDetailTags .button.button-dark.activated {

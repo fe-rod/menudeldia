@@ -1,5 +1,7 @@
 angular.module('todayMenu')
-    .controller('AccountCtrl', function($scope, $ionicModal, $cordovaToast) {
+    .controller('AccountCtrl', function($scope, $ionicModal, $cordovaToast, $rootScope) {
+        $rootScope.hideTabs = false;
+        $rootScope.hideFilter = true;
         $ionicModal.fromTemplateUrl('templates/account/comments.html', function($ionicModal) {
             $scope.commentsModal = $ionicModal;
             $scope.comments = {value: ''};
