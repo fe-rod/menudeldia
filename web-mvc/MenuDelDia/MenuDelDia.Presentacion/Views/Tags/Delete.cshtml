@@ -20,6 +20,27 @@
             @Html.DisplayFor(model => model.Name)
         </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplyToRestaurant)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ApplyToRestaurant, new { disabled = "disabled" })
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplyToLocation)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ApplyToLocation, new { disabled = "disabled" })
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplyToMenu)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ApplyToMenu, new { disabled = "disabled" })
+        </dd>
     </dl>
 
     @using (Html.BeginForm()) {

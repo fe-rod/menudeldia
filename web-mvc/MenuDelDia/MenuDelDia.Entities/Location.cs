@@ -46,7 +46,7 @@ namespace MenuDelDia.Entities
         [DisplayName("Longitud")]
         public double Longitude { get; set; }
 
-        public Guid? RestaurantId { get; set; }
+        public Guid RestaurantId { get; set; }
 
         [DisplayName("Días abiertos")]
         public virtual ICollection<OpenDay> OpenDays { get; set; }

@@ -45,5 +45,7 @@ namespace MenuDelDia.Entities
 
         [DisplayName("Tarjetas")]
         public virtual ICollection<Card> Cards { get; set; }
+
+        public bool Active { get; set; }
     }
 }

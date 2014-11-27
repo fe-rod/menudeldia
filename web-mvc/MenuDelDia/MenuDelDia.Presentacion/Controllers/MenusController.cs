@@ -1,48 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Linq;
+using System.Management.Instrumentation;
 using System.Net;
-using System.Net.Mime;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using MenuDelDia.Entities;
+using MenuDelDia.Presentacion.Authorize;
 using MenuDelDia.Presentacion.Models;
-using MenuDelDia.Repository;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
+using WebGrease.Css.Extensions;
 
 namespace MenuDelDia.Presentacion.Controllers
 {
-    public class MenusController : Controller
+    [CustomAuthorize(Roles = "Administrator,User")]
+    public class MenusController : BaseController
     {
-        private ApplicationUserManager _userManager;
 
-        private AppContext db = new AppContext();
-        public MenusController()
-        {
-
-        }
-
-        public MenusController(ApplicationUserManager userManager)
-        {
-            UserManager = userManager;
-        }
-        public ApplicationUserManager UserManager
-        {
-            get
-            {
-                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            }
-            private set
-            {
-                _userManager = value;
-            }
-        }
-
-
+        #region Private Methods
         private IList<MenuLocationModel> LoadLocations(Guid restaurantId, IEnumerable<Location> selectedLocations = null)
         {
             var selectedLocationsIds = new List<Guid>();
@@ -50,7 +26,7 @@ namespace MenuDelDia.Presentacion.Controllers
             if (selectedLocations != null)
                 selectedLocationsIds = selectedLocations.Select(sl => sl.Id).ToList();
 
-            return db.Locations
+            return CurrentAppContext.Locations
                 .Where(l => l.RestaurantId == restaurantId)
                 .ToList()
                 .Select(l => new MenuLocationModel
@@ -61,14 +37,40 @@ namespace MenuDelDia.Presentacion.Controllers
                 }).ToList();
         }
 
+        public IList<TagModel> LoadTags(IList<Guid> selectedTags = null)
+        {
+            if (selectedTags == null)
+            {
+                return CurrentAppContext.Tags
+                    .Where(t => t.ApplyToRestaurant)
+                    .Select(t => new TagModel
+                    {
+                        Id = t.Id,
+                        Name = t.Name,
+                    }).ToList();
+            }
+
+            return CurrentAppContext.Tags
+                .Where(t => t.ApplyToRestaurant)
+                .Select(t => new TagModel
+                {
+                    Id = t.Id,
+                    Name = t.Name,
+                    Selected = selectedTags.Contains(t.Id),
+                }).ToList();
+        }
+
+        #endregion
+
+
         // GET: Menus
         public async Task<ActionResult> Index()
         {
             var applicationUser = await UserManager.FindByIdAsync(User.Identity.GetUserId());
 
-            var menus = db.Menus.Include(m => m.Locations)
-                //.Where(m => m.RestaurantId == applicationUser.RestaurantId)
-                                .ToList();
+            var menus = CurrentAppContext.Menus.Include(m => m.Locations)
+                .Where(m => m.Locations.All(l => l.RestaurantId == applicationUser.RestaurantId))
+                .ToList();
 
             return View(menus.ToList());
         }
@@ -78,18 +80,25 @@ namespace MenuDelDia.Presentacion.Controllers
         {
             var applicationUser = await UserManager.FindByIdAsync(User.Identity.GetUserId());
             if (applicationUser.RestaurantId.HasValue == false)
-                throw new Exception();
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Menu menu = db.Menus.Find(id);
+            Menu menu = CurrentAppContext.Menus.Find(id);
             if (menu == null)
             {
                 return HttpNotFound();
             }
+            var restaurantIds = menu.Locations.Select(r => r.RestaurantId).Distinct().ToList();
+            if (restaurantIds.Count() > 1)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
+            if (await ValidateUserRequestWithUserLoggedIn(restaurantIds.First()) == false)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
             var menuModel = new MenuModel
             {
                 Id = menu.Id,
@@ -97,6 +106,7 @@ namespace MenuDelDia.Presentacion.Controllers
                 Active = menu.Active,
                 Ingredients = menu.Ingredients,
                 Description = menu.Description,
+                Cost = menu.Cost,
                 MenuDays = new MenuDaysModel
                 {
                     Friday = menu.MenuDays.Friday,
@@ -112,10 +122,8 @@ namespace MenuDelDia.Presentacion.Controllers
                     Date = menu.SpecialDay.Date,
                     Recurrent = menu.SpecialDay.Recurrent,
                 },
-                //SpecialDayDate = menu.SpecialDay.Date,
-                //SpecialDayRecurrent = menu.SpecialDay.Recurrent,
-
-                Locations = LoadLocations(applicationUser.RestaurantId.Value, menu.Locations)
+                Locations = LoadLocations(applicationUser.RestaurantId.Value, menu.Locations),
+                Tags = LoadTags(menu.Tags.Select(t => t.Id).ToList())
             };
             return View(menuModel);
         }
@@ -125,13 +133,15 @@ namespace MenuDelDia.Presentacion.Controllers
         {
             var applicationUser = await UserManager.FindByIdAsync(User.Identity.GetUserId());
             if (applicationUser.RestaurantId.HasValue == false)
-                throw new Exception();
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
             var menu = new MenuModel
             {
                 Locations = LoadLocations(applicationUser.RestaurantId.Value),
+                Tags = LoadTags(),
+                Active = true,
             };
-
+            menu.Locations.ForEach(l => l.Selected = true);
             return View(menu);
         }
 
@@ -140,16 +150,28 @@ namespace MenuDelDia.Presentacion.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Name,Description,Ingredients,MenuDays,SpecialDay,Active,Locations")] MenuModel menu)
+        public async Task<ActionResult> Create([Bind(Include = "Id,Name,Description,Ingredients,Cost,MenuDays,SpecialDay,Active,Locations,Tags")] MenuModel menu)
         {
             if (ModelState.IsValid)
             {
                 var applicationUser = await UserManager.FindByIdAsync(User.Identity.GetUserId());
                 if (applicationUser.RestaurantId.HasValue == false)
-                    throw new Exception();
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
                 var selectedLocations = menu.Locations.Where(l => l.Selected).Select(l => l.Id).ToList();
-                var entityLocations = db.Locations.Where(l => selectedLocations.Contains(l.Id)).ToList();
+                var entityLocations = CurrentAppContext.Locations.Where(l => selectedLocations.Contains(l.Id)).ToList();
+
+                var restaurantIds = entityLocations.Select(r => r.RestaurantId).Distinct().ToList();
+                if (restaurantIds.Count() > 1)
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+                if (await ValidateUserRequestWithUserLoggedIn(restaurantIds.First()) == false)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+
+                var selectedTags = menu.Tags.Where(t => t.Selected).Select(t => t.Id).ToList();
+                var entityTags = CurrentAppContext.Tags.Where(t => selectedTags.Contains(t.Id)).ToList();
 
                 var entityMenu = new Menu
                 {
@@ -158,6 +180,7 @@ namespace MenuDelDia.Presentacion.Controllers
                     Active = menu.Active,
                     Ingredients = menu.Ingredients,
                     Description = menu.Description,
+                    Cost = menu.Cost,
                     MenuDays = new MenuDays
                     {
                         Friday = menu.MenuDays.Friday,
@@ -175,13 +198,11 @@ namespace MenuDelDia.Presentacion.Controllers
                     }
                 };
 
-                foreach (var entityLocation in entityLocations)
-                {
-                    entityMenu.Locations.Add(entityLocation);
-                }
+                entityLocations.ForEach(l => entityMenu.Locations.Add(l));
+                entityTags.ForEach(t => entityMenu.Tags.Add(t));
 
-                db.Menus.Add(entityMenu);
-                db.SaveChanges();
+                CurrentAppContext.Menus.Add(entityMenu);
+                CurrentAppContext.SaveChanges();
                 return RedirectToAction("Index");
             }
 
@@ -193,16 +214,25 @@ namespace MenuDelDia.Presentacion.Controllers
         {
             var applicationUser = await UserManager.FindByIdAsync(User.Identity.GetUserId());
             if (applicationUser.RestaurantId.HasValue == false)
-                throw new Exception();
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Menu menu = db.Menus.Find(id);
+            Menu menu = CurrentAppContext.Menus.Find(id);
             if (menu == null)
             {
                 return HttpNotFound();
+            }
+
+            var restaurantIds = menu.Locations.Select(r => r.RestaurantId).Distinct().ToList();
+            if (restaurantIds.Count() > 1)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            if (await ValidateUserRequestWithUserLoggedIn(restaurantIds.First()) == false)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
             var menuModel = new MenuModel
@@ -212,6 +242,7 @@ namespace MenuDelDia.Presentacion.Controllers
                 Active = menu.Active,
                 Ingredients = menu.Ingredients,
                 Description = menu.Description,
+                Cost = menu.Cost,
                 MenuDays = new MenuDaysModel
                 {
                     Friday = menu.MenuDays.Friday,
@@ -227,14 +258,9 @@ namespace MenuDelDia.Presentacion.Controllers
                     Date = menu.SpecialDay.Date,
                     Recurrent = menu.SpecialDay.Recurrent,
                 },
-
-                //SpecialDayDate = menu.SpecialDay.Date,
-                //SpecialDayRecurrent = menu.SpecialDay.Recurrent,
-
-                Locations = LoadLocations(applicationUser.RestaurantId.Value, menu.Locations)
+                Locations = LoadLocations(applicationUser.RestaurantId.Value, menu.Locations),
+                Tags = LoadTags(menu.Tags.Select(t => t.Id).ToList()),
             };
-
-
             return View(menuModel);
         }
 
@@ -243,25 +269,44 @@ namespace MenuDelDia.Presentacion.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Description,Ingredients,MenuDays,SpecialDay,Active,Locations")] MenuModel menu)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Description,Ingredients,Cost,MenuDays,SpecialDay,Active,Locations,Tags")] MenuModel menu)
         {
             if (ModelState.IsValid)
             {
                 var applicationUser = await UserManager.FindByIdAsync(User.Identity.GetUserId());
                 if (applicationUser.RestaurantId.HasValue == false)
-                    throw new Exception();
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
                 var selectedLocations = menu.Locations.Where(l => l.Selected).Select(l => l.Id).ToList();
-                var entityLocations = db.Locations.Where(l => selectedLocations.Contains(l.Id)).ToList();
+                var entityLocations = CurrentAppContext.Locations.Where(l => selectedLocations.Contains(l.Id)).ToList();
 
-                var entityMenu = db.Menus.FirstOrDefault(m => m.Id == menu.Id);
+                var restaurantIds = entityLocations.Select(r => r.RestaurantId).Distinct().ToList();
+                if (restaurantIds.Count() > 1)
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+                if (await ValidateUserRequestWithUserLoggedIn(restaurantIds.First()) == false)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+
+                var entityMenu = CurrentAppContext.Menus.FirstOrDefault(m => m.Id == menu.Id);
 
                 if (entityMenu != null)
                 {
+                    restaurantIds = entityMenu.Locations.Select(r => r.RestaurantId).Distinct().ToList();
+                    if (restaurantIds.Count() > 1)
+                        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+                    if (await ValidateUserRequestWithUserLoggedIn(restaurantIds.First()) == false)
+                    {
+                        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                    }
+
                     entityMenu.Name = menu.Name;
                     entityMenu.Active = menu.Active;
                     entityMenu.Ingredients = menu.Ingredients;
                     entityMenu.Description = menu.Description;
+                    entityMenu.Cost = menu.Cost;
 
                     entityMenu.MenuDays.Friday = menu.MenuDays.Friday;
                     entityMenu.MenuDays.Monday = menu.MenuDays.Monday;
@@ -275,13 +320,16 @@ namespace MenuDelDia.Presentacion.Controllers
                     entityMenu.SpecialDay.Recurrent = menu.SpecialDay.Recurrent;
 
                     entityMenu.Locations.Clear();
+                    entityMenu.Tags.Clear();
 
-                    foreach (var entityLocation in entityLocations)
-                    {
-                        entityMenu.Locations.Add(entityLocation);
-                    }
-                    db.Entry(entityMenu).State = EntityState.Modified;
-                    db.SaveChanges();
+                    var tagsIds = menu.Tags.Where(t => t.Selected).Select(t => t.Id).ToList();
+                    var entityTags = CurrentAppContext.Tags.Where(t => tagsIds.Contains(t.Id)).ToList();
+
+                    entityLocations.ForEach(l => entityMenu.Locations.Add(l));
+                    entityTags.ForEach(t => entityMenu.Tags.Add(t));
+
+                    CurrentAppContext.Entry(entityMenu).State = EntityState.Modified;
+                    CurrentAppContext.SaveChanges();
                     return RedirectToAction("Index");
                 }
             }
@@ -290,28 +338,84 @@ namespace MenuDelDia.Presentacion.Controllers
         }
 
         // GET: Menus/Delete/5
-        public ActionResult Delete(Guid? id)
+        public async Task<ActionResult> Delete(Guid? id)
         {
+            var applicationUser = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            if (applicationUser.RestaurantId.HasValue == false)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Menu menu = db.Menus.Find(id);
+            Menu menu = CurrentAppContext.Menus.Find(id);
             if (menu == null)
             {
                 return HttpNotFound();
             }
-            return View(menu);
+            var restaurantIds = menu.Locations.Select(r => r.RestaurantId).Distinct().ToList();
+            if (restaurantIds.Count() > 1)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            if (await ValidateUserRequestWithUserLoggedIn(restaurantIds.First()) == false)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var menuModel = new MenuModel
+            {
+                Id = menu.Id,
+                Name = menu.Name,
+                Active = menu.Active,
+                Ingredients = menu.Ingredients,
+                Description = menu.Description,
+                Cost = menu.Cost,
+                MenuDays = new MenuDaysModel
+                {
+                    Friday = menu.MenuDays.Friday,
+                    Monday = menu.MenuDays.Monday,
+                    Saturday = menu.MenuDays.Saturday,
+                    Sunday = menu.MenuDays.Sunday,
+                    Thursday = menu.MenuDays.Thursday,
+                    Tuesday = menu.MenuDays.Tuesday,
+                    Wednesday = menu.MenuDays.Wednesday,
+                },
+                SpecialDay = new SpecialDayModel
+                {
+                    Date = menu.SpecialDay.Date,
+                    Recurrent = menu.SpecialDay.Recurrent,
+                },
+                Locations = LoadLocations(applicationUser.RestaurantId.Value, menu.Locations),
+                Tags = LoadTags(menu.Tags.Select(t => t.Id).ToList())
+            };
+            return View(menuModel);
         }
 
         // POST: Menus/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(Guid id)
+        public async Task<ActionResult> DeleteConfirmed(Guid id)
         {
-            Menu menu = db.Menus.Find(id);
-            db.Menus.Remove(menu);
-            db.SaveChanges();
+            Menu menu = CurrentAppContext.Menus.Find(id);
+
+            var restaurantIds = menu.Locations.Select(r => r.RestaurantId).Distinct().ToList();
+            if (restaurantIds.Count() > 1)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            if (await ValidateUserRequestWithUserLoggedIn(restaurantIds.First()) == false)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            menu.Tags.Clear();
+            menu.Locations.Clear();
+
+            foreach (var comment in menu.Comments.ToList())
+            {
+                menu.Comments.Remove(comment);
+            }
+
+            CurrentAppContext.Menus.Remove(menu);
+            CurrentAppContext.SaveChanges();
             return RedirectToAction("Index");
         }
 
@@ -319,7 +423,7 @@ namespace MenuDelDia.Presentacion.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                CurrentAppContext.Dispose();
             }
             base.Dispose(disposing);
         }

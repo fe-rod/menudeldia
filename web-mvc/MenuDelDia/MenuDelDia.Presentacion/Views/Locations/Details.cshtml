@@ -63,7 +63,6 @@
                         <th></th>
                         <th></th>
                         <th></th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -71,21 +70,51 @@
                     {
                         for (var i = 0; i < Model.OpenDays.Count; i++)
                         {
+                    <tr>
+                        <td>
+                            @Model.OpenDays[i].DayOfWeekStr
+                        </td>
+                        <td>
+                            @Model.OpenDays[i].OpenHour.ToString("00"):@Model.OpenDays[i].OpenMinutes.ToString("00")Hrs
+                        </td>
+                        <td>
+                            @Model.OpenDays[i].CloseHour.ToString("00"):@Model.OpenDays[i].CloseMinutes.ToString("00")Hrs
+                        </td>
+                    </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </dd>
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Tags)
+        </dt>
+        <dd>
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        for (var i = 0; i < Model.Tags.Count; i = i + 4)
+                        {
                             <tr>
-                                <td>
-                                    @Html.CheckBox("OpenDays[" + (i + 10) + "].Open", Model.OpenDays[i].Open, new { disabled = "disabled" })
-                                </td>
-                                <td>
-                                    @Model.OpenDays[i].DayOfWeek
-                                </td>
-                                <td>
-                                    @Html.TextBox("OpenDays[" + (i + 10) + "].OpenHour", Model.OpenDays[i].OpenHour, new { disabled = "disabled" })
-                                    @Html.TextBox("OpenDays[" + (i + 10) + "].OpenMinutes", Model.OpenDays[i].OpenMinutes, new { disabled = "disabled" })
-                                </td>
-                                <td>
-                                    @Html.TextBox("OpenDays[" + (i + 10) + "].CloseHour", Model.OpenDays[i].CloseHour, new { disabled = "disabled" })
-                                    @Html.TextBox("OpenDays[" + (i + 10) + "].CloseMinutes", Model.OpenDays[i].CloseMinutes, new { disabled = "disabled" })
-                                </td>
+                                @for (var j = i; ((j < (i + 4)) && (j < Model.Tags.Count)); j++)
+                                {
+                                    <td>
+                                        @Html.Hidden("Tags.Index", (j + 10))
+                                        @Html.CheckBox("Tags[" + (j + 10) + "].Selected", Model.Tags[j].Selected,new{disabled="disabled"})
+                                        @Model.Tags[j].Name
+                                    </td>
+                                }
                             </tr>
                         }
                     }

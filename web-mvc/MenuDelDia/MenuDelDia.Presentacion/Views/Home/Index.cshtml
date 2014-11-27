@@ -8,21 +8,18 @@
 
 <div class="row">
     <div class="col-md-4">
-        @if (User.Identity.IsAuthenticated)
+        @if (User.Identity.IsAuthenticated && User.IsInRole("Administrator"))
         {
             <ul>
+                <li><a href="@Url.Action("Index","Restaurants")">Restaurants</a></li>
                 <li><a href="@Url.Action("Index","Cards")">Cards</a></li>
                 <li><a href="@Url.Action("Index","Tags")">Tags</a></li>
-                <li><a href="@Url.Action("Index","Locations")">Location</a></li>
-                <li><a href="@Url.Action("Index","Menus")">Menu</a></li>
-                <li><a href="@Url.Action("Index","Restaurants")">Restaurants</a></li>
             </ul>
-
         }
 
     </div>
     <div class="col-md-4">
-        
+
     </div>
     <div class="col-md-4">
 

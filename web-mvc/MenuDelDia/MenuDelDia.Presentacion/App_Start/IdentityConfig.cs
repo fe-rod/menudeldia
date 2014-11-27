@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using MenuDelDia.Entities;
@@ -17,7 +19,22 @@ namespace MenuDelDia.Presentacion
     {
         public Task SendAsync(IdentityMessage message)
         {
-            // Plug in your email service here to send an email.
+            //MailMessage msg = new MailMessage();
+
+            //msg.From = new MailAddress("noreply@bonuus.uy");
+            //msg.To.Add("federicogepp@outlook.com");
+            //msg.Subject = "Password";
+            //msg.Body = "Test1";
+            //msg.Priority = MailPriority.High;
+
+            //SmtpClient client = new SmtpClient("smtp.gmail.com");
+
+            //client.Credentials = new NetworkCredential("smtp@hexacta.com.uy", "sh@r3dH3x@ct@");
+            //client.Port = 587;
+            //client.EnableSsl = true;
+            
+
+            //await client.SendMailAsync(msg);
             return Task.FromResult(0);
         }
     }
@@ -53,10 +70,10 @@ namespace MenuDelDia.Presentacion
             manager.PasswordValidator = new PasswordValidator
             {
                 RequiredLength = 6,
-                RequireNonLetterOrDigit = true,
-                RequireDigit = true,
-                RequireLowercase = true,
-                RequireUppercase = true,
+                RequireNonLetterOrDigit = false,
+                RequireDigit = false,
+                RequireLowercase = false,
+                RequireUppercase = false,
             };
 
             // Configure user lockout defaults

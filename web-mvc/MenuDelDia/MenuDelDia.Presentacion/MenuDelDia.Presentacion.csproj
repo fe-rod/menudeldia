@@ -210,8 +210,10 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Authorize\CustomAuthorize.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CardsController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\LocationsController.cs" />
     <Compile Include="Controllers\MenusController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -224,10 +226,12 @@
     </Compile>
     <Compile Include="Helpers\EnumerableHelper.cs" />
     <Compile Include="Helpers\HttpExtensions.cs" />
+    <Compile Include="Helpers\StringHelper.cs" />
     <Compile Include="Helpers\UrlHelper.cs" />
     <Compile Include="Helpers\WebPathHelper.cs" />
     <Compile Include="Models\MenuModel.cs" />
     <Compile Include="Models\LocationModel.cs" />
+    <Compile Include="Models\TagModel.cs" />
     <Compile Include="Models\RestaurantModel.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -365,6 +369,7 @@
     <Content Include="Views\Locations\_OpenDays.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\MenuDays.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\SpecialDay.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\SpecialDayModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -7,40 +7,21 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using MenuDelDia.Entities;
+using MenuDelDia.Presentacion.Authorize;
 using MenuDelDia.Repository;
 
 namespace MenuDelDia.Presentacion.Controllers
 {
+    [CustomAuthorize(Roles = "Administrator")]
     public class TagsController : Controller
     {
         private AppContext db = new AppContext();
 
-
-        public ActionResult GetTagsList()
-        {
-            //var lst = new List<dynamic>
-            //{
-            //    new {name = "pepe"},
-            //    new {name = "andrea"},
-            //    new {name = "miguel"},
-            //    new {name = "federico"},
-            //    new {name = "antonio"},
-            //    new {name = "karen"},
-            //};
-            var lst = new List<string>
-            {
-                "pepe",
-                "andrea",
-                "miguel",
-                "federico",
-                "antonio",
-                "karen",
-            };
+        #region Private
+        
+        #endregion
 
 
-            return Content(Newtonsoft.Json.JsonConvert.SerializeObject(lst));
-
-        }
         // GET: Tags
         public ActionResult Index()
         {
@@ -73,7 +54,7 @@ namespace MenuDelDia.Presentacion.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name")] Tag tag)
+        public ActionResult Create([Bind(Include = "Id,Name,ApplyToRestaurant,ApplyToLocation,ApplyToMenu")] Tag tag)
         {
             if (ModelState.IsValid)
             {
@@ -106,7 +87,7 @@ namespace MenuDelDia.Presentacion.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name")] Tag tag)
+        public ActionResult Edit([Bind(Include = "Id,Name,ApplyToRestaurant,ApplyToLocation,ApplyToMenu")] Tag tag)
         {
             if (ModelState.IsValid)
             {

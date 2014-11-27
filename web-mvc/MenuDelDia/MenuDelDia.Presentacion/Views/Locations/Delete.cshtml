@@ -1,4 +1,4 @@
-﻿@model MenuDelDia.Entities.Location
+﻿@model MenuDelDia.Presentacion.Models.LocationModel
 
 @{
     ViewBag.Title = "Delete";
@@ -51,6 +51,76 @@
             @Html.HiddenFor(model => model.Latitude)
             @Html.HiddenFor(model => model.Longitude)
             <div id="map_canvas" class="form-control" style="width: 50%; height: 300px"></div>
+        </dd>
+        
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OpenDays)
+        </dt>
+
+        <dd>
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        for (var i = 0; i < Model.OpenDays.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    @Model.OpenDays[i].DayOfWeekStr
+                                </td>
+                                <td>
+                                    @Model.OpenDays[i].OpenHour.ToString("00"):@Model.OpenDays[i].OpenMinutes.ToString("00")Hrs
+                                </td>
+                                <td>
+                                    @Model.OpenDays[i].CloseHour.ToString("00"):@Model.OpenDays[i].CloseMinutes.ToString("00")Hrs
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </dd>
+        
+        <dt>
+            @Html.DisplayNameFor(model => model.Tags)
+        </dt>
+        <dd>
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        for (var i = 0; i < Model.Tags.Count; i = i + 4)
+                        {
+                            <tr>
+                                @for (var j = i; ((j < (i + 4)) && (j < Model.Tags.Count)); j++)
+                                {
+                                    <td>
+                                        @Html.Hidden("Tags.Index", (j + 10))
+                                        @Html.CheckBox("Tags[" + (j + 10) + "].Selected", Model.Tags[j].Selected, new { disabled = "disabled" })
+                                        @Model.Tags[j].Name
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
         </dd>
 
     </dl>

@@ -37,12 +37,16 @@ namespace MenuDelDia.Entities
         [DisplayName("Día especial")]
         public SpecialDay SpecialDay { get; set; }
         
+        [DisplayName("Precio")]
+        public double Cost { get; set; }
+
+
         [DisplayName("Activo")]
         public bool Active { get; set; }
 
         [DisplayName("Comentarios")]
         public virtual ICollection<Comment> Comments { get; set; }
-        
+
         [DisplayName("Tags")]
         public virtual ICollection<Tag> Tags { get; set; }
 
@@ -55,7 +59,7 @@ namespace MenuDelDia.Entities
     {
         [DisplayName("Lunes")]
         public bool Monday { get; set; }
-        
+
         [DisplayName("Martes")]
         public bool Tuesday { get; set; }
 
@@ -70,7 +74,7 @@ namespace MenuDelDia.Entities
 
         [DisplayName("Sábado")]
         public bool Saturday { get; set; }
-        
+
         [DisplayName("Domingo")]
         public bool Sunday { get; set; }
     }
