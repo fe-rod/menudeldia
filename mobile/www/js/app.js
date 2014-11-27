@@ -67,7 +67,7 @@ angular.module('todayMenu', ['ionic', 'ngCordova'])
             }
         })
         .state('tab.store-detail', {
-            url: '/store/:storeId',
+            url: '/store/:storeId/:distance',
             views: {
                 'tab-stores': {
                     templateUrl: 'templates/stores/store-detail.html',

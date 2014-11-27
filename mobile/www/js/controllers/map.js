@@ -1,11 +1,16 @@
 angular.module('todayMenu')
 
-    .controller('MapCtrl', function($scope, $ionicLoading, $compile) {
+    .controller('MapCtrl', function($scope, $stateParams, $ionicLoading, $compile, Stores) {
 
-        //$scope.store = $stateParams.storeId);
+        $scope.store = Stores.get($stateParams.storeId);
 
         function initialize() {
-            var myLatlng = new google.maps.LatLng(-34.917191,-56.152229);
+            var myLatlng = new google.maps.LatLng($scope.store.location.lat,$scope.store.location.long);
+
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                var distance = google.maps.geometry.spherical.computeDistanceBetween(myLatlng, pos);
+            });
 
             var mapOptions = {
                 center: myLatlng,

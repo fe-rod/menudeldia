@@ -6,22 +6,35 @@
         <div class="menuDetailHeader">
             <img src="img/{{store.icon}}.png">
             <h4>{{store.name}}</h4>
-            <h5>&nbsp;</h5>
+            <p ng-if="!distanceAvailable">&nbsp;</p>
+            <p ng-if="distanceAvailable">A {{distanceTo | distance}} de tu ubicaci&oacute;n</p>
         </div>
         <div class="menuDetailContent">
             <div class="list list-inset">
-                <div class="item item-divider">
-                    Descripci&oacute;n
+                <div ng-if="store.description.length">
+                    <div class="item item-divider">
+                        Descripci&oacute;n
+                    </div>
+                    <p class="item item-text-wrap" href="#">
+                        {{store.description}}
+                    </p>
                 </div>
-                <p class="item item-text-wrap" href="#">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ac posuere libero, ac ultrices lorem. Suspendisse nec urna scelerisque lorem semper mattis. Etiam mollis erat sed efficitur.
-                </p>
-                <div class="item item-divider">
-                    Direcci&oacute;n
+                <div ng-if="store.address.length">
+                    <div class="item item-divider">
+                        Direcci&oacute;n
+                    </div>
+                    <p class="item item-text-wrap" href="#">
+                        {{store.address}}
+                    </p>
                 </div>
-                <p class="item item-text-wrap" href="#">
-                    Tom&aacute;s Diago 1425 esquina Scocer&iacute;a
-                </p>
+                <div ng-if="store.menu.length">
+                    <div class="item item-divider">
+                        Men&uacute;
+                    </div>
+                    <p class="item item-text-wrap" href="#">
+                        {{store.menu}}
+                    </p>
+                </div>
             </div>
         </div>
     </ion-content>
@@ -29,7 +42,7 @@
         <div class="menuDetailButtons button-bar">
             <a class="button button-stable" href="tel:{{store.phone}}"><span class="icon ion-ios7-telephone"></span></a>
             <a class="button button-stable" href="#/tab/storeMap/{{store.id}}"><span class="icon ion-ios7-location"></span></a>
-            <a class="button button-stable"><span class="icon ion-ios7-email"></span></a>
+            <a class="button button-stable" href="mailto:{{store.email}}"><span class="icon ion-ios7-email"></span></a>
         </div>
     </ion-footer-bar>
 </ion-view>
