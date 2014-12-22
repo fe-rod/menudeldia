@@ -27,8 +27,12 @@
                         <li><a href="@Url.Action("Index","Locations")">Sucursales</a></li>
                         <li><a href="@Url.Action("Index","Menus")">Menús</a></li>
                     }
-
-
+                    else if (User.Identity.IsAuthenticated && User.IsInRole("Administrator"))
+                    {
+                        <li><a href="@Url.Action("Index","Restaurants")">Restaurants</a></li>
+                        <li><a href="@Url.Action("Index","Cards")">Cards</a></li>
+                        <li><a href="@Url.Action("Index","Tags")">Tags</a></li>
+                    }
 
                 </ul>
                 @Html.Partial("_LoginPartial")
@@ -39,7 +43,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - Menú del día</p>
         </footer>
     </div>
 

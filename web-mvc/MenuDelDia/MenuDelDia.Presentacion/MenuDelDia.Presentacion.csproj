@@ -86,6 +86,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Device" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -212,6 +213,11 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Authorize\CustomAuthorize.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Api\AppCommentsController.cs" />
+    <Compile Include="Controllers\Api\SuggestionsController.cs" />
+    <Compile Include="Controllers\Api\LogosController.cs" />
+    <Compile Include="Controllers\Api\RestaurantsController.cs" />
+    <Compile Include="Controllers\Api\MenusController.cs" />
     <Compile Include="Controllers\CardsController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\LocationsController.cs" />
@@ -229,6 +235,17 @@
     <Compile Include="Helpers\StringHelper.cs" />
     <Compile Include="Helpers\UrlHelper.cs" />
     <Compile Include="Helpers\WebPathHelper.cs" />
+    <Compile Include="Models\ApiModels\CardApiModel.cs" />
+    <Compile Include="Models\ApiModels\LogoApiModel.cs" />
+    <Compile Include="Models\ApiModels\RestaurantApiModel.cs" />
+    <Compile Include="Models\ApiModels\LocationApiModel.cs" />
+    <Compile Include="Models\ApiModels\MenusApiModel.cs" />
+    <Compile Include="Models\ApiModels\OpenDayApiModel.cs" />
+    <Compile Include="Models\ApiModels\AppComentApiModel.cs" />
+    <Compile Include="Models\ApiModels\SuggestionApiModel.cs" />
+    <Compile Include="Models\ApiModels\TagApiModel.cs" />
+    <Compile Include="Models\ApiModels\MenuDaysApiModel.cs" />
+    <Compile Include="Models\ApiModels\SpecialDayApiModel.cs" />
     <Compile Include="Models\MenuModel.cs" />
     <Compile Include="Models\LocationModel.cs" />
     <Compile Include="Models\TagModel.cs" />
@@ -239,6 +256,11 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
+    <Compile Include="Resources\ViewResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ViewResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -389,6 +411,12 @@
       <Project>{CBF9E933-32A3-4C28-8AE8-00837F6F78B1}</Project>
       <Name>MenuDelDia.Repository</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\ViewResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ViewResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

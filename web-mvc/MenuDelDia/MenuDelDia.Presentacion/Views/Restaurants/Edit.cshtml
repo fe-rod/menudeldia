@@ -1,13 +1,14 @@
 ﻿@using System.Configuration
 @using MenuDelDia.Presentacion.Areas.HelpPage.ModelDescriptions
 @using MenuDelDia.Presentacion.Helpers
+@using MenuDelDia.Presentacion.Resources
 @model MenuDelDia.Presentacion.Models.RestaurantModel
 
 @{
     ViewBag.Title = "Edit";
 }
 
-<h2>Edit</h2>
+<h2>@ViewResources.EditTitle</h2>
 
 
 @using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -80,6 +81,7 @@
                                     <td>
                                         @Html.Hidden("Cards.Index", (i + 10))
                                         @Html.Hidden("Cards[" + (i + 10) + "].Id", Model.Cards[i].Id)
+                                        @Html.Hidden("Cards[" + (i + 10) + "].Name", Model.Cards[i].Name)
                                         @Model.Cards[i].Name ( @Model.Cards[i].Type )
                                     </td>
                                 </tr>
@@ -135,7 +137,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="@ViewResources.Save" class="btn btn-default" />
             </div>
         </div>
     </div>
@@ -145,11 +147,11 @@
 
     @if (User.IsInRole("Administrator"))
     {
-        @Html.ActionLink("Volver", "Index")
+        @Html.ActionLink(ViewResources.Back, "Index")
     }
     else
     {
-        @Html.ActionLink("Volver", "Index", "Home")
+        @Html.ActionLink(ViewResources.Back, "Index", "Home")
     }
 
 </div>

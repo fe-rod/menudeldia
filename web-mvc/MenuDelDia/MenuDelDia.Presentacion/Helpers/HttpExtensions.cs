@@ -44,8 +44,12 @@ namespace MenuDelDia.Presentacion.Helpers
             {
                 return ipList.Split(',')[0];
             }
+            var ip = request.ServerVariables["REMOTE_ADDR"];
 
-            return request.ServerVariables["REMOTE_ADDR"];
+            if (string.IsNullOrEmpty(ip) == false)
+                return ip;
+
+            return string.Empty;
         }
     }
 }

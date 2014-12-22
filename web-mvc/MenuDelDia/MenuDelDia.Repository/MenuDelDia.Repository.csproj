@@ -54,12 +54,14 @@
   <ItemGroup>
     <Compile Include="Base\AppContext.cs" />
     <Compile Include="Base\BaseRepository.cs" />
+    <Compile Include="Implementations\SuggestionRepository.cs" />
     <Compile Include="Implementations\CommentRepository.cs" />
     <Compile Include="Implementations\LocationRepository.cs" />
     <Compile Include="Implementations\MenuRepository.cs" />
     <Compile Include="Implementations\RestaurantRepository.cs" />
     <Compile Include="Implementations\TagRepository.cs" />
     <Compile Include="Base\IRepository.cs" />
+    <Compile Include="Interfaces\ISuggestionRepository.cs" />
     <Compile Include="Interfaces\ICommentRepository.cs" />
     <Compile Include="Interfaces\IMenuRepository.cs" />
     <Compile Include="Interfaces\IRestaurantRepository.cs" />
@@ -125,6 +127,18 @@
     <Compile Include="Migrations\201411271937276_script_14.Designer.cs">
       <DependentUpon>201411271937276_script_14.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201412021331457_script_15.cs" />
+    <Compile Include="Migrations\201412021331457_script_15.Designer.cs">
+      <DependentUpon>201412021331457_script_15.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201412221515155_script_16.cs" />
+    <Compile Include="Migrations\201412221515155_script_16.Designer.cs">
+      <DependentUpon>201412221515155_script_16.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201412221624111_script_17.cs" />
+    <Compile Include="Migrations\201412221624111_script_17.Designer.cs">
+      <DependentUpon>201412221624111_script_17.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -183,6 +197,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201411271937276_script_14.resx">
       <DependentUpon>201411271937276_script_14.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201412021331457_script_15.resx">
+      <DependentUpon>201412021331457_script_15.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201412221515155_script_16.resx">
+      <DependentUpon>201412221515155_script_16.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201412221624111_script_17.resx">
+      <DependentUpon>201412221624111_script_17.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

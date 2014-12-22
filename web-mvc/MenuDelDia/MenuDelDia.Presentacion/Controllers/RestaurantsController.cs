@@ -47,18 +47,18 @@ namespace MenuDelDia.Presentacion.Controllers
         }
 
         /// <summary>
-        /// Save image to disk and return the filename
+        /// Save image to disk and return the filename and the extension
         /// </summary>
         /// <param name="file"></param>
-        /// <returns>FileName</returns>
-        private string SaveImage(HttpPostedFileBase file)
+        /// <returns>(filname,extension)</returns>
+        private Tuple<string, string> SaveImage(HttpPostedFileBase file)
         {
             var extension = file.FileName.Substring(file.FileName.LastIndexOf('.')).ToLower();
-            var fileName = string.Format("{0}{1}", Guid.NewGuid(), extension);
-            var path = Path.Combine(Server.MapPath(ConfigurationManager.AppSettings["FolderLogos"]), fileName);
+            var fileName = Guid.NewGuid().ToString();
+            var path = Path.Combine(Server.MapPath(ConfigurationManager.AppSettings["FolderLogos"]), string.Format("{0}{1}", fileName, extension));
             file.SaveAs(path);
 
-            return fileName;
+            return new Tuple<string, string>(fileName, extension);
         }
 
         private void DeleteImage(string imageName)
@@ -212,12 +212,16 @@ namespace MenuDelDia.Presentacion.Controllers
             if (ModelState.IsValid)
             {
                 var fileName = string.Empty;
+                var fileExtension = string.Empty;
+
                 if (file != null && file.ContentLength > 0)
                 {
                     if (ValidateFile(file) == false)
                         return View(restaurant);
 
-                    fileName = SaveImage(file);
+                    var dataTuple = SaveImage(file);
+                    fileName = dataTuple.Item1;
+                    fileExtension = dataTuple.Item2;
                 }
 
                 if (await ValidateUserName(restaurant.EmailUserName) == false)
@@ -238,9 +242,11 @@ namespace MenuDelDia.Presentacion.Controllers
                     Name = restaurant.Name,
                     Email = restaurant.Email,
                     Description = restaurant.Description,
-                    LogoPath = fileName,
+                    LogoPath = string.Format("{0}{1}", fileName, fileExtension),
+                    LogoExtension = fileExtension,
+                    LogoName = fileName,
                     Url = FormatURL(restaurant.Url),
-                    Active = restaurant.Active
+                    Active = restaurant.Active,
                 };
 
                 entityCards.ForEach(c => entityRestaurant.Cards.Add(c));
@@ -321,8 +327,11 @@ namespace MenuDelDia.Presentacion.Controllers
                             return View(restaurant);
 
                         DeleteImage(restaurantEntity.LogoPath);
-                        restaurantEntity.LogoPath = SaveImage(file);
 
+                        var dataTuple = SaveImage(file);
+                        restaurantEntity.LogoName= dataTuple.Item1;
+                        restaurantEntity.LogoExtension = dataTuple.Item2;
+                        restaurantEntity.LogoPath = string.Format("{0}{1}", dataTuple.Item1, dataTuple.Item2);
                         fileModified = true;
                     }
 
@@ -432,7 +441,7 @@ namespace MenuDelDia.Presentacion.Controllers
                 var result = await UserManager.CreateAsync(user, password);
                 UserManager.AddToRole(user.Id, "User");
 
-                if (result.Succeeded)
+                if (result.Succeeded)   
                 {
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
