@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Resources;
 
 namespace MenuDelDia.Entities
 {
@@ -21,19 +22,19 @@ namespace MenuDelDia.Entities
         public override Guid Id { get; set; }
 
 
-        [Required(AllowEmptyStrings = false)]
+        [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(MessagesResource))]
         [DisplayName("Identificador")]
         public string Identifier { get; set; }
 
-        [Required(AllowEmptyStrings = false)]
+        [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(MessagesResource))]
         [DisplayName("Dirección")]
         public string Streets { get; set; }
 
-        [Required(AllowEmptyStrings = false)]
+        [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(MessagesResource))]
         [DisplayName("Teléfono")]
         public string Phone { get; set; }
 
-        [Required(AllowEmptyStrings = false)]
+        [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(MessagesResource))]
         [DisplayName("Descripción")]
         public string Description { get; set; }
 
@@ -46,14 +47,16 @@ namespace MenuDelDia.Entities
         [DisplayName("Longitud")]
         public double Longitude { get; set; }
 
-        public Guid? RestaurantId { get; set; }
+        public Guid RestaurantId { get; set; }
+        [ForeignKey("RestaurantId")]
+        public virtual Restaurant Restaurant { get; set; }
 
         [DisplayName("Días abiertos")]
         public virtual ICollection<OpenDay> OpenDays { get; set; }
 
         [DisplayName("Tags")]
         public virtual ICollection<Tag> Tags { get; set; }
-        
+
         [DisplayName("Menús")]
         public virtual ICollection<Menu> Menus { get; set; }
     }

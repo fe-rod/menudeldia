@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Resources;
 
 namespace MenuDelDia.Entities
 {
@@ -20,11 +21,11 @@ namespace MenuDelDia.Entities
         [Key]
         public override Guid Id { get; set; }
 
-        [Required(AllowEmptyStrings = false)]
+        [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(MessagesResource))]
         [DisplayName("Nombre")]
         public string Name { get; set; }
 
-        [Required(AllowEmptyStrings = false)]
+        [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(MessagesResource))]
         [DisplayName("Descripción")]
         public string Description { get; set; }
 
@@ -37,12 +38,16 @@ namespace MenuDelDia.Entities
         [DisplayName("Día especial")]
         public SpecialDay SpecialDay { get; set; }
         
+        [DisplayName("Precio")]
+        public double Cost { get; set; }
+
+
         [DisplayName("Activo")]
         public bool Active { get; set; }
 
         [DisplayName("Comentarios")]
         public virtual ICollection<Comment> Comments { get; set; }
-        
+
         [DisplayName("Tags")]
         public virtual ICollection<Tag> Tags { get; set; }
 
@@ -55,7 +60,7 @@ namespace MenuDelDia.Entities
     {
         [DisplayName("Lunes")]
         public bool Monday { get; set; }
-        
+
         [DisplayName("Martes")]
         public bool Tuesday { get; set; }
 
@@ -70,7 +75,7 @@ namespace MenuDelDia.Entities
 
         [DisplayName("Sábado")]
         public bool Saturday { get; set; }
-        
+
         [DisplayName("Domingo")]
         public bool Sunday { get; set; }
     }

@@ -1,11 +1,12 @@
-﻿@model MenuDelDia.Entities.Tag
+﻿@using MenuDelDia.Presentacion.Resources
+@model MenuDelDia.Entities.Tag
 
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Details</h2>
+<h2>@ViewResources.DetailsTitle</h2>
 
 <div>
     <h4>Tag</h4>
@@ -19,9 +20,30 @@
             @Html.DisplayFor(model => model.Name)
         </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplyToRestaurant)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ApplyToRestaurant, new { disabled = "disabled" })
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplyToLocation)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ApplyToLocation, new { disabled = "disabled" })
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplyToMenu)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ApplyToMenu, new { disabled = "disabled" })
+        </dd>
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink(ViewResources.Edit, "Edit", new { id = Model.Id }) |
+    @Html.ActionLink(ViewResources.Back, "Index")
 </p>

@@ -1,0 +1,10 @@
+﻿@model MenuDelDia.Presentacion.Models.SpecialDayModel
+
+@{var specialDayStr = "-";}
+
+@if (Model.Date.HasValue)
+{
+    specialDayStr = string.Format("{0} {1}", Model.Date.Value.ToString("dd/MM/yyyy"), Model.Recurrent ? "(Rec)" : string.Empty);
+}
+
+@specialDayStr

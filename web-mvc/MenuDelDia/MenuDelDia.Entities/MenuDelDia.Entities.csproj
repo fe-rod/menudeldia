@@ -53,6 +53,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Base\EntityBase.cs" />
+    <Compile Include="AppComment.cs" />
+    <Compile Include="Suggestion.cs" />
+    <Compile Include="Resources\MessagesResource.designer.cs">
+      <DependentUpon>MessagesResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="User.cs" />
     <Compile Include="Card.cs" />
     <Compile Include="Menu.cs" />
@@ -67,6 +74,12 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\MessagesResource.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>MessagesResource.designer.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

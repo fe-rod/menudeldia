@@ -1,10 +1,11 @@
-﻿@model MenuDelDia.Presentacion.Models.MenuModel
+﻿@using MenuDelDia.Presentacion.Resources
+@model MenuDelDia.Presentacion.Models.MenuModel
 
 @{
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>@ViewResources.DetailsTitle</h2>
 
 <div>
     <h4>Menu</h4>
@@ -35,27 +36,48 @@
         </dd>
 
         <dt>
+            @Html.DisplayNameFor(model => model.Cost)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Cost)
+        </dd>
+
+        <dt>
             @Html.DisplayNameFor(model => model.MenuDays)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.MenuDays)
-        </dd>
 
+            <table style=" width:100%; max-width: 280px">
+                <thead>
+                    <tr>
+                        <th><label for="@Html.IdFor(m => m.MenuDays.Monday)">L</label></th>
+                        <th><label for="@Html.IdFor(m => m.MenuDays.Tuesday)">M</label></th>
+                        <th><label for="@Html.IdFor(m => m.MenuDays.Wednesday)">M</label></th>
+                        <th><label for="@Html.IdFor(m => m.MenuDays.Thursday)">J</label></th>
+                        <th><label for="@Html.IdFor(m => m.MenuDays.Friday)">V</label></th>
+                        <th><label for="@Html.IdFor(m => m.MenuDays.Saturday)">S</label></th>
+                        <th><label for="@Html.IdFor(m => m.MenuDays.Sunday)">D</label></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@Html.CheckBoxFor(m => m.MenuDays.Monday, new { disabled = "disabled" })</td>
+                        <td>@Html.CheckBoxFor(m => m.MenuDays.Tuesday, new { disabled = "disabled" })</td>
+                        <td>@Html.CheckBoxFor(m => m.MenuDays.Wednesday, new { disabled = "disabled" })</td>
+                        <td>@Html.CheckBoxFor(m => m.MenuDays.Thursday, new { disabled = "disabled" })</td>
+                        <td>@Html.CheckBoxFor(m => m.MenuDays.Friday, new { disabled = "disabled" })</td>
+                        <td>@Html.CheckBoxFor(m => m.MenuDays.Saturday, new { disabled = "disabled" })</td>
+                        <td>@Html.CheckBoxFor(m => m.MenuDays.Sunday, new { disabled = "disabled" })</td>
+                    </tr>
+                </tbody>
+            </table>
         <dt>
             @Html.DisplayNameFor(model => model.SpecialDay)
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.SpecialDay)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Active)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Active)
         </dd>
 
         <dt>
@@ -76,7 +98,7 @@
                         <tr>
                             <td>
                                 @Html.Hidden("Locations.Index", (i + 10))
-                                @Html.CheckBox("Locations[" + (i + 10) + "].Selected", Model.Locations[i].Selected,new {disabled="disabled"})
+                                @Html.CheckBox("Locations[" + (i + 10) + "].Selected", Model.Locations[i].Selected, new { disabled = "disabled" })
                             </td>
                             <td>
                                 @Model.Locations[i].Name
@@ -87,9 +109,51 @@
                 </tbody>
             </table>
         </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Tags)
+        </dt>
+        <dd>
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        for (var i = 0; i < Model.Tags.Count; i = i + 4)
+                        {
+                            <tr>
+                                @for (var j = i; ((j < (i + 4)) && (j < Model.Tags.Count)); j++)
+                                {
+                                    <td>
+                                        @Html.Hidden("Tags.Index", (j + 10))
+                                        @Html.CheckBox("Tags[" + (j + 10) + "].Selected", Model.Tags[j].Selected, new { disabled = "disabled" })
+                                        @Model.Tags[j].Name
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Active)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Active)
+        </dd>
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink(ViewResources.Edit, "Edit", new { id = Model.Id }) |
+    @Html.ActionLink(ViewResources.Back, "Index")
 </p>

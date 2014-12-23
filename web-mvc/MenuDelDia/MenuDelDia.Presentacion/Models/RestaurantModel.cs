@@ -10,6 +10,8 @@ namespace MenuDelDia.Presentacion.Models
         public RestaurantModel()
         {
             Cards = new List<CardModel>();
+            Tags = new List<TagModel>();
+            Active = true;
         }
 
         public Guid Id { get; set; }
@@ -36,6 +38,16 @@ namespace MenuDelDia.Presentacion.Models
 
         [DisplayName("Tarjetas")]
         public IList<CardModel> Cards { get; set; }
+
+        [EmailAddress]
+        [DisplayName("Nombre de usuario (email)")]
+        public string EmailUserName { get; set; }
+
+        [DisplayName("Activo")]
+        public bool Active { get; set; }
+
+        [DisplayName("Tags")]
+        public IList<TagModel> Tags { get; set; }
     }
 
     public class CardModel

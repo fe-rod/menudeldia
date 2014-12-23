@@ -1,61 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using MenuDelDia.Entities;
+using MenuDelDia.Presentacion.Authorize;
 using MenuDelDia.Presentacion.Models;
-using MenuDelDia.Repository;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
+using WebGrease.Css.Extensions;
 
 
 namespace MenuDelDia.Presentacion.Controllers
 {
-    [Authorize]
-    public class LocationsController : Controller
+    [CustomAuthorize(Roles = "Administrator,User")]
+    public class LocationsController : BaseController
     {
-        private readonly ApplicationUserManager _applicationUserManager;
-        private ApplicationUserManager _userManager;
-        private ApplicationUser _applicationUser;
-        private AppContext db = new AppContext();
-
-
-        public ApplicationUserManager UserManager
+        #region Private Methods
+        public IList<TagModel> LoadTags(IList<Guid> selectedTags = null)
         {
-            get
+            if (selectedTags == null)
             {
-                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                return CurrentAppContext.Tags
+                    .Where(t => t.ApplyToLocation)
+                    .Select(t => new TagModel
+                    {
+                        Id = t.Id,
+                        Name = t.Name,
+                    }).ToList();
             }
-            private set
-            {
-                _userManager = value;
-            }
+
+            return CurrentAppContext.Tags
+                .Where(t => t.ApplyToLocation)
+                .Select(t => new TagModel
+                {
+                    Id = t.Id,
+                    Name = t.Name,
+                    Selected = selectedTags.Contains(t.Id),
+                }).ToList();
         }
-        public ApplicationUser ApplicationUser
-        {
-            get
-            {
-                return _applicationUser ?? UserManager.FindByIdAsync(User.Identity.GetUserId()).Result;
-            }
-            private set
-            {
-                _applicationUser = value;
-            }
-        }
+        #endregion
 
 
         public LocationsController()
         {
 
-        }
-
-        public LocationsController(ApplicationUserManager applicationUserManager)
-        {
-            UserManager = applicationUserManager;
         }
 
         public string DayOfWeekToString(DayOfWeek dayOfWeek)
@@ -88,25 +77,32 @@ namespace MenuDelDia.Presentacion.Controllers
 
 
         // GET: Locations
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var locations = db.Locations.Where(l => l.RestaurantId == ApplicationUser.RestaurantId).ToList();
+            var currentUserRestaurantId = (await CurrentUser()).RestaurantId;
+            var locations = CurrentAppContext.Locations.Where(l => l.RestaurantId == currentUserRestaurantId).ToList();
 
             return View(locations);
         }
 
         // GET: Locations/Details/5
-        public ActionResult Details(Guid? id)
+        public async Task<ActionResult> Details(Guid? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Location location = db.Locations.Find(id);
+            Location location = CurrentAppContext.Locations.Find(id);
             if (location == null)
             {
                 return HttpNotFound();
             }
+
+            if (await ValidateUserRequestWithUserLoggedIn(location.RestaurantId) == false)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
             var locationModel = new LocationModel
             {
                 Id = location.Id,
@@ -121,11 +117,13 @@ namespace MenuDelDia.Presentacion.Controllers
                 {
                     Id = Guid.NewGuid(),
                     DayOfWeek = od.DayOfWeek,
+                    DayOfWeekStr = DayOfWeekToString(od.DayOfWeek),
                     OpenHour = od.OpenHour,
                     OpenMinutes = od.OpenMinutes,
                     CloseHour = od.CloseHour,
                     CloseMinutes = od.CloseMinutes,
-                }).ToList()
+                }).ToList(),
+                Tags = LoadTags(location.Tags.Select(t => t.Id).ToList()),
             };
 
             return View(locationModel);
@@ -135,7 +133,11 @@ namespace MenuDelDia.Presentacion.Controllers
         public ActionResult Create()
         {
             ViewBag.DayOfWeeks = DayOfWeeksSelectListItems();
-            return View(new LocationModel());
+            var model = new LocationModel
+            {
+                Tags = LoadTags()
+            };
+            return View(model);
         }
 
         // POST: Locations/Create
@@ -143,10 +145,20 @@ namespace MenuDelDia.Presentacion.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Identifier,Streets,Phone,Description,Delivery,Latitude,Longitude,OpenDays")] LocationModel location)
+        public async Task<ActionResult> Create([Bind(Include = "Id,Identifier,Streets,Phone,Description,Delivery,Latitude,Longitude,OpenDays,Tags")] LocationModel location)
         {
             if (ModelState.IsValid)
             {
+                var currentUserRestaurantId = (await CurrentUser()).RestaurantId;
+                if (currentUserRestaurantId.HasValue == false)
+                {
+                    ViewBag.DayOfWeeks = DayOfWeeksSelectListItems();
+                    return View(location);
+                }
+
+                var selectedTags = location.Tags.Where(t => t.Selected).Select(t => t.Id).ToList();
+                var entityTags = CurrentAppContext.Tags.Where(t => selectedTags.Contains(t.Id)).ToList();
+
                 var entityLocation = new Location
                 {
                     Id = Guid.NewGuid(),
@@ -157,7 +169,7 @@ namespace MenuDelDia.Presentacion.Controllers
                     Latitude = location.Latitude,
                     Longitude = location.Longitude,
                     Phone = location.Phone,
-                    RestaurantId = ApplicationUser.RestaurantId,
+                    RestaurantId = currentUserRestaurantId.Value,
                     OpenDays = location.OpenDays.Select(od => new OpenDay
                     {
                         Id = Guid.NewGuid(),
@@ -169,8 +181,11 @@ namespace MenuDelDia.Presentacion.Controllers
                     }).ToList()
                 };
 
-                db.Locations.Add(entityLocation);
-                db.SaveChanges();
+                entityTags.ForEach(t => entityLocation.Tags.Add(t));
+
+
+                CurrentAppContext.Locations.Add(entityLocation);
+                CurrentAppContext.SaveChanges();
                 return RedirectToAction("Index");
             }
 
@@ -179,17 +194,25 @@ namespace MenuDelDia.Presentacion.Controllers
         }
 
         // GET: Locations/Edit/5
-        public ActionResult Edit(Guid? id)
+        public async Task<ActionResult> Edit(Guid? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Location location = db.Locations.Find(id);
+            Location location = CurrentAppContext.Locations.Find(id);
             if (location == null)
             {
                 return HttpNotFound();
             }
+
+            if (await ValidateUserRequestWithUserLoggedIn(location.RestaurantId) == false)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var tagsIds = location.Tags.Select(t => t.Id).ToList();
+
             var locationModel = new LocationModel
             {
                 Id = location.Id,
@@ -209,7 +232,8 @@ namespace MenuDelDia.Presentacion.Controllers
                     CloseMinutes = od.CloseMinutes,
                     DayOfWeek = od.DayOfWeek,
                     DayOfWeekStr = DayOfWeekToString(od.DayOfWeek)
-                }).ToList()
+                }).ToList(),
+                Tags = LoadTags(tagsIds),
             };
 
             ViewBag.DayOfWeeks = DayOfWeeksSelectListItems();
@@ -221,13 +245,19 @@ namespace MenuDelDia.Presentacion.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Identifier,Streets,Phone,Description,Delivery,Latitude,Longitude,OpenDays")] LocationModel location)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Identifier,Streets,Phone,Description,Delivery,Latitude,Longitude,OpenDays,Tags")] LocationModel location)
         {
             if (ModelState.IsValid)
             {
-                var entityLocation = db.Locations.FirstOrDefault(l => l.Id == location.Id);
+                var entityLocation = CurrentAppContext.Locations.FirstOrDefault(l => l.Id == location.Id);
+
                 if (entityLocation != null)
                 {
+                    if (await ValidateUserRequestWithUserLoggedIn(entityLocation.RestaurantId) == false)
+                    {
+                        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                    }
+
                     entityLocation.Identifier = location.Identifier;
                     entityLocation.Delivery = location.Delivery;
                     entityLocation.Description = location.Description;
@@ -237,8 +267,7 @@ namespace MenuDelDia.Presentacion.Controllers
                     entityLocation.Streets = location.Streets;
 
                     entityLocation.OpenDays.Clear();
-                    foreach (var openDay in location.OpenDays)
-                    {
+                    location.OpenDays.ForEach(openDay =>
                         entityLocation.OpenDays.Add(new OpenDay
                         {
                             Id = Guid.NewGuid(),
@@ -247,10 +276,15 @@ namespace MenuDelDia.Presentacion.Controllers
                             OpenMinutes = openDay.OpenMinutes,
                             CloseHour = openDay.CloseHour,
                             CloseMinutes = openDay.CloseMinutes,
-                        });
-                    }
-                    db.Entry(entityLocation).State = EntityState.Modified;
-                    db.SaveChanges();
+                        }));
+
+                    entityLocation.Tags.Clear();
+                    var selectedTags = location.Tags.Where(t => t.Selected).Select(t => t.Id).ToList();
+                    var entityTags = CurrentAppContext.Tags.Where(t => selectedTags.Contains(t.Id)).ToList();
+                    entityTags.ForEach(t => entityLocation.Tags.Add(t));
+
+                    CurrentAppContext.Entry(entityLocation).State = EntityState.Modified;
+                    CurrentAppContext.SaveChanges();
                     return RedirectToAction("Index");
                 }
             }
@@ -259,28 +293,71 @@ namespace MenuDelDia.Presentacion.Controllers
         }
 
         // GET: Locations/Delete/5
-        public ActionResult Delete(Guid? id)
+        public async Task<ActionResult> Delete(Guid? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Location location = db.Locations.Find(id);
+            Location location = CurrentAppContext.Locations.Find(id);
             if (location == null)
             {
                 return HttpNotFound();
             }
-            return View(location);
+
+            if (await ValidateUserRequestWithUserLoggedIn(location.RestaurantId) == false)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var locationModel = new LocationModel
+            {
+                Id = location.Id,
+                Identifier = location.Identifier,
+                Delivery = location.Delivery,
+                Description = location.Description,
+                Latitude = location.Latitude,
+                Longitude = location.Longitude,
+                Phone = location.Phone,
+                Streets = location.Streets,
+                OpenDays = location.OpenDays.Select(od => new OpenDaysModel
+                {
+                    Id = Guid.NewGuid(),
+                    DayOfWeek = od.DayOfWeek,
+                    DayOfWeekStr = DayOfWeekToString(od.DayOfWeek),
+                    OpenHour = od.OpenHour,
+                    OpenMinutes = od.OpenMinutes,
+                    CloseHour = od.CloseHour,
+                    CloseMinutes = od.CloseMinutes,
+                }).ToList(),
+                Tags = LoadTags(location.Tags.Select(t => t.Id).ToList()),
+            };
+
+            return View(locationModel);
         }
 
         // POST: Locations/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(Guid id)
+        public async Task<ActionResult> DeleteConfirmed(Guid id)
         {
-            Location location = db.Locations.Find(id);
-            db.Locations.Remove(location);
-            db.SaveChanges();
+            Location location = CurrentAppContext.Locations.Find(id);
+
+            if (await ValidateUserRequestWithUserLoggedIn(location.RestaurantId) == false)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            location.Menus.Clear();
+            location.Tags.Clear();
+
+            foreach (var openDay in location.OpenDays.ToList())
+            {
+                location.OpenDays.Remove(openDay);
+            }
+
+            CurrentAppContext.Locations.Remove(location);
+            CurrentAppContext.SaveChanges();
             return RedirectToAction("Index");
         }
 
@@ -288,7 +365,7 @@ namespace MenuDelDia.Presentacion.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                CurrentAppContext.Dispose();
             }
             base.Dispose(disposing);
         }

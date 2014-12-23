@@ -1,12 +1,13 @@
 ﻿@using System.Configuration
 @using MenuDelDia.Presentacion.Helpers
+@using MenuDelDia.Presentacion.Resources
 @model MenuDelDia.Presentacion.Models.RestaurantModel
 
 @{
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>@ViewResources.DetailsTitle</h2>
 
 <div>
     <h4>Restaurant</h4>
@@ -49,6 +50,6 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink(ViewResources.Edit, "Edit", new { id = Model.Id }) |
+    @Html.ActionLink(ViewResources.Back, "Index")
 </p>

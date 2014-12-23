@@ -20,11 +20,14 @@ namespace MenuDelDia.Repository
 
         public IDbSet<Card> Cards { get; set; }
         public IDbSet<Comment> Comments { get; set; }
+        public IDbSet<AppComment> AppComments { get; set; }
         public IDbSet<Location> Locations { get; set; }
         public IDbSet<Menu> Menus { get; set; }
         public IDbSet<OpenDay> OpenDays { get; set; }
         public IDbSet<Restaurant> Restaurants { get; set; }
         public IDbSet<Tag> Tags { get; set; }
+        public IDbSet<Suggestion> Suggestion { get; set; }
+        
 
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

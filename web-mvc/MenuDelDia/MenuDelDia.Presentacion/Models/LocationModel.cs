@@ -13,7 +13,7 @@ namespace MenuDelDia.Presentacion.Models
         public LocationModel()
         {
             OpenDays = new Collection<OpenDaysModel>();
-            Tags = new Collection<Tag>();
+            Tags = new Collection<TagModel>();
             Menus = new Collection<Menu>();
         }
 
@@ -51,7 +51,7 @@ namespace MenuDelDia.Presentacion.Models
         public virtual IList<OpenDaysModel> OpenDays { get; set; }
 
         [DisplayName("Tags")]
-        public virtual ICollection<Tag> Tags { get; set; }
+        public virtual IList<TagModel> Tags { get; set; }
 
         [DisplayName("Menús")]
         public virtual ICollection<Menu> Menus { get; set; }
@@ -85,13 +85,13 @@ namespace MenuDelDia.Presentacion.Models
         public string DayOfWeekStr { get; set; }
 
         [DisplayName("Hora de apertura")]
-        [Range(0, 12)]
+        [Range(0, 23)]
         public int OpenHour { get; set; }
         [Range(0, 59)]
         public int OpenMinutes { get; set; }
 
         [DisplayName("Hora de cierre")]
-        [Range(0, 12)]
+        [Range(0, 23)]
         public int CloseHour { get; set; }
         [Range(0, 59)]
         public int CloseMinutes { get; set; }

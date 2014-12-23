@@ -12,7 +12,7 @@ namespace MenuDelDia.Presentacion.Models
         public MenuModel()
         {
             Comments = new List<Comment>();
-            Tags = new List<Tag>();
+            Tags = new List<TagModel>();
             Locations = new List<MenuLocationModel>();
             MenuDays = new MenuDaysModel();
             SpecialDay = new SpecialDayModel();
@@ -43,6 +43,11 @@ namespace MenuDelDia.Presentacion.Models
         //[DisplayName("Recurrente")]
         //public bool SpecialDayRecurrent { get; set; }
 
+        [DisplayName("Precio")]
+        [Required(AllowEmptyStrings = false)]
+        public double Cost { get; set; }
+
+
         [DisplayName("Activo")]
         public bool Active { get; set; }
 
@@ -50,7 +55,7 @@ namespace MenuDelDia.Presentacion.Models
         public virtual IList<Comment> Comments { get; set; }
 
         [DisplayName("Tags")]
-        public virtual IList<Tag> Tags { get; set; }
+        public virtual IList<TagModel> Tags { get; set; }
 
         [DisplayName("Sucursales")]
         public virtual IList<MenuLocationModel> Locations { get; set; }

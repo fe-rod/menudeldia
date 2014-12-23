@@ -1,10 +1,11 @@
-﻿@model MenuDelDia.Presentacion.Models.MenuModel
+﻿@using MenuDelDia.Presentacion.Resources
+@model MenuDelDia.Presentacion.Models.MenuModel
 
 @{
     ViewBag.Title = "Create";
 }
 
-<h2>Create</h2>
+<h2>@ViewResources.CreateTitle</h2>
 
 
 @using (Html.BeginForm())
@@ -36,6 +37,14 @@
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Ingredients, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Ingredients, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Cost, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Cost, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Cost, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -112,6 +121,39 @@
         </div>
 
         <div class="form-group">
+            @Html.LabelFor(model => model.Tags, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10 ">
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (var i = 0; i < Model.Tags.Count; i = i + 4)
+                        {
+                            <tr>
+                                @for (var j = i; ((j < (i + 4)) && (j < Model.Tags.Count)); j++)
+                                {
+                                    <td>
+                                        @Html.Hidden("Tags.Index", (j + 10))
+                                        @Html.CheckBox("Tags[" + (j + 10) + "].Selected", Model.Tags[j].Selected)
+                                        @Html.Hidden("Tags[" + (j + 10) + "].Id", Model.Tags[j].Id)
+                                        @Html.Hidden("Tags[" + (j + 10) + "].Name", Model.Tags[j].Name)
+                                        @Model.Tags[j].Name
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="form-group">
             @Html.LabelFor(model => model.Active, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Active, new { htmlAttributes = new { @class = "" } })
@@ -121,14 +163,15 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="@ViewResources.Create" class="btn btn-default" />
             </div>
         </div>
     </div>
+
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink(ViewResources.Back, "Index")
 </div>
 
 @section Scripts {

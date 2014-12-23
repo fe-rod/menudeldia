@@ -7,10 +7,12 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using MenuDelDia.Entities;
+using MenuDelDia.Presentacion.Authorize;
 using MenuDelDia.Repository;
 
 namespace MenuDelDia.Presentacion.Controllers
 {
+    [CustomAuthorize(Roles = "Administrator")]
     public class CardsController : Controller
     {
         private AppContext db = new AppContext();
@@ -112,6 +114,7 @@ namespace MenuDelDia.Presentacion.Controllers
         public ActionResult DeleteConfirmed(Guid id)
         {
             Card card = db.Cards.Find(id);
+            card.Restaurants.Clear();
             db.Cards.Remove(card);
             db.SaveChanges();
             return RedirectToAction("Index");

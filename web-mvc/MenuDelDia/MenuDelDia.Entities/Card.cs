@@ -5,11 +5,12 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using MenuDelDia.Entities.Enums;
+using Resources;
 
 namespace MenuDelDia.Entities
 {
     [Table("Cards")]
-    public class Card:EntityBase
+    public class Card : EntityBase
     {
         public Card()
         {
@@ -19,7 +20,7 @@ namespace MenuDelDia.Entities
         [Key]
         public override Guid Id { get; set; }
 
-        [Required(AllowEmptyStrings = false)]
+        [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(MessagesResource))]
         [DisplayName("Nombre")]
         public string Name { get; set; }
         [DisplayName("Tipo Tarjeta")]

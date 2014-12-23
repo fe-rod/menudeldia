@@ -7,24 +7,45 @@
 </div>
 
 <div class="row">
-    <div class="col-md-4">
-        @if (User.Identity.IsAuthenticated)
+    <div class="col-md-12">
+        @if (User.Identity.IsAuthenticated && User.IsInRole("User"))
         {
-            <ul>
-                <li><a href="@Url.Action("Index","Cards")">Cards</a></li>
-                <li><a href="@Url.Action("Index","Tags")">Tags</a></li>
-                <li><a href="@Url.Action("Index","Locations")">Location</a></li>
-                <li><a href="@Url.Action("Index","Menus")">Menu</a></li>
-                <li><a href="@Url.Action("Index","Restaurants")">Restaurants</a></li>
-            </ul>
-
+            <div class="col-md-4">
+                <div class="well">
+                    <a href="@Url.Action("Edit","Restaurants")" class="btn btn-primary btn-lg btn-block">Restaurant</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="well">
+                    <a href="@Url.Action("Index","Locations")" class="btn btn-primary btn-lg btn-block">Sucursales</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="well">
+                    <a href="@Url.Action("Index","Menus")" class="btn btn-primary btn-lg btn-block">Menús</a>
+                </div>
+            </div>
         }
+        else if (User.Identity.IsAuthenticated && User.IsInRole("Administrator"))
+        {
+            <div class="well">
+                <div class="col-md-4">
+                    <div class="well">
+                        <a href="@Url.Action("Index","Restaurants")" class="btn btn-primary btn-lg btn-block">Restaurants</a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="well">
+                        <a href="@Url.Action("Index","Cards")" class="btn btn-primary btn-lg btn-block">Cards</a>
+                    </div>
+                </div>
 
-    </div>
-    <div class="col-md-4">
-        
-    </div>
-    <div class="col-md-4">
-
+                <div class="col-md-4">
+                    <div class="well">
+                        <a href="@Url.Action("Index","Tags")" class="btn btn-primary btn-lg btn-block">Tags</a>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
 </div>

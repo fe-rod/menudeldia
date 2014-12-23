@@ -1,15 +1,16 @@
 ﻿@using System.Configuration
 @using MenuDelDia.Presentacion.Helpers
+@using MenuDelDia.Presentacion.Resources
 @model IEnumerable<MenuDelDia.Presentacion.Models.RestaurantModel>
 
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>@ViewResources.Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink(ViewResources.Create, "Create", null, new { @class = "btn btn-primary" })
 </p>
 <table class="table">
     <tr>
@@ -46,9 +47,9 @@
                 {<a id="lnkUrl" target="blank" href="@item.Url">@item.Url</a>}
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                @Html.ActionLink(ViewResources.Edit, "Edit", new { id = item.Id }, new { @class = "btn btn-default btn-xs" }) |
+                @Html.ActionLink(ViewResources.Details, "Details", new { id = item.Id }, new { @class = "btn btn-default btn-xs" }) |
+                @Html.ActionLink(ViewResources.Delete, "Delete", new { id = item.Id }, new { @class = "btn btn-default btn-xs" })
             </td>
         </tr>
     }
