@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity;
 using System.Device.Location;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
+using MenuDelDia.Presentacion.Helpers;
 using MenuDelDia.Presentacion.Models.ApiModels;
 using MenuDelDia.Repository;
+using WebGrease.Css.Extensions;
 
 
 namespace MenuDelDia.Presentacion.Controllers.Api
@@ -17,10 +22,8 @@ namespace MenuDelDia.Presentacion.Controllers.Api
 
         #region Private Methods
 
-        private IList<MenusApiModel> QueryMenus()
+        private IList<MenusApiModel> QueryMenus(Guid? id = null)
         {
-            //todo: filtrar por restaurant activo
-
             using (var db = new AppContext())
             {
                 db.Configuration.AutoDetectChangesEnabled = false;
@@ -37,6 +40,8 @@ namespace MenuDelDia.Presentacion.Controllers.Api
                     .Include(m => m.Tags)
                     .Where(m => m.Active
                         && (
+                            (id.HasValue == false || id.Value == m.Id) &&
+                            (m.Locations.Any(l => l.Restaurant.Active)) &&
                             (dayOfWeek == DayOfWeek.Monday && m.MenuDays.Monday) ||
                             (dayOfWeek == DayOfWeek.Tuesday && m.MenuDays.Tuesday) ||
                             (dayOfWeek == DayOfWeek.Wednesday && m.MenuDays.Wednesday) ||
@@ -67,7 +72,7 @@ namespace MenuDelDia.Presentacion.Controllers.Api
                         Name = m.Name,
                         Description = m.Description,
                         Ingredients = m.Ingredients,
-                        Cost = m.Cost,
+                        Price = m.Cost,
                         MenuDays = new MenuDaysApiModel
                         {
                             Monday = m.MenuDays.Monday,
@@ -91,6 +96,8 @@ namespace MenuDelDia.Presentacion.Controllers.Api
                             Delivery = l.Delivery,
                             Phone = l.Phone,
                             Streets = l.Streets,
+                            RestaurantId = l.RestaurantId,
+                            RestaurantName = l.Restaurant.Name,
                             OpenDays = l.OpenDays.Select(od => new OpenDayApiModel
                             {
                                 DayOfWeek = od.DayOfWeek,
@@ -102,17 +109,52 @@ namespace MenuDelDia.Presentacion.Controllers.Api
                             Latitude = l.Latitude,
                             Longitude = l.Longitude,
                             Distance = -1.0,
-                            Logo = new LogoApiModel
-                            {
-                                LogoExtension = l.Restaurant.LogoExtension,
-                                LogoName = l.Restaurant.LogoName,
-                                LogoPath = l.Restaurant.LogoPath,
-                            }
                         }).ToList(),
 
                         Tags = m.Tags.Select(t => new TagApiModel { Id = t.Id, Name = t.Name }).ToList(),
                     })
                .ToList();
+
+
+                var restaurantsIds = menus.SelectMany(m => m.Locations.Select(l => l.RestaurantId)).ToList().Distinct();
+
+                var logos = db.Restaurants
+                    .Where(r => restaurantsIds.Contains(r.Id))
+                    .Select(r => new
+                    {
+                        r.Id,
+                        logo = new LogoApiModel
+                        {
+                            LogoExtension = r.LogoExtension,
+                            LogoName = r.LogoName,
+                            LogoPath = r.LogoPath,
+                        }
+                    }).ToList();
+
+
+                foreach (var menu in menus)
+                {
+                    var location = menu.Locations.FirstOrDefault();
+                    if (location != null)
+                    {
+                        var logoInfo = logos.FirstOrDefault(l => l.Id == location.RestaurantId);
+                        if (logoInfo != null && string.IsNullOrEmpty(logoInfo.logo.LogoPath) == false)
+                        {
+                            var path = Path.Combine(HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["FolderLogos"]), string.Format("{0}{1}", logoInfo.logo.LogoName, logoInfo.logo.LogoExtension));
+                            var file = new FileInfo(path);
+                            if (file.Exists)
+                            {
+                                logoInfo.logo.LogoBase64 = StringHelper.EncodeToBase64(file.FullName);
+                                logoInfo.logo.LogoExtension = logoInfo.logo.LogoExtension.Replace(".", "");
+                            }
+                        }
+                        if (logoInfo != null)
+                        {
+                            menu.Logo = logoInfo.logo;
+                        }
+                    }
+                }
+
                 return menus;
             }
         }
@@ -179,6 +221,7 @@ namespace MenuDelDia.Presentacion.Controllers.Api
                 .ToList();
             }
 
+            menus.ForEach(m => m.NearestLocation = m.Locations.FirstOrDefault());
             return menus.OrderBy(m => m.Name)
                              .Skip(filter.Start ?? 0)
                              .Take(filter.Size ?? menus.Count)
@@ -188,14 +231,15 @@ namespace MenuDelDia.Presentacion.Controllers.Api
 
         #endregion
 
-
         [HttpGet]
-        [Route("api/menus")]
-        public HttpResponseMessage Get()
+        [Route("api/menus/{id:guid}")]
+        public HttpResponseMessage Get(Guid id)
         {
-            var menus = FilterMenus(QueryMenus(), new MenusFilter());
-            return Request.CreateResponse(HttpStatusCode.OK, menus);
+            var menus = FilterMenus(QueryMenus(id), new MenusFilter());
+            var menu = menus.FirstOrDefault();
+            return Request.CreateResponse(HttpStatusCode.OK, menu);
         }
+
 
         [HttpGet]
         [Route("api/menus/{start:int}/{size:int}")]
@@ -205,13 +249,13 @@ namespace MenuDelDia.Presentacion.Controllers.Api
             return Request.CreateResponse(HttpStatusCode.OK, menus);
         }
 
-        [HttpGet]
-        [Route("api/menus/{latitude:double}/{longitude:double}")]
-        public HttpResponseMessage Get(double latitude, double longitude)
-        {
-            var menus = FilterMenus(QueryMenus(), new MenusFilter { Latitude = latitude, Longitude = longitude });
-            return Request.CreateResponse(HttpStatusCode.OK, menus);
-        }
+        //[HttpGet]
+        //[Route("api/menus/{latitude:double}/{longitude:double}")]
+        //public HttpResponseMessage Get(double latitude, double longitude)
+        //{
+        //    var menus = FilterMenus(QueryMenus(), new MenusFilter { Latitude = latitude, Longitude = longitude });
+        //    return Request.CreateResponse(HttpStatusCode.OK, menus);
+        //}
 
         [HttpGet]
         [Route("api/menus/{latitude:double}/{longitude:double}/{start:int}/{size:int}")]

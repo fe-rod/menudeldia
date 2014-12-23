@@ -1,10 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 using MenuDelDia.Entities.Enums;
+using MenuDelDia.Presentacion.Helpers;
 using MenuDelDia.Presentacion.Models.ApiModels;
 using MenuDelDia.Presentacion.Resources;
 using MenuDelDia.Repository;
@@ -16,7 +21,7 @@ namespace MenuDelDia.Presentacion.Controllers.Api
 
         #region Private Methods
 
-        private IList<RestaurantApiModel> QueryRestaurants()
+        private IList<RestaurantApiModel> QueryRestaurants(Guid? id = null)
         {
             using (var db = new AppContext())
             {
@@ -29,7 +34,7 @@ namespace MenuDelDia.Presentacion.Controllers.Api
                     .Include(r => r.Locations)
                     .Include(r => r.Cards)
                     .Include(r => r.Tags)
-                    .Where(r => r.Active)
+                    .Where(r => r.Active && (id.HasValue == false || r.Id == id.Value))
                     .Select(r => new RestaurantApiModel
                     {
                         Id = r.Id,
@@ -73,18 +78,19 @@ namespace MenuDelDia.Presentacion.Controllers.Api
                     }).ToList();
 
 
-                //restaurants.ForEach(r =>
-                //{
-                //    if (string.IsNullOrEmpty(r.LogoPath) == false)
-                //    {
-                //        var path = Path.Combine(HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["FolderLogos"]), string.Format("{0}{1}", r.LogoName, r.LogoExtension));
-                //        var file = new FileInfo(path);
-                //        if (file.Exists)
-                //        {
-                //            r.LogoBase64 = StringHelper.EncodeToBase64(file.FullName);
-                //        }
-                //    }
-                //});
+                restaurants.ForEach(r =>
+                {
+                    if (string.IsNullOrEmpty(r.LogoPath) == false)
+                    {
+                        var path = Path.Combine(HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["FolderLogos"]), string.Format("{0}{1}", r.LogoName, r.LogoExtension));
+                        var file = new FileInfo(path);
+                        if (file.Exists)
+                        {
+                            r.LogoBase64 = StringHelper.EncodeToBase64(file.FullName);
+                            r.LogoExtension = r.LogoExtension.Replace(".", "");
+                        }
+                    }
+                });
                 return restaurants;
             }
         }
@@ -102,14 +108,16 @@ namespace MenuDelDia.Presentacion.Controllers.Api
         }
         #endregion
 
-
         [HttpGet]
-        [Route("api/restaurants")]
-        public HttpResponseMessage Get()
+        [Route("api/restaurants/{id:guid}")]
+        public HttpResponseMessage Get(Guid id)
         {
-            var restaurants = QueryRestaurants();
-            return Request.CreateResponse(HttpStatusCode.OK, restaurants);
+            var restaurants = FilterRestaurant(QueryRestaurants(id), new RestaurantFilter());
+            var restaurant = restaurants.FirstOrDefault();
+
+            return Request.CreateResponse(HttpStatusCode.OK, restaurant);
         }
+
 
         [HttpGet]
         [Route("api/restaurants/{start:int}/{size:int}")]

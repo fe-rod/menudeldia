@@ -15,6 +15,7 @@ namespace MenuDelDia.Presentacion.Models.ApiModels
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public double Distance { get; set; }
-        public LogoApiModel Logo { get; set; }
+        public Guid RestaurantId { get; set; }
+        public string RestaurantName { get; set; }
     }
 }
