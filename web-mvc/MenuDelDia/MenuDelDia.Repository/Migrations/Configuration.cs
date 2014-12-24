@@ -30,7 +30,6 @@ namespace MenuDelDia.Repository.Migrations
             context.Cards.AddOrUpdate(c => new { c.Name, c.CardType }, new Card { Id = Guid.Parse("ED2D36F3-8851-408F-9882-C6216787EF54"), Name = "Master", CardType = CardType.Credit });
             context.Cards.AddOrUpdate(c => new { c.Name, c.CardType }, new Card { Id = Guid.Parse("F8F21E7B-B4F5-4D1E-95FA-F9A48E2014A5"), Name = "Master", CardType = CardType.Debit });
 
-
             //  This method will be called after migrating to the latest version.
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 

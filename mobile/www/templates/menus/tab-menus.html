@@ -10,20 +10,28 @@
                 <!--Cancel-->
             <!--</button>-->
         <!--</div>-->
-        <a class="item item-avatar menuList" href="#/tab/menu/{{menu.id}}" ng-repeat="menu in menus">
-            <img  src="img/{{menu.store.icon}}.png">
-            <h2 class="menuTitle">{{menu.name}}</h2><h2 class="menuPrice">${{menu.price}}</h2>
-            <p>{{menu.store.name}} - {{menu.store.distance}} km</p>
-            <button class="button button-stable">
-                saludable
-            </button>
-            <button class="button button-stable">
-                vegetariano
-            </button>
-            <button class="button button-stable">
-                celiacos
-            </button>
-        </a>
+        <ion-list can-swipe="true">
+            <ion-item ng-repeat="menu in menus" class="item item-avatar menuList" href="#/tab/menu/{{menu.id}}">
+                    <img  src="img/{{menu.store.icon}}.png">
+                    <h2 class="menuTitle">{{menu.name}}</h2><h2 class="menuPrice">${{menu.price}}</h2>
+                    <p>{{menu.store.name}} - {{menu.store.distance}} km</p>
+                    <button class="button button-stable">
+                        saludable
+                    </button>
+                    <button class="button button-stable">
+                        vegetariano
+                    </button>
+                    <button class="button button-stable">
+                        celiacos
+                    </button>
+                     <ion-option-button class="favoriteMenu button-stable" ng-click="favorite(menu)">
+                         <div class="row row-center">
+                            <i class="icon ion-ios7-star star" ng-class="{'active': menu.favorite}"></i>
+                         </div>
+                     </ion-option-button>
+            </ion-item>
+        </ion-list>
+
         <ion-infinite-scroll
                 on-infinite="loadMore()"
                 distance="1%">

@@ -6,6 +6,10 @@ angular.module('todayMenu')
         $rootScope.hideTabs = false;
         $rootScope.hideFilter = false;
 
+        $scope.favorite = function(menu){
+            menu.favorite = !menu.favorite;
+        };
+
         $ionicPopover.fromTemplateUrl('templates/menus/filterPopover.html', function(popover) {
             $rootScope.popover = popover;
         });

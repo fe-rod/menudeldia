@@ -38,9 +38,9 @@ namespace MenuDelDia.Presentacion.Controllers.Api
                     .Include(m => m.Locations.Select(l => l.OpenDays))
                     .Include(m => m.Locations.Select(l => l.Restaurant))
                     .Include(m => m.Tags)
-                    .Where(m => m.Active
+                    .Where(m => m.Active && (id.HasValue == false || id.Value == m.Id)
                         && (
-                            (id.HasValue == false || id.Value == m.Id) &&
+                             
                             (m.Locations.Any(l => l.Restaurant.Active)) &&
                             (dayOfWeek == DayOfWeek.Monday && m.MenuDays.Monday) ||
                             (dayOfWeek == DayOfWeek.Tuesday && m.MenuDays.Tuesday) ||

@@ -19,8 +19,8 @@
 }
 
 .bar.bar-stable {
-    background-color: #3F51B5;
-    border-color: #3F51B5;
+    background-color: #FF5722;
+    border-color: #FF5722;
 }
 
 .bar.bar-stable .title {
@@ -33,11 +33,11 @@
 }
 
 .tabs-icon-top .tabs {
-    background-color: #3F51B5;
+    background-color: #FF5722;
     color: #fcfcfc;
     height: 52px;
     padding-top: 4px;
-    border-color: #3F51B5;
+    border-color: #FF5722;
 }
 
 .tabs-icon-top > .tabs .tab-item, .tabs-icon-top.tabs .tab-item, .tabs-icon-bottom > .tabs .tab-item, .tabs-icon-bottom.tabs .tab-item {
@@ -70,8 +70,20 @@
     color: white;
 }
 
-.menuList{
+.menuList .favoriteMenu div{
+    height: 100%;
+}
 
+.menuList .favoriteMenu.button-stable{
+    background-color: #EEEEEE;
+}
+
+.menuList .favoriteMenu .icon.active{
+    color: #FDD835;
+}
+
+.menuList .favoriteMenu .icon{
+    color: #9E9E9E;
 }
 
 .menuList .button{
@@ -90,7 +102,7 @@
 
 .menuList .menuPrice{
     float: right;
-    color: #FF4081;
+    color: #D84315;
     font-weight: bold;
 }
 
@@ -136,7 +148,7 @@
     padding-left:60px;
     font-size: 20px;
     font-weight: bold;
-    color: #FF4081;
+    color: #D84315;
 }
 
 .menuDetailHeader p {
@@ -173,13 +185,13 @@
 }
 
 .menuDetailTags .button.button-dark{
-    background-color: #FF4081;
-    border-color: #FF4081;
+    background-color: #FF8A65;
+    border-color: #FF8A65;
 }
 
 .menuDetailTags .button.button-dark.active, .menuDetailTags .button.button-dark.activated {
-    border-color: #FF4081;
-    background-color: #FF4081;
+    border-color: #FF8A65;
+    background-color: #FF8A65;
     color: #fff;
     box-shadow: none;
 }
@@ -190,8 +202,8 @@
 }
 
 .menuDetailFooter .menuDetailButtons .button{
-    background-color: #3F51B5;
-    border-color: #303F9F;
+    background-color: #FF5722;
+    border-color: #FFF;
 }
 
 .menuDetailFooter .menuDetailButtons .icon{
@@ -295,6 +307,16 @@
 .commentsForm .button.button-clear{
     color: #fff;
 }
+
+.commentsForm .button.button-stable{
+    color: #FFF;
+    background-color: #FF7043;
+    border-color: #FF7043;
+    padding-left: 0px;
+    padding-right: 0px;
+    font-size: 15px;
+}
+
 .commentsForm .button.button-clear .icon:before{
     font-size: 20px;
 }
