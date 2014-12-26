@@ -145,7 +145,7 @@ namespace MenuDelDia.Presentacion.Controllers
             ViewBag.DayOfWeeks = DayOfWeeksSelectListItems();
             var model = new LocationModel
             {
-                Tags = LoadTags()
+                //Tags = LoadTags()
             };
             return View(model);
         }
@@ -155,7 +155,7 @@ namespace MenuDelDia.Presentacion.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Identifier,Streets,Phone,Description,Delivery,Latitude,Longitude,OpenDays,Tags")] LocationModel location)
+        public async Task<ActionResult> Create([Bind(Include = "Id,Identifier,Streets,Phone,Description,Delivery,Latitude,Longitude,OpenDays")] LocationModel location)
         {
             if (ModelState.IsValid)
             {
@@ -166,8 +166,8 @@ namespace MenuDelDia.Presentacion.Controllers
                     return View(location);
                 }
 
-                var selectedTags = location.Tags.Where(t => t.Selected).Select(t => t.Id).ToList();
-                var entityTags = CurrentAppContext.Tags.Where(t => selectedTags.Contains(t.Id)).ToList();
+                //var selectedTags = location.Tags.Where(t => t.Selected).Select(t => t.Id).ToList();
+                //var entityTags = CurrentAppContext.Tags.Where(t => selectedTags.Contains(t.Id)).ToList();
 
                 var entityLocation = new Location
                 {
@@ -192,7 +192,7 @@ namespace MenuDelDia.Presentacion.Controllers
                     }).ToList()
                 };
 
-                entityTags.ForEach(t => entityLocation.Tags.Add(t));
+                //entityTags.ForEach(t => entityLocation.Tags.Add(t));
 
 
                 CurrentAppContext.Locations.Add(entityLocation);
@@ -222,7 +222,7 @@ namespace MenuDelDia.Presentacion.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var tagsIds = location.Tags.Select(t => t.Id).ToList();
+            //var tagsIds = location.Tags.Select(t => t.Id).ToList();
 
             var locationModel = new LocationModel
             {
@@ -244,7 +244,7 @@ namespace MenuDelDia.Presentacion.Controllers
                     DayOfWeek = od.DayOfWeek,
                     DayOfWeekStr = DayOfWeekToString(od.DayOfWeek)
                 }).ToList(),
-                Tags = LoadTags(tagsIds),
+                //Tags = LoadTags(tagsIds),
             };
 
             ViewBag.DayOfWeeks = DayOfWeeksSelectListItems();
@@ -256,7 +256,7 @@ namespace MenuDelDia.Presentacion.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Identifier,Streets,Phone,Description,Delivery,Latitude,Longitude,OpenDays,Tags")] LocationModel location)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Identifier,Streets,Phone,Description,Delivery,Latitude,Longitude,OpenDays")] LocationModel location)
         {
             if (ModelState.IsValid)
             {
@@ -290,10 +290,10 @@ namespace MenuDelDia.Presentacion.Controllers
                             CloseMinutes = openDay.CloseMinutes,
                         }));
 
-                    entityLocation.Tags.Clear();
-                    var selectedTags = location.Tags.Where(t => t.Selected).Select(t => t.Id).ToList();
-                    var entityTags = CurrentAppContext.Tags.Where(t => selectedTags.Contains(t.Id)).ToList();
-                    entityTags.ForEach(t => entityLocation.Tags.Add(t));
+                    //entityLocation.Tags.Clear();
+                    //var selectedTags = location.Tags.Where(t => t.Selected).Select(t => t.Id).ToList();
+                    //var entityTags = CurrentAppContext.Tags.Where(t => selectedTags.Contains(t.Id)).ToList();
+                    //entityTags.ForEach(t => entityLocation.Tags.Add(t));
 
                     CurrentAppContext.Entry(entityLocation).State = EntityState.Modified;
                     CurrentAppContext.SaveChanges();
@@ -342,7 +342,7 @@ namespace MenuDelDia.Presentacion.Controllers
                     CloseHour = od.CloseHour,
                     CloseMinutes = od.CloseMinutes,
                 }).ToList(),
-                Tags = LoadTags(location.Tags.Select(t => t.Id).ToList()),
+                //Tags = LoadTags(location.Tags.Select(t => t.Id).ToList()),
             };
 
             return View(locationModel);
@@ -361,7 +361,7 @@ namespace MenuDelDia.Presentacion.Controllers
             }
 
             location.Menus.Clear();
-            location.Tags.Clear();
+            //location.Tags.Clear();
 
             foreach (var openDay in location.OpenDays.ToList())
             {
