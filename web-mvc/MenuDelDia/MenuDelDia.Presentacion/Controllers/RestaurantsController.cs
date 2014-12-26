@@ -207,7 +207,7 @@ namespace MenuDelDia.Presentacion.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [CustomAuthorize(Roles = "Administrator")]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Name,Description,Url,Cards,EmailUserName,Active,Tags")] RestaurantModel restaurant, HttpPostedFileBase file)
+        public async Task<ActionResult> Create([Bind(Include = "Id,Name,Description,Url,Email,Cards,EmailUserName,Active,Tags")] RestaurantModel restaurant, HttpPostedFileBase file)
         {
             if (ModelState.IsValid)
             {
@@ -308,7 +308,7 @@ namespace MenuDelDia.Presentacion.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [CustomAuthorize(Roles = "Administrator,User")]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,LogoPath,Description,Url,ClearLogoPath,Cards,Active,Tags")] RestaurantModel restaurant, HttpPostedFileBase file)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,LogoPath,Description,Url,Email,ClearLogoPath,Cards,Active,Tags")] RestaurantModel restaurant, HttpPostedFileBase file)
         {
             if (ModelState.IsValid)
             {
@@ -362,8 +362,12 @@ namespace MenuDelDia.Presentacion.Controllers
 
                     CurrentAppContext.Entry(restaurantEntity).State = EntityState.Modified;
                     CurrentAppContext.SaveChanges();
-                    return RedirectToAction("Index");
+                    if (User.IsInRole("Administrator"))
+                    {
+                        return RedirectToAction("Index");    
+                    }
 
+                    return RedirectToAction("Index","Home");
                 }
             }
             return View(restaurant);
