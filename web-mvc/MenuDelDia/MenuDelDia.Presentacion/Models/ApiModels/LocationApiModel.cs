@@ -14,7 +14,7 @@ namespace MenuDelDia.Presentacion.Models.ApiModels
         public IList<OpenDayApiModel> OpenDays { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-        public double Distance { get; set; }
+        public double? Distance { get; set; }
         public Guid RestaurantId { get; set; }
         public string RestaurantName { get; set; }
         public string LogoName { get; set; }

@@ -12,7 +12,7 @@ namespace MenuDelDia.Presentacion.Models.ApiModels
         public double Price { get; set; }
         public MenuDaysApiModel MenuDays { get; set; }
         public SpecialDayApiModel SpecialDay { get; set; }
-        public IList<LocationApiModel> Locations { get; set; }
+        //public IList<LocationApiModel> Locations { get; set; }
         public IList<TagApiModel> Tags { get; set; }
         public LocationApiModel NearestLocation { get; set; }
         public LogoApiModel Logo { get; set; }

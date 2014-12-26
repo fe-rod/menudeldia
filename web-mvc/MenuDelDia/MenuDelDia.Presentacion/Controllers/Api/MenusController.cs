@@ -32,7 +32,7 @@ namespace MenuDelDia.Presentacion.Controllers.Api
             return DbGeography.PointFromText(text, 4326);
         }
 
-        private IList<MenusApiModel> QueryMenus(Guid? id = null, double? latitude = null, double? longitude = null)
+        private IList<MenusApiModel> QueryMenus(Guid? id = null, double? latitude = null, double? longitude = null, double? radius = null)
         {
             DbGeography currentPosition = null;
             if (latitude != null && longitude != null)
@@ -78,7 +78,8 @@ namespace MenuDelDia.Presentacion.Controllers.Api
                                             (od.DayOfWeek == DayOfWeek.Friday) ||
                                             (od.DayOfWeek == DayOfWeek.Saturday) ||
                                             (od.DayOfWeek == DayOfWeek.Sunday))
-                                        )
+                                        ) &&
+                    (radius.HasValue == false || m.Locations.Any(l => l.SpatialLocation.Distance(currentPosition) <= radius))
                         )
                 .Select(m =>
                     new MenusApiModel
@@ -103,7 +104,9 @@ namespace MenuDelDia.Presentacion.Controllers.Api
                             Date = m.SpecialDay.Date,
                             Recurrent = m.SpecialDay.Recurrent
                         },
-                        Locations = m.Locations.Select(l => new LocationApiModel
+                        NearestLocation = m.Locations
+                                           .OrderBy(l => l.SpatialLocation.Distance(currentPosition))
+                                           .Select(l => new LocationApiModel
                         {
                             Id = l.Id,
                             Identifier = l.Identifier,
@@ -123,15 +126,14 @@ namespace MenuDelDia.Presentacion.Controllers.Api
                             }).ToList(),
                             Latitude = l.Latitude,
                             Longitude = l.Longitude,
-                            Distance = -1.0,
-                        }).ToList(),
+                            Distance = l.SpatialLocation.Distance(currentPosition),
+                        }).FirstOrDefault(),
 
                         Tags = m.Tags.Select(t => new TagApiModel { Id = t.Id, Name = t.Name }).ToList(),
                     })
                .ToList();
 
-
-                var restaurantsIds = menus.SelectMany(m => m.Locations.Select(l => l.RestaurantId)).ToList().Distinct();
+                var restaurantsIds = menus.Select(m => m.NearestLocation.RestaurantId).ToList().Distinct();
 
                 var logos = db.Restaurants
                     .Where(r => restaurantsIds.Contains(r.Id))
@@ -149,7 +151,7 @@ namespace MenuDelDia.Presentacion.Controllers.Api
 
                 foreach (var menu in menus)
                 {
-                    var location = menu.Locations.FirstOrDefault();
+                    var location = menu.NearestLocation;
                     if (location != null)
                     {
                         var logoInfo = logos.FirstOrDefault(l => l.Id == location.RestaurantId);
@@ -176,67 +178,14 @@ namespace MenuDelDia.Presentacion.Controllers.Api
 
         private IList<MenusApiModel> FilterMenus(IList<MenusApiModel> menus, MenusFilter filter)
         {
-            if (filter.Latitude.HasValue && filter.Longitude.HasValue)
+            if (filter.FilteredByLatLong)
             {
-                var filteredMenus = new List<MenusApiModel>();
-
-                var hashDistances = new Dictionary<Guid, double>();
-                var geoCoordinateOrigin = new GeoCoordinate(filter.Latitude.Value, filter.Longitude.Value);
-
-                foreach (var menu in menus)
-                {
-                    MenusApiModel localMenuVariable = menu;
-
-                    var locations = localMenuVariable.Locations.ToList();
-                    localMenuVariable.Locations = new List<LocationApiModel>();
-
-                    locations.ForEach(l =>
-                    {
-                        if (hashDistances.ContainsKey(l.Id))
-                        {
-                            l.Distance = hashDistances[l.Id];
-                        }
-                        else
-                        {
-                            l.Distance =
-                                geoCoordinateOrigin.GetDistanceTo(new GeoCoordinate
-                                {
-                                    Latitude = l.Latitude,
-                                    Longitude = l.Longitude
-                                });
-                            hashDistances.Add(l.Id, l.Distance);
-                        }
-
-                        if (filter.Radius.HasValue == false || l.Distance <= filter.Radius)
-                        {
-                            localMenuVariable.Locations.Add(l);
-                            if (localMenuVariable.NearestLocation == null)
-                            {
-                                localMenuVariable.NearestLocation = l;
-                            }
-                            else
-                            {
-                                if (localMenuVariable.NearestLocation.Distance > l.Distance)
-                                {
-                                    localMenuVariable.NearestLocation = l;
-                                }
-                            }
-                        }
-                    });
-
-                    if (localMenuVariable.Locations.Any())
-                    {
-                        filteredMenus.Add(localMenuVariable);
-                    }
-                }
-
-                return filteredMenus.OrderBy(m => m.NearestLocation.Distance)
+                return menus.OrderBy(m => m.NearestLocation.Distance)
                 .Skip(filter.Start ?? 0)
                 .Take(filter.Size ?? menus.Count)
                 .ToList();
             }
 
-            menus.ForEach(m => m.NearestLocation = m.Locations.FirstOrDefault());
             return menus.OrderBy(m => m.Name)
                              .Skip(filter.Start ?? 0)
                              .Take(filter.Size ?? menus.Count)
@@ -276,10 +225,9 @@ namespace MenuDelDia.Presentacion.Controllers.Api
         [Route("api/menus/{latitude:double}/{longitude:double}/{start:int}/{size:int}")]
         public HttpResponseMessage Get(double latitude, double longitude, int start, int size)
         {
-            var menus = FilterMenus(QueryMenus(), new MenusFilter
+            var menus = FilterMenus(QueryMenus(null, latitude, longitude), new MenusFilter
             {
-                Latitude = latitude,
-                Longitude = longitude,
+                FilteredByLatLong = true,
                 Start = start,
                 Size = size
             });
@@ -290,24 +238,20 @@ namespace MenuDelDia.Presentacion.Controllers.Api
         [Route("api/menus/{latitude:double}/{longitude:double}/{radius:int}")]
         public HttpResponseMessage Get(double latitude, double longitude, int radius)
         {
-            var menus = FilterMenus(QueryMenus(), new MenusFilter
+            var menus = FilterMenus(QueryMenus(null, latitude, longitude, radius), new MenusFilter
             {
-                Latitude = latitude,
-                Longitude = longitude,
-                Radius = radius,
+                FilteredByLatLong = true,
             });
             return Request.CreateResponse(HttpStatusCode.OK, menus);
         }
-        
+
         [HttpGet]
         [Route("api/menus/{latitude:double}/{longitude:double}/{radius:int}/{start:int}/{size:int}")]
         public HttpResponseMessage Get(double latitude, double longitude, int radius, int start, int size)
         {
-            var menus = FilterMenus(QueryMenus(), new MenusFilter
+            var menus = FilterMenus(QueryMenus(null, latitude, longitude, radius), new MenusFilter
             {
-                Latitude = latitude,
-                Longitude = longitude,
-                Radius = radius,
+                FilteredByLatLong = true,
                 Start = start,
                 Size = size
             });
@@ -319,16 +263,11 @@ namespace MenuDelDia.Presentacion.Controllers.Api
     {
         public MenusFilter()
         {
-            Latitude = null;
-            Longitude = null;
-            Radius = null;
             Start = null;
             Size = null;
         }
 
-        public double? Latitude { get; set; }
-        public double? Longitude { get; set; }
-        public int? Radius { get; set; }
+        public bool FilteredByLatLong { get; set; }
         public int? Start { get; set; }
         public int? Size { get; set; }
 
