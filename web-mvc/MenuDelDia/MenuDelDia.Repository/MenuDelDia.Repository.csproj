@@ -139,6 +139,10 @@
     <Compile Include="Migrations\201412221624111_script_17.Designer.cs">
       <DependentUpon>201412221624111_script_17.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201412261548266_SpatialLocation.cs" />
+    <Compile Include="Migrations\201412261548266_SpatialLocation.Designer.cs">
+      <DependentUpon>201412261548266_SpatialLocation.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -206,6 +210,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201412221624111_script_17.resx">
       <DependentUpon>201412221624111_script_17.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201412261548266_SpatialLocation.resx">
+      <DependentUpon>201412261548266_SpatialLocation.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

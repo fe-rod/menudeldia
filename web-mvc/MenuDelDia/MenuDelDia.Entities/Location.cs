@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity.Spatial;
 using Resources;
 
 namespace MenuDelDia.Entities
@@ -46,6 +47,8 @@ namespace MenuDelDia.Entities
 
         [DisplayName("Longitud")]
         public double Longitude { get; set; }
+
+        public DbGeography SpatialLocation { get; set; }
 
         public Guid RestaurantId { get; set; }
         [ForeignKey("RestaurantId")]

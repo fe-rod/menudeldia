@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
+using System.Data.Entity.Spatial;
 using System.Device.Location;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -22,8 +24,22 @@ namespace MenuDelDia.Presentacion.Controllers.Api
 
         #region Private Methods
 
-        private IList<MenusApiModel> QueryMenus(Guid? id = null)
+        public static DbGeography CreatePoint(double latitude, double longitude)
         {
+            var text = string.Format(CultureInfo.InvariantCulture.NumberFormat,
+                                     "POINT({0} {1})", longitude, latitude);
+            // 4326 is most common coordinate system used by GPS/Maps
+            return DbGeography.PointFromText(text, 4326);
+        }
+
+        private IList<MenusApiModel> QueryMenus(Guid? id = null, double? latitude = null, double? longitude = null)
+        {
+            DbGeography currentPosition = null;
+            if (latitude != null && longitude != null)
+            {
+                currentPosition = CreatePoint(latitude.Value, longitude.Value);
+            }
+
             using (var db = new AppContext())
             {
                 db.Configuration.AutoDetectChangesEnabled = false;
@@ -40,7 +56,6 @@ namespace MenuDelDia.Presentacion.Controllers.Api
                     .Include(m => m.Tags)
                     .Where(m => m.Active && (id.HasValue == false || id.Value == m.Id)
                         && (
-                             
                             (m.Locations.Any(l => l.Restaurant.Active)) &&
                             (dayOfWeek == DayOfWeek.Monday && m.MenuDays.Monday) ||
                             (dayOfWeek == DayOfWeek.Tuesday && m.MenuDays.Tuesday) ||
@@ -283,7 +298,7 @@ namespace MenuDelDia.Presentacion.Controllers.Api
             });
             return Request.CreateResponse(HttpStatusCode.OK, menus);
         }
-
+        
         [HttpGet]
         [Route("api/menus/{latitude:double}/{longitude:double}/{radius:int}/{start:int}/{size:int}")]
         public HttpResponseMessage Get(double latitude, double longitude, int radius, int start, int size)

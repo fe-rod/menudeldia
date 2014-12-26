@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Spatial;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -38,6 +40,14 @@ namespace MenuDelDia.Presentacion.Controllers
                     Name = t.Name,
                     Selected = selectedTags.Contains(t.Id),
                 }).ToList();
+        }
+
+        public static DbGeography CreatePoint(double latitude, double longitude)
+        {
+            var text = string.Format(CultureInfo.InvariantCulture.NumberFormat,
+                                     "POINT({0} {1})", longitude, latitude);
+            // 4326 is most common coordinate system used by GPS/Maps
+            return DbGeography.PointFromText(text, 4326);
         }
         #endregion
 
@@ -168,6 +178,7 @@ namespace MenuDelDia.Presentacion.Controllers
                     Description = location.Description,
                     Latitude = location.Latitude,
                     Longitude = location.Longitude,
+                    SpatialLocation = CreatePoint(location.Latitude, location.Longitude),
                     Phone = location.Phone,
                     RestaurantId = currentUserRestaurantId.Value,
                     OpenDays = location.OpenDays.Select(od => new OpenDay
