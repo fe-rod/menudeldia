@@ -42,7 +42,7 @@ namespace MenuDelDia.Presentacion.Controllers
             if (selectedTags == null)
             {
                 return CurrentAppContext.Tags
-                    .Where(t => t.ApplyToRestaurant)
+                    .Where(t => t.ApplyToMenu)
                     .Select(t => new TagModel
                     {
                         Id = t.Id,
@@ -51,7 +51,7 @@ namespace MenuDelDia.Presentacion.Controllers
             }
 
             return CurrentAppContext.Tags
-                .Where(t => t.ApplyToRestaurant)
+                .Where(t => t.ApplyToMenu)
                 .Select(t => new TagModel
                 {
                     Id = t.Id,
