@@ -33,7 +33,7 @@ namespace MenuDelDia.Presentacion.Models
         public string Phone { get; set; }
 
         [Required(AllowEmptyStrings = false)]
-        [DisplayName("Descripción")]
+        [DisplayName("Características del local")]
         public string Description { get; set; }
 
         [DisplayName("Delivery")]
