@@ -274,6 +274,7 @@ namespace MenuDelDia.Presentacion.Controllers
                     entityLocation.Description = location.Description;
                     entityLocation.Latitude = location.Latitude;
                     entityLocation.Longitude = location.Longitude;
+                    entityLocation.SpatialLocation = CreatePoint(location.Latitude, location.Longitude);
                     entityLocation.Phone = location.Phone;
                     entityLocation.Streets = location.Streets;
 
