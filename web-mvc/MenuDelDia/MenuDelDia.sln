@@ -11,18 +11,25 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MenuDelDia.Repository", "Me
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Azure|Any CPU = Azure|Any CPU
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E5AC68B8-F6BF-4B33-AF3F-AE1A7E45D081}.Azure|Any CPU.ActiveCfg = Azure|Any CPU
+		{E5AC68B8-F6BF-4B33-AF3F-AE1A7E45D081}.Azure|Any CPU.Build.0 = Azure|Any CPU
 		{E5AC68B8-F6BF-4B33-AF3F-AE1A7E45D081}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E5AC68B8-F6BF-4B33-AF3F-AE1A7E45D081}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5AC68B8-F6BF-4B33-AF3F-AE1A7E45D081}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5AC68B8-F6BF-4B33-AF3F-AE1A7E45D081}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C5BB5D1-DD2A-4964-A9E9-21B698EFEE5D}.Azure|Any CPU.ActiveCfg = Release|Any CPU
+		{2C5BB5D1-DD2A-4964-A9E9-21B698EFEE5D}.Azure|Any CPU.Build.0 = Release|Any CPU
 		{2C5BB5D1-DD2A-4964-A9E9-21B698EFEE5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2C5BB5D1-DD2A-4964-A9E9-21B698EFEE5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C5BB5D1-DD2A-4964-A9E9-21B698EFEE5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C5BB5D1-DD2A-4964-A9E9-21B698EFEE5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBF9E933-32A3-4C28-8AE8-00837F6F78B1}.Azure|Any CPU.ActiveCfg = Release|Any CPU
+		{CBF9E933-32A3-4C28-8AE8-00837F6F78B1}.Azure|Any CPU.Build.0 = Release|Any CPU
 		{CBF9E933-32A3-4C28-8AE8-00837F6F78B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CBF9E933-32A3-4C28-8AE8-00837F6F78B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBF9E933-32A3-4C28-8AE8-00837F6F78B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
