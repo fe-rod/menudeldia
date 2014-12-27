@@ -7,6 +7,7 @@ namespace MenuDelDia.Presentacion.Models.ApiModels
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public string Description { get; set; }
         public string LogoPath { get; set; }
         public string LogoName { get; set; }
         public string LogoExtension { get; set; }

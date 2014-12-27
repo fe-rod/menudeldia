@@ -52,6 +52,7 @@ namespace MenuDelDia.Presentacion.Controllers.Api
                     {
                         Id = r.Id,
                         Name = r.Name,
+                        Description = r.Description,
                         Email = r.Email,
                         LogoPath = r.LogoPath,
                         LogoName = r.LogoName,
