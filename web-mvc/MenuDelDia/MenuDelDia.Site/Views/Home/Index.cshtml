@@ -1,0 +1,263 @@
+﻿@{Layout = null;}
+@model MenuDelDia.Site.Models.MessageModel
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Menu Del Dia</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,300,100,100italic,300italic,400italic,700,700italic">
+    <link rel="stylesheet" href="/Content/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/Content/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/Content/css/animate.css">
+    <link rel="stylesheet" href="/Content/css/magnific-popup.css">
+    <link rel="stylesheet" href="/Content/ultimate-flat-social-icons/ultm-css/ultm.css">
+    <link rel="stylesheet" href="/Content/css/form-elements.css">
+    <link rel="stylesheet" href="/Content/css/buttons.css">
+    <link rel="stylesheet" href="/Content/css/style.css">
+    <link rel="stylesheet" href="/Content/css/media-queries.css">
+    @Scripts.Render("~/bundles/modernizr")
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Favicon and touch icons -->
+    <link rel="shortcut icon" href="/Content/ico/favicon.png">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/Content/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/Content/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/Content/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="/Content/ico/apple-touch-icon-57-precomposed.png">
+
+</head>
+
+<body>
+
+    <!-- Top menu -->
+    <nav class="navbar navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-navbar-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">Jesis - Responsive App Landing Page</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="top-navbar-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a class="scroll-link" href="#top-content">Descargar</a></li>
+                    <li><a class="scroll-link" href="#features">Caracteristicas</a></li>
+                    <li><a class="scroll-link" href="#contact">Contactanos</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Top content -->
+    <div class="top-content">
+        <div class="inner-bg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-5 phone wow fadeInLeft">
+                        <img src="/Content/img/iphone-1.png" alt="">
+                    </div>
+                    <div class="col-sm-7 text wow fadeInUp">
+                        <h1>Promote your app with Jesis. <br>Get it now!</h1>
+                        <div class="description">
+                            We have been working very hard to design the new version of our app.
+                            Finally it's ready. It comes with a lot of new features. Check it out now!
+                        </div>
+                        <div class="top-button">
+                            <a class="button-1" href="#">
+                                <span class="button-1-left"><i class="fa fa-mobile"></i></span>
+                                <span class="button-1-right">
+                                    <span class="button-1-right-top">Available on the</span>
+                                    <span class="button-1-right-bottom">App Store</span>
+                                </span>
+                            </a>
+                            <a class="button-2" href="#">
+                                <span class="button-2-left"><i class="fa fa-android"></i></span>
+                                <span class="button-2-right">
+                                    <span class="button-2-right-top">Get it now for</span>
+                                    <span class="button-2-right-bottom">Android</span>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features -->
+    <div class="features-container section-container" id="features">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 features section-description wow fadeIn">
+                    <h2>What makes it awesome</h2>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+                        labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4 features-left wow fadeInUp">
+                    <div class="features-box">
+                        <div class="features-box-icon">
+                            <i class="fa fa-eye"></i>
+                        </div>
+                        <h3>Easy To Use</h3>
+                        <p>Lorem ipsum dolor sit amet, consect adipisicing elit, sed do eiusmod tempor incididunt ut labore.</p>
+                    </div>
+                    <div class="features-box">
+                        <div class="features-box-icon">
+                            <i class="fa fa-table"></i>
+                        </div>
+                        <h3>Responsive Layout</h3>
+                        <p>Lorem ipsum dolor sit amet, consect adipisicing elit, sed do eiusmod tempor incididunt ut labore.</p>
+                    </div>
+                </div>
+                <div class="col-sm-4 features-center wow fadeInDown">
+                    <img src="/Content/img/iphone-3.png" alt="">
+                </div>
+                <div class="col-sm-4 features-right wow fadeInUp">
+                    <div class="features-box">
+                        <div class="features-box-icon">
+                            <i class="fa fa-pencil"></i>
+                        </div>
+                        <h3>Awesome Design</h3>
+                        <p>Lorem ipsum dolor sit amet, consect adipisicing elit, sed do eiusmod tempor incididunt ut labore.</p>
+                    </div>
+                    <div class="features-box">
+                        <div class="features-box-icon">
+                            <i class="fa fa-cloud"></i>
+                        </div>
+                        <h3>Cloud Based</h3>
+                        <p>Lorem ipsum dolor sit amet, consect adipisicing elit, sed do eiusmod tempor incididunt ut labore.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Contact us -->
+    <div class="contact-container section-container section-container-full-bg" id="contact">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 contact section-description wow fadeIn">
+                    <h2>Contact us</h2>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+                        labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-7 contact-form wow fadeInLeft">
+                    <h3>Send us a message</h3>
+
+                    @using (Html.BeginForm("SendMessage", "Home", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Email, new { @class = "sr-only" })
+                            @Html.TextBoxFor(m => m.Email, new { @placeholder = "Email...", @class = "contact-email form-control" })
+                            @Html.ValidationMessageFor(m => m.Email)
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Subject, new { @class = "sr-only" })
+                            @Html.TextBoxFor(m => m.Subject, new { @placeholder = "Subject...", @class = "contact-subject form-control" })
+                            @Html.ValidationMessageFor(m => m.Subject)
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Message, new { @class = "sr-only" })
+                            @Html.TextAreaFor(m => m.Message, new { @placeholder = "Message...", @class = "contact-message form-control" })
+                            @Html.ValidationMessageFor(m => m.Message)
+                        </div>
+                        <button type="submit" class="btn" id="btnSend">Send message</button>
+                    }
+
+                    <p id="pMessage"></p>
+
+
+                </div>
+                <div class="col-sm-5 contact-address wow fadeInUp">
+                    <h3>Contact details</h3>
+                    <p><i class="fa fa-map-marker"></i>Via Principe Amedeo 9, 10100, Torino, TO, Italy</p>
+                    <p><i class="fa fa-phone"></i>Phone: 0039 333 12 68 347</p>
+                    <p><i class="fa fa-envelope"></i>Email: <a href="">contact@yourdomain.com</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-7 footer-copyright">
+                    &copy; Jesis Bootstrap Template by <a href="http://azmind.com">Azmind</a>.
+                </div>
+                <div class="col-sm-5 footer-social">
+                    <a class="ultm ultm-facebook ultm-32 ultm-square ultm-color-to-gray" href=""></a>
+                    <a class="ultm ultm-dribbble ultm-32 ultm-square ultm-color-to-gray" href=""></a>
+                    <a class="ultm ultm-twitter ultm-32 ultm-square ultm-color-to-gray" href=""></a>
+                    <a class="ultm ultm-google-plus-1 ultm-32 ultm-square ultm-color-to-gray" href=""></a>
+                    <a class="ultm ultm-pinterest ultm-32 ultm-square ultm-color-to-gray" href=""></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- Javascript -->
+    <script src="/Content/js/jquery-1.11.1.min.js"></script>
+    <script src="/Content/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/Content/js/bootstrap-hover-dropdown.min.js"></script>
+    <script src="/Content/js/jquery.backstretch.min.js"></script>
+    <script src="/Content/js/wow.min.js"></script>
+    <script src="/Content/js/retina-1.1.0.min.js"></script>
+    <script src="/Content/js/jquery.magnific-popup.min.js"></script>
+    <script src="/Content/twitter/jquery.tweet.min.js"></script>
+    <script src="/Content/js/scripts.js"></script>
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("contact-form form").validate({
+                submitHandler: function (form) {
+                    $(form).submit();
+                }
+            });
+        });
+
+    </script>
+
+
+
+
+    <!--[if lt IE 10]>
+        <script src="/Content/js/placeholder.js"></script>
+    <![endif]-->
+    
+    
+
+</body>
+
+</html>
