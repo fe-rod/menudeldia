@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MenuDelDia.Entities", "Menu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MenuDelDia.Repository", "MenuDelDia.Repository\MenuDelDia.Repository.csproj", "{CBF9E933-32A3-4C28-8AE8-00837F6F78B1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MenuDelDia.Site", "MenuDelDia.Site\MenuDelDia.Site.csproj", "{6E66DEE4-05AC-4A50-91CE-55AB7737FC1A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Azure|Any CPU = Azure|Any CPU
@@ -34,6 +36,12 @@ Global
 		{CBF9E933-32A3-4C28-8AE8-00837F6F78B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBF9E933-32A3-4C28-8AE8-00837F6F78B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBF9E933-32A3-4C28-8AE8-00837F6F78B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E66DEE4-05AC-4A50-91CE-55AB7737FC1A}.Azure|Any CPU.ActiveCfg = Release|Any CPU
+		{6E66DEE4-05AC-4A50-91CE-55AB7737FC1A}.Azure|Any CPU.Build.0 = Release|Any CPU
+		{6E66DEE4-05AC-4A50-91CE-55AB7737FC1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E66DEE4-05AC-4A50-91CE-55AB7737FC1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E66DEE4-05AC-4A50-91CE-55AB7737FC1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E66DEE4-05AC-4A50-91CE-55AB7737FC1A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
