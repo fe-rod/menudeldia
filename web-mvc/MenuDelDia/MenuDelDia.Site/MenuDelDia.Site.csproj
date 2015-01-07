@@ -148,9 +148,6 @@
     <Content Include="Content\img\backgrounds\2.jpg" />
     <Content Include="Content\img\iphone-1%402x.png" />
     <Content Include="Content\img\iphone-1.png" />
-    <Content Include="Content\img\iphone-1_old.png" />
-    <Content Include="Content\img\iphone-2%402x.png" />
-    <Content Include="Content\img\iphone-2.png" />
     <Content Include="Content\img\iphone-3%402x.png" />
     <Content Include="Content\img\iphone-3.png" />
     <Content Include="Content\img\logo%402x.png" />
@@ -234,7 +231,6 @@
     <Content Include="Content\ultimate-flat-social-icons\ultm-bg-images\40x40\wordpress.png" />
     <Content Include="Content\ultimate-flat-social-icons\ultm-bg-images\40x40\youtube-1.png" />
     <Content Include="Content\ultimate-flat-social-icons\ultm-css\ultm.css" />
-    <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap.js" />
@@ -274,6 +270,7 @@
     <Content Include="Content\font-awesome\scss\_spinning.scss" />
     <Content Include="Content\font-awesome\scss\_stacked.scss" />
     <Content Include="Content\font-awesome\scss\_variables.scss" />
+    <None Include="Properties\PublishProfiles\mddweb.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

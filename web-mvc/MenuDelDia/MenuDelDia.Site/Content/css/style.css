@@ -77,7 +77,7 @@ ul.navbar-nav {
 }
 
 ul.navbar-nav li a { padding-top: 20px; padding-bottom: 20px; background: #fff; color: #f44336; }
-ul.navbar-nav li a:hover { background: #fff; color: #f44336; }
+ul.navbar-nav li a:hover { background: #fff; color: #f44336; text-decoration: underline; }
 ul.navbar-nav li a:focus { background: #fff; color: #f44336; outline: 0; }
 .nav .open > a, .nav .open > a:hover, .nav .open > a:focus { background: #fff; }
 
@@ -542,3 +542,52 @@ footer {
     line-height: 32px;
 }
 
+.pricing-box {
+    height: 500px;
+    background: #EEEEEE;
+    border-radius: 3px;
+    padding-top: 30px;
+}
+
+.pricing-box p{
+    color: #444444;
+}
+
+.pricing-box hr{
+    
+}
+
+.pricing-box .content {
+    
+}
+
+.pricing-box .price-tag {
+    width: 100%;
+    background-color: #EF5350;
+    height: 60px;
+    top: 293px;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    position: relative;
+}
+
+.pricing-box hr {
+    border: 1px solid #d0d0d0;
+    margin-left: 35px;
+    margin-right: 35px;
+}
+
+.pricing-box .price-tag.coming-soon {
+    background-color: #757575;
+}
+
+    .pricing-box .price-tag label {
+        color: #fff;
+        font-size: 40px;
+    }
+
+    .pricing-box .price-tag.coming-soon label {
+        color: #fff;
+        font-size: 28px;
+        padding-top: 8px;
+    }

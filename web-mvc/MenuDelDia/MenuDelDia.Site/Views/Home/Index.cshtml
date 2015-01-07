@@ -38,7 +38,16 @@
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/Content/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/Content/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="/Content/ico/apple-touch-icon-57-precomposed.png">
+    <script type="text/javascript">
+    var appInsights = window.appInsights || function (config) {
+        function s(config) { t[config] = function () { var i = arguments; t.queue.push(function () { t[config].apply(t, i) }) } } var t = { config: config }, r = document, f = window, e = "script", o = r.createElement(e), i, u; for (o.src = config.url || "//az416426.vo.msecnd.net/scripts/a/ai.0.js", r.getElementsByTagName(e)[0].parentNode.appendChild(o), t.cookie = r.cookie, t.queue = [], i = ["Event", "Exception", "Metric", "PageView", "Trace"]; i.length;) s("track" + i.pop()); return config.disableExceptionTracking || (i = "onerror", s("_" + i), u = f[i], f[i] = function (config, r, f, e, o) { var s = u && u(config, r, f, e, o); return s !== !0 && t["_" + i](config, r, f, e, o), s }), t
+    }({
+        instrumentationKey: "4ddb25e2-3a5d-42ef-8984-5ca88b3110c0"
+    });
 
+    window.appInsights = appInsights;
+    appInsights.trackPageView();
+    </script>
 </head>
 
 <body>
@@ -53,13 +62,14 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">Jesis - Responsive App Landing Page</a>
+                <a class="navbar-brand" href="/">Jesis - Responsive App Landing Page</a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="top-navbar-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li><a class="scroll-link" href="#top-content">Descargar</a></li>
                     <li><a class="scroll-link" href="#features">Caracteristicas</a></li>
+                    <li><a class="scroll-link" href="#pricing">Eleg&iacute; tu plan</a></li>
                     <li><a class="scroll-link" href="#contact">Contactanos</a></li>
                 </ul>
             </div>
@@ -153,6 +163,50 @@
             </div>
         </div>
     </div>
+
+    <!-- Pricing -->
+    <div class="pricing-container section-container" id="pricing">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 about-us section-description wow fadeIn">
+                    <h2>Eleg&iacute; tu plan</h2>
+                    <p>
+                        Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut
+                        aliquip ex ea commodo consequat. Ut wisi enim ad minim veniam, quis nostrud.
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-4 about-us-box wow fadeInUp">
+                    <h3>Men&uacute; 1</h3>
+                    <div class="pricing-box">
+                        <p>Listado de locales</p>
+                        <hr />
+                        <p>Listado de menus dfsd sdf sdf sdf sfsd fsd fsdf sdf ds fsd fs fsdf</p>
+                        <div class="price-tag">
+                            <label>$ 250</label>
+                        </div>
+                    </div>
+                    @*<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod.</p>*@
+                </div>
+                <div class="col-sm-4 about-us-box wow fadeInDown">
+                    <h3>Men&uacute; 2</h3>
+                    <div class="pricing-box">
+                        <p>Listado de locales</p>
+                        <hr />
+                        <p>Listado de menus dfsd sdf sdf sdf sfsd fsd fsdf sdf ds fsd fs fsdf</p>
+                        <div class="price-tag coming-soon">
+                            <label>Pr&oacute;ximamente</label>
+                        </div>
+                    </div>
+                    @*<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod.</p>*@
+                </div>
+                <div class="col-sm-2"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- Contact us -->
     <div class="contact-container section-container section-container-full-bg" id="contact">
         <div class="container">
@@ -204,9 +258,6 @@
         </div>
     </div>
 
-
-
-
     <!-- Footer -->
     <footer>
         <div class="container">
@@ -255,8 +306,8 @@
     <!--[if lt IE 10]>
         <script src="/Content/js/placeholder.js"></script>
     <![endif]-->
-    
-    
+
+
 
 </body>
 
