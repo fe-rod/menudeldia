@@ -543,7 +543,7 @@ footer {
 }
 
 .pricing-box {
-    height: 500px;
+    height: 551px;
     background: #EEEEEE;
     border-radius: 3px;
     padding-top: 30px;
@@ -551,6 +551,9 @@ footer {
 
 .pricing-box p{
     color: #444444;
+    font-size: 16px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 .pricing-box hr{
@@ -565,20 +568,22 @@ footer {
     width: 100%;
     background-color: #EF5350;
     height: 60px;
-    top: 293px;
+    top: 164px;
     border-bottom-left-radius: 3px;
     border-bottom-right-radius: 3px;
     position: relative;
 }
 
+
 .pricing-box hr {
     border: 1px solid #d0d0d0;
-    margin-left: 35px;
-    margin-right: 35px;
+    margin-left: 70px;
+    margin-right: 70px;
 }
 
 .pricing-box .price-tag.coming-soon {
     background-color: #757575;
+    top: 16px;
 }
 
     .pricing-box .price-tag label {
