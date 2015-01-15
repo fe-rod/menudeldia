@@ -142,6 +142,7 @@
     <Content Include="Content\ico\apple-touch-icon-57-precomposed.png" />
     <Content Include="Content\ico\apple-touch-icon-72-precomposed.png" />
     <Content Include="Content\ico\favicon.png" />
+    <Content Include="Content\img\ajax-loader.gif" />
     <Content Include="Content\img\backgrounds\1%402x.jpg" />
     <Content Include="Content\img\backgrounds\1.jpg" />
     <Content Include="Content\img\backgrounds\2%402x.jpg" />
