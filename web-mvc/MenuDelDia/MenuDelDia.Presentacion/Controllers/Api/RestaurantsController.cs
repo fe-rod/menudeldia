@@ -113,12 +113,14 @@ namespace MenuDelDia.Presentacion.Controllers.Api
         {
             if (filter.Start.HasValue && filter.Size.HasValue)
             {
-                return data.Skip(filter.Start.Value)
+                return data.Skip(filter.Start.Value * filter.Size.Value)
                            .Take(filter.Size.Value)
+                           .OrderBy(d=>d.Name)
                            .ToList();
             }
 
-            return data;
+            return data.OrderBy(d => d.Name)
+                       .ToList();
         }
 
         private IList<LocationApiModel> FilterStores(IList<LocationApiModel> data, StoreFilter filter)
@@ -126,7 +128,7 @@ namespace MenuDelDia.Presentacion.Controllers.Api
             if (filter.Start.HasValue && filter.Size.HasValue)
             {
 
-                return data.Skip(filter.Start.Value)
+                return data.Skip(filter.Start.Value * filter.Size.Value)
                            .Take(filter.Size.Value)
                            .ToList();
             }

@@ -181,13 +181,13 @@ namespace MenuDelDia.Presentacion.Controllers.Api
             if (filter.FilteredByLatLong)
             {
                 return menus.OrderBy(m => m.NearestLocation.Distance)
-                .Skip(filter.Start ?? 0)
+                .Skip(filter.Start * filter.Size ?? 0)
                 .Take(filter.Size ?? menus.Count)
                 .ToList();
             }
 
             return menus.OrderBy(m => m.Name)
-                             .Skip(filter.Start ?? 0)
+                             .Skip(filter.Start * filter.Size ?? 0)
                              .Take(filter.Size ?? menus.Count)
                              .ToList();
         }
