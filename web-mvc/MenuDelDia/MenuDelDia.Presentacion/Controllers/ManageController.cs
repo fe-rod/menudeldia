@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -51,9 +52,9 @@ namespace MenuDelDia.Presentacion.Controllers
             var model = new IndexViewModel
             {
                 HasPassword = HasPassword(),
-                PhoneNumber = await UserManager.GetPhoneNumberAsync(User.Identity.GetUserId()),
-                TwoFactor = await UserManager.GetTwoFactorEnabledAsync(User.Identity.GetUserId()),
-                Logins = await UserManager.GetLoginsAsync(User.Identity.GetUserId()),
+                PhoneNumber = await UserManager.GetPhoneNumberAsync(Guid.Parse(User.Identity.GetUserId())),
+                TwoFactor = await UserManager.GetTwoFactorEnabledAsync(Guid.Parse(User.Identity.GetUserId())),
+                Logins = await UserManager.GetLoginsAsync(Guid.Parse(User.Identity.GetUserId())),
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(User.Identity.GetUserId())
             };
             return View(model);
@@ -219,10 +220,10 @@ namespace MenuDelDia.Presentacion.Controllers
             {
                 return View(model);
             }
-            var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
+            var result = await UserManager.ChangePasswordAsync(Guid.Parse(User.Identity.GetUserId()), model.OldPassword, model.NewPassword);
             if (result.Succeeded)
             {
-                var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                var user = await UserManager.FindByIdAsync(Guid.Parse(User.Identity.GetUserId()));
                 if (user != null)
                 {
                     await SignInAsync(user, isPersistent: false);
@@ -248,10 +249,10 @@ namespace MenuDelDia.Presentacion.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await UserManager.AddPasswordAsync(User.Identity.GetUserId(), model.NewPassword);
+                var result = await UserManager.AddPasswordAsync(Guid.Parse(User.Identity.GetUserId()), model.NewPassword);
                 if (result.Succeeded)
                 {
-                    var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                    var user = await UserManager.FindByIdAsync(Guid.Parse(User.Identity.GetUserId()));
                     if (user != null)
                     {
                         await SignInAsync(user, isPersistent: false);
@@ -339,7 +340,7 @@ namespace MenuDelDia.Presentacion.Controllers
 
         private bool HasPassword()
         {
-            var user = UserManager.FindById(User.Identity.GetUserId());
+            var user = UserManager.FindById(Guid.Parse(User.Identity.GetUserId()));
             if (user != null)
             {
                 return user.PasswordHash != null;
@@ -349,7 +350,7 @@ namespace MenuDelDia.Presentacion.Controllers
 
         private bool HasPhoneNumber()
         {
-            var user = UserManager.FindById(User.Identity.GetUserId());
+            var user = UserManager.FindById(Guid.Parse(User.Identity.GetUserId()));
             if (user != null)
             {
                 return user.PhoneNumber != null;

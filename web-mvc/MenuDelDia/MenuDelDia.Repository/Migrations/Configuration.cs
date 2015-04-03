@@ -18,12 +18,9 @@ namespace MenuDelDia.Repository.Migrations
 
         protected override void Seed(MenuDelDia.Repository.AppContext context)
         {
+            context.Roles.AddOrUpdate(p => p.Name, new AppRole { Name = "Administrator" });
+            context.Roles.AddOrUpdate(p => p.Name, new AppRole { Name = "User" });
 
-           
-            context.Roles.AddOrUpdate(p => p.Name, new IdentityRole { Name = "Administrator" });
-            context.Roles.AddOrUpdate(p => p.Name, new IdentityRole { Name = "User" });
-            
-            
 
             context.Cards.AddOrUpdate(c => new { c.Name, c.CardType }, new Card { Id = Guid.Parse("90C694AC-246F-45D6-9435-5A3330CD67D2"), Name = "Visa", CardType = CardType.Credit });
             context.Cards.AddOrUpdate(c => new { c.Name, c.CardType }, new Card { Id = Guid.Parse("FDEE4F3A-2677-47D3-9DF4-78CB633C0836"), Name = "Visa", CardType = CardType.Debit });

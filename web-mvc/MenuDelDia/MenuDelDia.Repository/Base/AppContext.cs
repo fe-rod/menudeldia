@@ -11,12 +11,9 @@ using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace MenuDelDia.Repository
 {
-    public class AppContext : IdentityDbContext<ApplicationUser>
+    public class AppContext : IdentityDbContext<ApplicationUser, AppRole, Guid, AppUserLogin, AppUserRole, AppUserClaim>
     {
-        public AppContext():base("AppContext")
-        {
-            
-        }
+        public AppContext() : base("AppContext") { }
 
         public IDbSet<Card> Cards { get; set; }
         public IDbSet<Comment> Comments { get; set; }
@@ -27,13 +24,13 @@ namespace MenuDelDia.Repository
         public IDbSet<Restaurant> Restaurants { get; set; }
         public IDbSet<Tag> Tags { get; set; }
         public IDbSet<Suggestion> Suggestion { get; set; }
-        
+
 
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            
+
             //modelBuilder.Conventions.Remove<PluralizingEntitySetNameConvention>();
             modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
             modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();

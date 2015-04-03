@@ -1,17 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
-using System.Web.Mvc;
+using System.Web.Http;
+using System.Web.Http.Owin;
 using MenuDelDia.Entities;
 using MenuDelDia.Repository;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 
-namespace MenuDelDia.Presentacion.Controllers
+namespace MenuDelDia.Presentacion.Controllers.Api.Site
 {
-    public class BaseController : Controller
+    public class ApiBaseController : ApiController
     {
         private AppContext _db = new AppContext();
         private ApplicationUserManager _userManager;
@@ -31,7 +32,7 @@ namespace MenuDelDia.Presentacion.Controllers
         {
             get
             {
-                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                return _userManager ?? HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
             }
             private set
             {
@@ -45,7 +46,7 @@ namespace MenuDelDia.Presentacion.Controllers
         {
             get
             {
-                return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
+                return _signInManager ?? HttpContext.Current.GetOwinContext().Get<ApplicationSignInManager>();
             }
             private set { _signInManager = value; }
         }
@@ -67,5 +68,25 @@ namespace MenuDelDia.Presentacion.Controllers
 
             return currentUser.RestaurantId == requestRestaurantId;
         }
+        
+        /// <summary>
+        /// Return userId based on current claims.
+        /// </summary> 
+        /// <returns>UserId</returns>
+        /// <exception cref="FatalException">User must be authenticated.</exception>
+        public Guid CurrentUserId
+        {
+            get
+            {
+                var userClaim = ClaimsPrincipal.Current;
+
+                if (userClaim.Identity.IsAuthenticated == false)
+                    throw new ApplicationException("User must be authenticated.");
+
+                var userIdClaim = userClaim.Claims.First(c => c.Type == "id");
+                return Guid.Parse(userIdClaim.Value);
+            }
+        }
     }
 }
+

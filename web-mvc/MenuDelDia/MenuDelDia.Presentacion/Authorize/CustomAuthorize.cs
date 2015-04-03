@@ -5,6 +5,7 @@ using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using MenuDelDia.Entities;
+using MenuDelDia.Presentacion.Identity;
 using MenuDelDia.Repository;
 using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
@@ -17,10 +18,9 @@ namespace MenuDelDia.Presentacion.Authorize
     public class CustomAuthorize : AuthorizeAttribute
     {
         private readonly string[] allowedroles;
-        private readonly AppContext context = new AppContext();
-        private ApplicationUserManager _userManager = new ApplicationUserManager(new UserStore<ApplicationUser>());
-
-
+        private readonly AppContext _context = new AppContext();
+        private ApplicationUserManager _userManager = new ApplicationUserManager(new AppUserStore(new AppContext()));
+        
 
         public CustomAuthorize(params string[] roles)
         {
@@ -33,14 +33,14 @@ namespace MenuDelDia.Presentacion.Authorize
                 return false;
 
             //var usr = _userManager.FindByEmail(httpContext.User.Identity.Name);
-            var usr = context.Users.Where(u => u.Email == httpContext.User.Identity.Name).Select(u => new { u.UserName, u.RestaurantId }).FirstOrDefault();
+            var usr = _context.Users.Where(u => u.Email == httpContext.User.Identity.Name).Select(u => new { u.UserName, u.RestaurantId }).FirstOrDefault();
 
             if (usr == null)
                 return false;
 
             if (usr.RestaurantId != null)
             {
-                var active = context.Restaurants.Where(r => r.Id == usr.RestaurantId).Select(r => r.Active).FirstOrDefault();
+                var active = _context.Restaurants.Where(r => r.Id == usr.RestaurantId).Select(r => r.Active).FirstOrDefault();
                 if (active == false)
                     return false;
             }

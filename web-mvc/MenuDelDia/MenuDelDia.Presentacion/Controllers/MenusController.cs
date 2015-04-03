@@ -66,7 +66,8 @@ namespace MenuDelDia.Presentacion.Controllers
         // GET: Menus
         public async Task<ActionResult> Index()
         {
-            var applicationUser = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            var userId = Guid.Parse(User.Identity.GetUserId());
+            var applicationUser = await UserManager.FindByIdAsync(userId);
 
             var menus = CurrentAppContext.Menus.Include(m => m.Locations)
                 .Where(m => m.Locations.All(l => l.RestaurantId == applicationUser.RestaurantId))
@@ -78,7 +79,7 @@ namespace MenuDelDia.Presentacion.Controllers
         // GET: Menus/Details/5
         public async Task<ActionResult> Details(Guid? id)
         {
-            var applicationUser = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            var applicationUser = await UserManager.FindByIdAsync(Guid.Parse(User.Identity.GetUserId()));
             if (applicationUser.RestaurantId.HasValue == false)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
@@ -131,7 +132,7 @@ namespace MenuDelDia.Presentacion.Controllers
         // GET: Menus/Create
         public async Task<ActionResult> Create()
         {
-            var applicationUser = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            var applicationUser = await UserManager.FindByIdAsync(Guid.Parse(User.Identity.GetUserId()));
             if (applicationUser.RestaurantId.HasValue == false)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
@@ -154,7 +155,7 @@ namespace MenuDelDia.Presentacion.Controllers
         {
             if (ModelState.IsValid)
             {
-                var applicationUser = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                var applicationUser = await UserManager.FindByIdAsync(Guid.Parse(User.Identity.GetUserId()));
                 if (applicationUser.RestaurantId.HasValue == false)
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
@@ -212,7 +213,7 @@ namespace MenuDelDia.Presentacion.Controllers
         // GET: Menus/Edit/5
         public async Task<ActionResult> Edit(Guid? id)
         {
-            var applicationUser = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            var applicationUser = await UserManager.FindByIdAsync(Guid.Parse(User.Identity.GetUserId()));
             if (applicationUser.RestaurantId.HasValue == false)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
@@ -273,7 +274,7 @@ namespace MenuDelDia.Presentacion.Controllers
         {
             if (ModelState.IsValid)
             {
-                var applicationUser = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                var applicationUser = await UserManager.FindByIdAsync(Guid.Parse(User.Identity.GetUserId()));
                 if (applicationUser.RestaurantId.HasValue == false)
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
@@ -340,7 +341,7 @@ namespace MenuDelDia.Presentacion.Controllers
         // GET: Menus/Delete/5
         public async Task<ActionResult> Delete(Guid? id)
         {
-            var applicationUser = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            var applicationUser = await UserManager.FindByIdAsync(Guid.Parse(User.Identity.GetUserId()));
             if (applicationUser.RestaurantId.HasValue == false)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
