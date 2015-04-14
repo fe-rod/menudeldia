@@ -142,6 +142,8 @@
     <Content Include="Content\ico\apple-touch-icon-57-precomposed.png" />
     <Content Include="Content\ico\apple-touch-icon-72-precomposed.png" />
     <Content Include="Content\ico\favicon.png" />
+    <Content Include="Content\ico\shareicon.png" />
+    <Content Include="Content\ico\smallicon.png" />
     <Content Include="Content\img\ajax-loader.gif" />
     <Content Include="Content\img\backgrounds\1%402x.jpg" />
     <Content Include="Content\img\backgrounds\1.jpg" />
@@ -156,6 +158,7 @@
     <Content Include="Content\img\screenshots\1.jpg" />
     <Content Include="Content\img\screenshots\2.jpg" />
     <Content Include="Content\img\screenshots\3.jpg" />
+    <Content Include="Content\img\smallicon.png" />
     <Content Include="Content\img\team\1.jpg" />
     <Content Include="Content\img\team\2.jpg" />
     <Content Include="Content\img\team\3.jpg" />
