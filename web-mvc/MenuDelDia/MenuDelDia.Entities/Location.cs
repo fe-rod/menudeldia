@@ -62,5 +62,7 @@ namespace MenuDelDia.Entities
 
         [DisplayName("Menús")]
         public virtual ICollection<Menu> Menus { get; set; }
+
+        public string Zone { get; set; }
     }
 }

@@ -28,6 +28,7 @@ namespace MenuDelDia.Presentacion.Controllers.Api.Site
         }
 
         [HttpGet]
+        [Route("api/creditcards")]
         public HttpResponseMessage Get()
         {
             var result = LoadCards();

@@ -255,6 +255,8 @@
     <Compile Include="Models\ApiModels\MenusApiModel.cs" />
     <Compile Include="Models\ApiModels\OpenDayApiModel.cs" />
     <Compile Include="Models\ApiModels\AppComentApiModel.cs" />
+    <Compile Include="Models\ApiModels\site\LocationApiModel.cs" />
+    <Compile Include="Models\ApiModels\site\RestaurantMenuApiModel.cs" />
     <Compile Include="Models\ApiModels\site\UpdateRegisterApiModel.cs" />
     <Compile Include="Models\ApiModels\site\RegisterApiModel.cs" />
     <Compile Include="Models\ApiModels\SuggestionApiModel.cs" />

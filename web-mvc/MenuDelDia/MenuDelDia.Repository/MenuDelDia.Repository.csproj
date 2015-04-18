@@ -143,6 +143,14 @@
     <Compile Include="Migrations\201412261548266_SpatialLocation.Designer.cs">
       <DependentUpon>201412261548266_SpatialLocation.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201504142044204_script_18.cs" />
+    <Compile Include="Migrations\201504142044204_script_18.Designer.cs">
+      <DependentUpon>201504142044204_script_18.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504181809118_script_19.cs" />
+    <Compile Include="Migrations\201504181809118_script_19.Designer.cs">
+      <DependentUpon>201504181809118_script_19.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -213,6 +221,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201412261548266_SpatialLocation.resx">
       <DependentUpon>201412261548266_SpatialLocation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504142044204_script_18.resx">
+      <DependentUpon>201504142044204_script_18.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504181809118_script_19.resx">
+      <DependentUpon>201504181809118_script_19.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

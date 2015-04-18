@@ -37,7 +37,7 @@ namespace MenuDelDia.Entities
 
         [DisplayName("Día especial")]
         public SpecialDay SpecialDay { get; set; }
-        
+
         [DisplayName("Precio")]
         public double Cost { get; set; }
 
@@ -88,6 +88,23 @@ namespace MenuDelDia.Entities
 
         [DisplayName("Recurrente")]
         public bool Recurrent { get; set; }
+    }
+
+    public class MenuComparer : IEqualityComparer<Menu>
+    {
+        public bool Equals(Menu x, Menu y)
+        {
+            if (x == null && y == null) { return true; }
+            if (x == null) { return false; }
+            if (y == null) { return false; }
+
+            return (x.Id == y.Id);
+        }
+
+        public int GetHashCode(Menu obj)
+        {
+            return obj.Id.GetHashCode();
+        }
     }
 
 }

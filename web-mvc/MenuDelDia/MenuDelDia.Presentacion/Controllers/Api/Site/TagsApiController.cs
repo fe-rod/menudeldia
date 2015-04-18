@@ -28,6 +28,7 @@ namespace MenuDelDia.Presentacion.Controllers.Api.Site
         }
 
         [HttpGet]
+        [Route("api/site/tags")]
         public HttpResponseMessage Get()
         {
             var result = LoadTags();
